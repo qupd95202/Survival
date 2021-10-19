@@ -56,8 +56,6 @@ public class Global {
         VOLCANO,//火山
         VILLAGE,//村莊
         ICEFIELD,//冰原
-        DESERT,//沙漠
-        SEA,
         NONE;
     }
 
@@ -106,7 +104,7 @@ public class Global {
     //速度上限
     public static final int SPEED_MAX = 10;
     //地圖上道具數量上限
-    public static final int PROPS_AMOUNT_MAX = 10;
+    public static final int PROPS_AMOUNT_MAX = 6;
 
 
 
