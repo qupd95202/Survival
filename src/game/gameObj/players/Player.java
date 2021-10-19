@@ -61,6 +61,9 @@ public class Player extends GameObject implements CommandSolver.KeyListener {
     private boolean canUseTeleportation; //有沒有撿到此道具
     private Delay trapDelay;
 
+    //是否在封閉區域
+    private boolean inclosedArea = false;
+
 
     public Player(int x, int y, Animation currentAnimation, RoleState roleState) {
         super(x, y, Global.PLAYER_WIDTH, Global.PLAYER_HEIGHT);
@@ -90,7 +93,11 @@ public class Player extends GameObject implements CommandSolver.KeyListener {
 
         movingState = MovingState.STAND;
 
+        inclosedArea = false;
+
     }
+
+
 
     @Override
     public void paintComponent(Graphics g) {
@@ -302,7 +309,12 @@ public class Player extends GameObject implements CommandSolver.KeyListener {
         pointDelay.play();
         if (pointDelay.count()) {
             if (movingState == MovingState.WALK) {
-                point++;
+                //如果在封閉區域內移動 則扣分
+                if (inclosedArea) {
+                    point--;
+                }else {
+                    point++;
+                }
             }
         }
     }
@@ -391,5 +403,13 @@ public class Player extends GameObject implements CommandSolver.KeyListener {
 
     public int transformCDTime() {
         return 10-transformCD.getCount()/60;
+    }
+
+    public boolean inclosedArea() {
+        return inclosedArea;
+    }
+
+    public void setInclosedArea(boolean inclosedArea) {
+        this.inclosedArea = inclosedArea;
     }
 }

@@ -46,7 +46,6 @@ public class GameScene extends Scene implements CommandSolver.MouseCommandListen
     private Image imgVolcano;
     private Image imgVillage;
 
-
     private Delay propsReProduce;
 
     //時間計算
@@ -55,10 +54,8 @@ public class GameScene extends Scene implements CommandSolver.MouseCommandListen
     private long chooseTime; //選擇的遊戲時間
     private long lastTime;
 
-
     //關閉的區域（在裡面扣分）
     private Position closedArea;
-    private boolean inclosedArea;
     private Image imgWarning;
 
     //左下角的方格
@@ -74,7 +71,7 @@ public class GameScene extends Scene implements CommandSolver.MouseCommandListen
         //遊戲時間
         startTime = System.nanoTime();
         chooseTime = 300; //單位：秒
-        inclosedArea = false;
+
 
         gameObjectList = new ArrayList<>();//初始ArrayList
         transformObstacles = new ArrayList<>();
@@ -142,8 +139,8 @@ public class GameScene extends Scene implements CommandSolver.MouseCommandListen
         camera.paint(g);
         camera.endCamera(g);
 
-        //顯示遊戲時間
-        paintTime(g);
+        //顯示遊戲剩餘時間
+        paintLastGameTime(g);
         //顯示警告
         paintWarning(g);
         //顯示積分
@@ -157,7 +154,6 @@ public class GameScene extends Scene implements CommandSolver.MouseCommandListen
         }else {
             runnerLight.paint(0,Global.SCREEN_Y-100,100,100,g);
         }
-
 
         //變身格
         changeBody.paint(105,Global.SCREEN_Y-100,100,100,g);
@@ -241,7 +237,7 @@ public class GameScene extends Scene implements CommandSolver.MouseCommandListen
         g.setColor(Color.BLACK);
     }
 
-    private void paintTime(Graphics g) {
+    private void paintLastGameTime(Graphics g) {
         g.setColor(Color.WHITE);
         g.drawString(String.format("剩餘時間 %s 秒", lastTime),Global.SCREEN_X - 100 , 30);
         g.setColor(Color.BLACK);
@@ -299,33 +295,24 @@ public class GameScene extends Scene implements CommandSolver.MouseCommandListen
 
     }
 
-
     private void checkPlayerInClosedArea() {
         if (mainPlayer.painter().left() < closedArea.getX() && mainPlayer.painter().top() < closedArea.getY()) {
-//            System.out.print("角色x" + mainPlayer.painter().left() + "  ");
-//            System.out.print("角色y" + mainPlayer.painter().top() + " ");
-//
-//            System.out.print("關閉x" + closedArea.getX() + "  ");
-//            System.out.print("關閉y" + closedArea.getY());
-//            System.out.println("Warning");
-            inclosedArea = true;
+            mainPlayer.setInclosedArea(true);
         }else {
-            inclosedArea = false;
+            mainPlayer.setInclosedArea(false);;
         }
     }
 
     private void paintWarning(Graphics g) {
-        if (inclosedArea) {
-            g.setColor(Color.RED);
+        if (mainPlayer.inclosedArea()) {
             g.drawImage(
                     imgWarning,
-                    Global.SCREEN_X / 2 - 50,
-                    Global.SCREEN_Y / 2 - 82,
-                    100,
-                    40,
+                    Global.SCREEN_X / 2 - 100 ,
+                    0,
+                    200,
+                    37,
                     null
             );
-            g.setColor(Color.BLACK);
         }
     }
 

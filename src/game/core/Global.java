@@ -108,6 +108,10 @@ public class Global {
     //地圖上道具數量上限
     public static final int PROPS_AMOUNT_MAX = 10;
 
+
+
+
+
     public static ArrayList<Image> bumpImg = new ArrayList<Image>(List.of(SceneController.getInstance().imageController().tryGetImage(
                     new Path().img().actors().bump().Bump1()),
             SceneController.getInstance().imageController().tryGetImage(
