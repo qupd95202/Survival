@@ -25,7 +25,7 @@ public class Props extends GameObject {
         super(Global.random(0, Global.MAP_PIXEL_WIDTH), Global.random(0, Global.MAP_PIXEL_HEIGHT), Global.UNIT_WIDTH, Global.UNIT_HEIGHT);
 //        super(300,300, Global.UNIT_WIDTH, Global.UNIT_HEIGHT);
         this.animation = AllImages.questionBox;
-        this.propsType = Type.teleportation;
+        this.propsType = genRandomType();
         collider().scale(painter().width() - 10, painter().height() - 10);
         painter().setCenter(collider().centerX(), collider().centerY());
     }

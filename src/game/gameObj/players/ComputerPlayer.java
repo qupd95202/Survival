@@ -1,6 +1,7 @@
 package game.gameObj.players;
 
 import game.core.Global;
+import game.graphic.AllImages;
 import game.graphic.Animation;
 import game.utils.Delay;
 
@@ -9,7 +10,6 @@ public class ComputerPlayer extends Player {
 
     private boolean isChase;
     private boolean isRun;
-    private boolean isTransform;
     public Player chasedPlayer;
     private float nearest;
     private Delay randomMoveDelay;
@@ -18,6 +18,8 @@ public class ComputerPlayer extends Player {
 
     public ComputerPlayer(int x, int y, Animation animation, RoleState roleState) {
         super(x, y, animation, roleState);
+        transformTime.play();
+        transformTime.loop();
         isChase = false;
         isRun = false;
         nearest = Global.NEAREST;
@@ -57,6 +59,11 @@ public class ComputerPlayer extends Player {
 //    }
 
     public void preyUpdate() {
+        if (transformTime.count()) {
+            if (Global.getProbability(40)) {
+                transform();
+            }
+        }
         if (randomMoveDelay.count()) {
             iniMoveOnX = Global.random(-2, 1);
             iniMoveOnY = Global.random(-2, 1);
@@ -139,6 +146,11 @@ public class ComputerPlayer extends Player {
                     isChase = true;
                 }
             }
+            if (nearest < Global.WINDOW_WIDTH / 2) {
+                if (player.getPositionType() != player.getTransformationAnimationType()) {
+                    isChase = true;
+                }
+            }
             if (isChase) {
                 float chaseDx = Math.abs(chasedPlayer.collider().centerX() - painter().centerX());
                 float chaseDy = Math.abs(chasedPlayer.collider().bottom() - painter().centerY() - 10);
@@ -163,6 +175,13 @@ public class ComputerPlayer extends Player {
         }
 
     }
+
+    @Override
+    public void transform() {
+        storedTransformAnimation = AllImages.getRandomAnimation();
+        super.transform();
+    }
+
     @Override
     public void notMove() {
         translate(-movement.getVector2D().getX(), -movement.getVector2D().getY());
