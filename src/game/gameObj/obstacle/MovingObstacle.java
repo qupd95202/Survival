@@ -6,6 +6,7 @@ import game.gameObj.GameObject;
 import game.gameObj.Transformation;
 import game.gameObj.mapObj.MapObject;
 import game.graphic.Animation;
+import game.graphic.ImgArrAndType;
 import game.utils.Path;
 
 import java.awt.*;
@@ -13,17 +14,14 @@ import java.util.ArrayList;
 
 //這個應該是要不可移動但可變身的物件
 public class MovingObstacle extends TransformObstacle {
-    private ArrayList<Image> img;
 
     //動畫處理部分拉出
     private Animation animation;
 
 
-    public MovingObstacle(int x, int y,Animation animation) {
+    public MovingObstacle(int x, int y, ImgArrAndType animation) {
         super(x, y,animation);
-        img = Global.bumpImg;
-
-        this.animation = animation;
+        this.animation = new Animation(animation);
         this.canPass = false;
     }
 
@@ -44,10 +42,5 @@ public class MovingObstacle extends TransformObstacle {
 
     public void move() {
 
-    }
-
-    @Override
-    public Animation getAnimation() {
-        return animation;
     }
 }

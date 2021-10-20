@@ -8,10 +8,14 @@ import game.gameObj.Props;
 import game.gameObj.Transformation;
 import game.graphic.AllImages;
 import game.graphic.Animation;
+import game.graphic.ImgArrAndType;
 import game.utils.CommandSolver;
 import game.utils.Delay;
 
 import java.awt.*;
+import java.util.ArrayList;
+
+import static game.gameObj.Props.Type.trap;
 
 public class Player extends GameObject implements CommandSolver.KeyListener {
 
@@ -29,7 +33,7 @@ public class Player extends GameObject implements CommandSolver.KeyListener {
 
     }
 
-    public static final Animation bumpAnimation = AllImages.bump;
+    public static final Animation bumpAnimation = new Animation(AllImages.bump);
 
 
     //移動相關
@@ -62,8 +66,11 @@ public class Player extends GameObject implements CommandSolver.KeyListener {
     private boolean canUseTeleportation; //有沒有撿到此道具
     private Delay trapDelay;
 
+    //扣分相關
+    private boolean isInClosedArea;
 
-    public Player(int x, int y, Animation currentAnimation, RoleState roleState) {
+
+    public Player(int x, int y, ImgArrAndType imageArrayList, RoleState roleState) {
         super(x, y, Global.PLAYER_WIDTH, Global.PLAYER_HEIGHT);
         movement = new Movement(Global.NORMAL_SPEED);//一般角色移動
         collider().scale(painter().width() - 10, painter().height() - 10);
@@ -76,11 +83,12 @@ public class Player extends GameObject implements CommandSolver.KeyListener {
         canTransform = true;
         isUseTeleportation = false;
         canUseTeleportation = false;
+        isInClosedArea = false;
 
         this.roleState = roleState;
         roleStateBeforeBump = roleState;
-        this.currentAnimation = currentAnimation;
-        originalAnimation = currentAnimation;
+        this.currentAnimation = new Animation(imageArrayList);
+        originalAnimation = new Animation(imageArrayList);
 
         pointDelay = new Delay(60);
         collisionDelay = new Delay(180);
@@ -248,10 +256,12 @@ public class Player extends GameObject implements CommandSolver.KeyListener {
     }
 
     public void animationExchange(Player player) {
-        currentAnimation = player.originalAnimation;
-        player.currentAnimation = originalAnimation;
-        originalAnimation = currentAnimation;
-        player.originalAnimation = player.currentAnimation;
+        Animation temp = originalAnimation;
+        originalAnimation = player.originalAnimation;
+        player.originalAnimation = temp;
+        //當前變回original
+        currentAnimation = originalAnimation;
+        player.currentAnimation = player.originalAnimation;
     }
 
     public void roleStateExchange(Player player) {
@@ -262,7 +272,7 @@ public class Player extends GameObject implements CommandSolver.KeyListener {
     }
 
     public void chooseTransformObject(Transformation transformation) {
-        storedTransformAnimation = transformation.getAnimation();
+        storedTransformAnimation = new Animation(transformation.getImgArrAndType());
     }
 
     public void transform() {
@@ -291,7 +301,7 @@ public class Player extends GameObject implements CommandSolver.KeyListener {
 
 
     /**
-     * 每秒增加1積分
+     * 每秒增加1積分，若在扣分區，每秒扣2積分
      */
     protected void addPoint() {
         if (roleState == RoleState.HUNTER) {
@@ -299,7 +309,11 @@ public class Player extends GameObject implements CommandSolver.KeyListener {
         }
         pointDelay.play();
         if (pointDelay.count()) {
-            if (movingState == MovingState.WALK) {
+            if (isInClosedArea) {
+                if (point > 0) {
+                    point -= 1;
+                }
+            } else if (movingState == MovingState.WALK) {
                 point++;
             }
         }
@@ -351,10 +365,14 @@ public class Player extends GameObject implements CommandSolver.KeyListener {
                 canUseTeleportation = true;
                 break;
 
-            default:
+            case trap:
                 System.out.println("不能動");
                 canMove = false;
                 trapDelay.play();
+                break;
+            default:
+                System.out.println("加分");
+                point += 10;
         }
     }
 
@@ -404,5 +422,13 @@ public class Player extends GameObject implements CommandSolver.KeyListener {
 
     public Global.MapAreaType getTransformationAnimationType() {
         return currentAnimation.getMapAreaType();
+    }
+
+    public void setInClosedArea(boolean inClosedArea) {
+        isInClosedArea = inClosedArea;
+    }
+
+    public boolean isInClosedArea() {
+        return isInClosedArea;
     }
 }

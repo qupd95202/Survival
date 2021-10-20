@@ -3,8 +3,8 @@ package game.gameObj.obstacle;
 import game.core.Global;
 import game.gameObj.GameObject;
 import game.gameObj.Transformation;
-import game.gameObj.mapObj.MapObject;
 import game.graphic.Animation;
+import game.graphic.ImgArrAndType;
 
 import java.awt.*;
 
@@ -13,9 +13,9 @@ public class TransformObstacle extends GameObject implements Transformation {
     //動畫處理部分拉出
     private Animation animation;
 
-    public TransformObstacle(int x, int y, Animation animation) {
+    public TransformObstacle(int x, int y, ImgArrAndType imgArrAndType) {
         super(x, y, Global.OBSTACLE_WIDTH, Global.OBSTACLE_HEIGHT);
-        this.animation = animation;
+        this.animation = new Animation(imgArrAndType);
         collider().scale(painter().width() - 10, painter().height() - 10);
         painter().setCenter(collider().centerX(), collider().centerY());
     }
@@ -44,8 +44,9 @@ public class TransformObstacle extends GameObject implements Transformation {
         animation.update();
     }
 
+
     @Override
-    public Animation getAnimation() {
-        return animation;
+    public ImgArrAndType getImgArrAndType() {
+        return animation.getImg();
     }
 }

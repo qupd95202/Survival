@@ -544,18 +544,16 @@ public class Path {
                 }
 
             }
+
             public String addSpeed() {
                 return this + "/addSpeed.png";
             }
-
             public String warningLabel() {
                 return this + "/warningLabel.png";
             }
-
             public Move move() {
                 return new Move(this);
             }
-
             public DontMove dontMove() {
                 return new DontMove(this);
             }
@@ -568,7 +566,6 @@ public class Path {
             public String question1() {
                 return this + "/questionbox1.png";
             }
-
             public String question2() {
                 return this + "/questionbox2.png";
             }
@@ -587,24 +584,24 @@ public class Path {
             public String changeBody() {
                 return this + "/changeRoleButton.png";
             }
+            public String nothing() {
+                return this + "/nothing.png";
+            }
 
         }
+
         public Actors actors() {
             return new Actors(this);
         }
-
         public Animals animals() {
             return new Animals(this);
         }
-
         public Background background() {
             return new Background(this);
         }
-
         public Map map() {
             return new Map(this);
         }
-
         public Menu menu() {
             return new Menu(this);
         }
