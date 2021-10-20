@@ -3,7 +3,9 @@ package game.scene;
 import game.Menu.Label;
 import game.Menu.Mouse;
 import game.controllers.SceneController;
+import game.core.GameTime;
 import game.core.Global;
+import game.core.Point;
 import game.core.Position;
 import game.gameObj.GameObject;
 import game.gameObj.Props;
@@ -58,6 +60,8 @@ public class GameScene extends Scene implements CommandSolver.MouseCommandListen
     private long gameTime;
     private long chooseTime; //選擇的遊戲時間
     private long lastTime;
+    private GameTime printGameTime;
+    private Image imgClock;
 
 
 
@@ -71,6 +75,10 @@ public class GameScene extends Scene implements CommandSolver.MouseCommandListen
     //提示訊息(畫面上所有的文字處理)
     private ArrayList<Label> labels;
     private Label transFormCDLabel;
+
+    //積分動畫顯示
+    private Point point;
+    private Image imgPoint;
 
 
 
@@ -127,11 +135,15 @@ public class GameScene extends Scene implements CommandSolver.MouseCommandListen
         imgVolcano = SceneController.getInstance().imageController().tryGetImage(new Path().img().background().volcano());
         imgVillage = SceneController.getInstance().imageController().tryGetImage(new Path().img().background().village());
 
-
         imgWarning = new Animation(AllImages.WARNING);
 
         mouse = new Mouse(0, 0, 50, 50);
 
+        point = new Point();
+        imgPoint = SceneController.getInstance().imageController().tryGetImage(new Path().img().numbers().coin());
+
+        printGameTime = new GameTime();
+        imgClock = SceneController.getInstance().imageController().tryGetImage(new Path().img().numbers().clock());
     }
 
 
@@ -209,7 +221,7 @@ public class GameScene extends Scene implements CommandSolver.MouseCommandListen
         propsGenUpdate();
         sortObjectByPosition();
         //用forEach將ArrayList中每個gameObject去update()
-        keepNotPass(transformObstacles);
+
         keepNotPass(unPassMapObjects);
         allPropsUpdate();
 
@@ -274,16 +286,69 @@ public class GameScene extends Scene implements CommandSolver.MouseCommandListen
         });
     }
 
+    //積分顯示動畫
     public void paintPoint(Graphics g) {
-        g.setColor(Color.RED);
-        g.drawString("你的積分:" + mainPlayer.getPoint(), 600, 30);
-        g.setColor(Color.BLACK);
+//        g.setColor(Color.RED);
+//        g.drawString("你的積分:" + mainPlayer.getPoint(), 700, 30);
+//        g.setColor(Color.BLACK);
+        g.drawImage(imgPoint,
+                520,
+                5,
+                40,
+                40,
+                null);
+        g.drawImage(point.imgHundreds(mainPlayer.getPoint()),
+                560,
+                10,
+                20,
+                30,
+                null);
+        g.drawImage(point.imgTens(mainPlayer.getPoint()),
+                580,
+                10,
+                20,
+                30,
+                null);
+        g.drawImage(point.imgDigits(mainPlayer.getPoint()),
+                600,
+                10,
+                20,
+                30,
+                null);
+
+
     }
 
     private void paintTime(Graphics g) {
-        g.setColor(Color.WHITE);
-        g.drawString(String.format("剩餘時間 %s 秒", lastTime), Global.SCREEN_X - 100, 30);
-        g.setColor(Color.BLACK);
+//        g.setColor(Color.WHITE);
+//        g.drawString(String.format("剩餘時間 %s 秒", lastTime), Global.SCREEN_X - 100, 30);
+//        g.setColor(Color.BLACK);
+
+
+        g.drawImage(imgClock,
+                Global.SCREEN_X - 150,
+                -5,
+                60,
+                60,
+                null);
+        g.drawImage(printGameTime.imgHundreds(lastTime),
+                Global.SCREEN_X - 100,
+                10,
+                30,
+                30,
+                null);
+        g.drawImage(printGameTime.imgTens(lastTime),
+                Global.SCREEN_X - 80,
+                10,
+                30,
+                30,
+                null);
+        g.drawImage(printGameTime.imgDigits(lastTime),
+                Global.SCREEN_X - 60,
+                10,
+                30,
+                30,
+                null);
     }
 
     /**
@@ -324,7 +389,6 @@ public class GameScene extends Scene implements CommandSolver.MouseCommandListen
             }
         }
     }
-
 
     private void mapAreaClosing() {
         if (gameTime > 30 && gameTime <= 60) {
@@ -389,7 +453,6 @@ public class GameScene extends Scene implements CommandSolver.MouseCommandListen
             props.paint(g);
         }
     }
-
 
     @Override
     public void keyPressed(int commandCode, long trigTime) {

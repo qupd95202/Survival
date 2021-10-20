@@ -106,6 +106,9 @@ public class Global {
     //地圖上道具數量上限
     public static final int PROPS_AMOUNT_MAX = 6;
 
+    //選擇遊戲時間
+    public static final int CHOOSE_GAMETIME = 300;
+
 
 
 

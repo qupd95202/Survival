@@ -199,4 +199,5 @@ public class AllImages {
             SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().warningLabel()),
             SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().dontMove().nothing()))),Global.MapAreaType.NONE);
 
+
 }
