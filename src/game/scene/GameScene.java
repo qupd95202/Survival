@@ -59,8 +59,7 @@ public class GameScene extends Scene implements CommandSolver.MouseCommandListen
     private long chooseTime; //選擇的遊戲時間
     private long lastTime;
 
-    //關閉的區域（在裡面扣分）
-    private boolean inclosedArea;
+
 
     //左下角的方格
     Animation runnerLight;
@@ -73,6 +72,8 @@ public class GameScene extends Scene implements CommandSolver.MouseCommandListen
 
     //提示訊息(畫面上所有的文字處理)
     private ArrayList<Label> labels;
+    private Label transFormCDLabel;
+
 
 
     @Override
@@ -80,13 +81,13 @@ public class GameScene extends Scene implements CommandSolver.MouseCommandListen
         //遊戲時間
         startTime = System.nanoTime();
         chooseTime = 300; //單位：秒
-        inclosedArea = false;
 
         gameObjectList = new ArrayList<>();//初始ArrayList
         transformObstacles = new ArrayList<>();
 
         players = new ArrayList<>();
-        labels =new ArrayList<Label>();
+
+        labels = new ArrayList<Label>();
         propsReProduce = new Delay(900);
         propsRemove = new Delay(1800);
         propsRemove.play();
@@ -103,13 +104,13 @@ public class GameScene extends Scene implements CommandSolver.MouseCommandListen
         players.add(mainPlayer);
         players.add(new ComputerPlayer(0, 0, AllImages.blue, Player.RoleState.PREY));
         players.add(new ComputerPlayer(500, 500, AllImages.blue, Player.RoleState.PREY));
-        runnerDark=AllImages.runnerDark;
-        runnerLight=AllImages.runnerLight;
-        runnerNormal=AllImages.runnerNormal;
-        changeBody = AllImages.changeBody;
-        labels.add(new Label(Global.RUNNER_X+75,Global.RUNNER_Y+85,"F",20));
-        labels.add(new Label(Global.RUNNER_X+Global.GAME_SCENE_BOX_SIZE+5+75,Global.RUNNER_Y+85,"R",20));
-        labels.add(new Label(Global.RUNNER_X+Global.GAME_SCENE_BOX_SIZE+5+15,Global.RUNNER_Y+30 , String.valueOf(mainPlayer.transformCDTime()),20));
+
+        runner = new Animation(AllImages.runnerDark);
+        changeBody = new Animation(AllImages.changeBody);
+        transFormCDLabel = new Label(Global.RUNNER_X + Global.GAME_SCENE_BOX_SIZE + 5 + 15, Global.RUNNER_Y + 30, String.valueOf(mainPlayer.transformCDTime()), 20);
+        labels.add(new Label(Global.RUNNER_X + 75, Global.RUNNER_Y + 85, "F", 20));
+        labels.add(new Label(Global.RUNNER_X + Global.GAME_SCENE_BOX_SIZE + 5 + 75, Global.RUNNER_Y + 85, "R", 20));
+        labels.add(transFormCDLabel);
 
         //將要畫的物件存進ArrayList 為了要能在ArrayList取比較 重疊時畫的先後順序（y軸）
         players.forEach(player -> gameObjectList.addAll(List.of(player)));
@@ -130,7 +131,11 @@ public class GameScene extends Scene implements CommandSolver.MouseCommandListen
 
         imgWarning=AllImages.WARNING;
 
-        mouse=new Mouse(0,0,50,50);
+
+        imgWarning = new Animation(AllImages.WARNING);
+
+        mouse = new Mouse(0, 0, 50, 50);
+
     }
 
 
@@ -165,12 +170,13 @@ public class GameScene extends Scene implements CommandSolver.MouseCommandListen
         paintPoint(g);
 
         //判斷有沒有道具
-        if(!mainPlayer.isCanUseTeleportation() && !mainPlayer.isUseTeleportation()){
-            runnerDark.paint(Global.RUNNER_X,Global.RUNNER_Y,Global.GAME_SCENE_BOX_SIZE,Global.GAME_SCENE_BOX_SIZE,g);
-        }else if(mainPlayer.isCanUseTeleportation() && !mainPlayer.isUseTeleportation()){
-            runnerNormal.paint(Global.RUNNER_X,Global.RUNNER_Y,Global.GAME_SCENE_BOX_SIZE,Global.GAME_SCENE_BOX_SIZE,g);
-        }else {
-            runnerLight.paint(Global.RUNNER_X,Global.RUNNER_Y,Global.GAME_SCENE_BOX_SIZE,Global.GAME_SCENE_BOX_SIZE,g);
+
+        if (mainPlayer.isCanUseTeleportation() && !mainPlayer.isUseTeleportation()) {
+            runner.setImg(AllImages.runnerNormal);
+        } else if (mainPlayer.isCanUseTeleportation() && mainPlayer.isUseTeleportation()) {
+            runner.setImg(AllImages.runnerLight);
+        } else {
+            runner.setImg(AllImages.runnerDark);
         }
 
         //變身格
@@ -182,7 +188,6 @@ public class GameScene extends Scene implements CommandSolver.MouseCommandListen
         for (int i = 0; i < labels.size(); i++) {
             labels.get(i).paint(g);
         }
-
 
         mouse.paint(g);
 
@@ -212,17 +217,21 @@ public class GameScene extends Scene implements CommandSolver.MouseCommandListen
 
         gameObjectList.forEach(gameObject -> gameObject.update());
         cPlayerCheckOthersUpdate();
+        cPlayerCheckPropsUpdate();
         playerCollisionCheckUpdate();
         propsCollisionCheckUpdate();
         imgWarning.update();
         camera.update();
-        labels.get(2).setWords(String.valueOf(mainPlayer.transformCDTime()));
+
+        transFormCDLabel.setWords(String.valueOf(mainPlayer.transformCDTime()));
+
     }
 
     @Override
     public CommandSolver.MouseCommandListener mouseListener() {
         return this;
     }
+
 
     @Override
     public CommandSolver.KeyListener keyListener() {
@@ -244,6 +253,15 @@ public class GameScene extends Scene implements CommandSolver.MouseCommandListen
                 if (computerPlayer != player) {
                     computerPlayer.whoIsNear(player);
                 }
+            }
+        }
+    }
+
+    public void cPlayerCheckPropsUpdate() {
+        for (int i = 1; i < players.size(); i++) {
+            ComputerPlayer computerPlayer = (ComputerPlayer) players.get(i);
+            for (int j = 0; j < propsArrayList.size(); j++) {
+                computerPlayer.whichPropIsNear(propsArrayList.get(j));
             }
         }
     }
@@ -313,31 +331,31 @@ public class GameScene extends Scene implements CommandSolver.MouseCommandListen
     private void mapAreaClosing() {
         if (gameTime > 30 && gameTime <= 60) {
             if (mainPlayer.getPositionType() == Global.MapAreaType.FOREST) {
-                inclosedArea = true;
+                mainPlayer.setInClosedArea(true);
             } else {
-                inclosedArea = false;
+                mainPlayer.setInClosedArea(false);
             }
         } else if (gameTime > 60 && gameTime <= 120) {
             if (mainPlayer.getPositionType() == Global.MapAreaType.FOREST ||
                     mainPlayer.getPositionType() == Global.MapAreaType.ICEFIELD) {
-                inclosedArea = true;
+                mainPlayer.setInClosedArea(true);
             } else {
-                inclosedArea = false;
+                mainPlayer.setInClosedArea(false);
             }
         } else if (gameTime > 120) {
             if (mainPlayer.getPositionType() != Global.MapAreaType.VILLAGE) {
-                inclosedArea = true;
+                mainPlayer.setInClosedArea(true);
             } else {
-                inclosedArea = false;
+                mainPlayer.setInClosedArea(false);
             }
         }
     }
 
     private void paintWarning(Graphics g) {
-        if (inclosedArea) {
+        if (mainPlayer.isInClosedArea()) {
             g.setColor(Color.RED);
             imgWarning.paint(
-                    Global.SCREEN_X / 2-50 ,
+                    Global.SCREEN_X / 2 - 50,
                     100,
                     120,
                     50,
@@ -408,22 +426,10 @@ public class GameScene extends Scene implements CommandSolver.MouseCommandListen
             }
             mainPlayer.useTeleportation(mouseX, mouseY);
         }
-        mouse.mouseTrig(e,state,trigTime);
+
+        mouse.mouseTrig(e, state, trigTime);
+
     }
 
 
 }
-//    public void computerUpdate() {
-//        cp.whoIsNear(player);
-//        cp.update();
-//    }
-//    public void nearUpdate() {
-//
-//    }
-
-
-//    public void computerUpdate() {
-//        cp.whoIsNear(player);
-//        cp.update();
-//    }
-//}

@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ObjectArr {
-    public static ArrayList<Props> propsArr = new ArrayList<Props>(List.of(new Props(), new Props(), new Props()));
+    public static ArrayList<Props> propsArr = new ArrayList<Props>(List.of(new Props(), new Props(), new Props(),new Props(),new Props()));
 
     //0-1920, 0-1920        森林有：bee bunny1 bunny2 frog snail snack
     //1920-3840, 0-1920     火山有：barnacle bat ladyBug snakeLava snakeSlime

@@ -13,7 +13,8 @@ public class Props extends GameObject {
     public enum Type {
         addSpeed,
         teleportation,//瞬間移動
-        trap; //陷阱
+        trap, //陷阱
+        addPoint; //加分
     }
 
     private Animation animation;
@@ -24,7 +25,7 @@ public class Props extends GameObject {
     public Props() {
         super(Global.random(0, Global.MAP_PIXEL_WIDTH), Global.random(0, Global.MAP_PIXEL_HEIGHT), Global.UNIT_WIDTH, Global.UNIT_HEIGHT);
 //        super(300,300, Global.UNIT_WIDTH, Global.UNIT_HEIGHT);
-        this.animation = AllImages.questionBox;
+        this.animation = new Animation(AllImages.questionBox);
         this.propsType = genRandomType();
         collider().scale(painter().width() - 10, painter().height() - 10);
         painter().setCenter(collider().centerX(), collider().centerY());
@@ -33,7 +34,7 @@ public class Props extends GameObject {
     public Props(Type type) {
         super(Global.random(0, Global.MAP_PIXEL_WIDTH), Global.random(0, Global.MAP_PIXEL_HEIGHT), Global.UNIT_WIDTH, Global.UNIT_HEIGHT);
 //        super(300,300, Global.UNIT_WIDTH, Global.UNIT_HEIGHT);
-        this.animation = AllImages.questionBox;
+        this.animation = new Animation(AllImages.questionBox);
         this.propsType = type;
     }
 
@@ -52,7 +53,7 @@ public class Props extends GameObject {
     }
 
     public Type genRandomType() {
-        int randomNum = Global.random(1, 3);
+        int randomNum = Global.random(1, 4);
         switch (randomNum) {
             case 1 -> {
                 return Type.addSpeed;
@@ -60,8 +61,11 @@ public class Props extends GameObject {
             case 2 -> {
                 return Type.teleportation;
             }
-            default -> {
+            case 3 -> {
                 return Type.trap;
+            }
+            default -> {
+                return Type.addPoint;
             }
         }
     }
