@@ -2,6 +2,7 @@ package game.gameObj.players;
 
 import game.core.Global;
 import game.core.Movement;
+import game.core.Position;
 import game.gameObj.GameObject;
 import game.gameObj.Props;
 import game.gameObj.Transformation;
@@ -61,6 +62,9 @@ public class Player extends GameObject implements CommandSolver.KeyListener {
     private boolean canUseTeleportation; //有沒有撿到此道具
     private Delay trapDelay;
 
+    //是否在封閉區域
+    private boolean inclosedArea = false;
+
 
     public Player(int x, int y, Animation currentAnimation, RoleState roleState) {
         super(x, y, Global.PLAYER_WIDTH, Global.PLAYER_HEIGHT);
@@ -90,7 +94,11 @@ public class Player extends GameObject implements CommandSolver.KeyListener {
 
         movingState = MovingState.STAND;
 
+        inclosedArea = false;
+
     }
+
+
 
     @Override
     public void paintComponent(Graphics g) {
@@ -125,10 +133,7 @@ public class Player extends GameObject implements CommandSolver.KeyListener {
             transform();
         }
         if (commandCode == Global.KeyCommand.TELEPORTATION.getValue()) {
-            System.out.println("有吃到" + canUseTeleportation);
-
             clickedTeleportation();
-            System.out.println("有按到?" + isUseTeleportation);
         }
     }
 
@@ -302,7 +307,12 @@ public class Player extends GameObject implements CommandSolver.KeyListener {
         pointDelay.play();
         if (pointDelay.count()) {
             if (movingState == MovingState.WALK) {
-                point++;
+                //如果在封閉區域內移動 則扣分
+                if (inclosedArea) {
+                    point--;
+                }else {
+                    point++;
+                }
             }
         }
     }
@@ -364,7 +374,6 @@ public class Player extends GameObject implements CommandSolver.KeyListener {
         return movingState;
     }
 
-
     public int getPoint() {
         return point;
     }
@@ -390,6 +399,30 @@ public class Player extends GameObject implements CommandSolver.KeyListener {
     }
 
     public int transformCDTime() {
-        return 10-transformCD.getCount()/60;
+        return 10 - transformCD.getCount() / 60;
+    }
+
+    public Global.MapAreaType getPositionType() {
+        if (painter().left() < Global.UNIT_WIDTH * Global.MAP_WIDTH / 2 && painter().top() < Global.UNIT_HEIGHT * Global.MAP_HEIGHT / 2) {
+            return Global.MapAreaType.FOREST;
+        } else if (painter().left() < Global.UNIT_WIDTH * Global.MAP_WIDTH / 2 && painter().top() < Global.UNIT_HEIGHT * Global.MAP_HEIGHT) {
+            return Global.MapAreaType.ICEFIELD;
+        } else if (painter().left() < Global.UNIT_WIDTH * Global.MAP_WIDTH && painter().top() < Global.UNIT_HEIGHT * Global.MAP_HEIGHT / 2) {
+            return Global.MapAreaType.VOLCANO;
+        } else {
+            return Global.MapAreaType.VILLAGE;
+        }
+    }
+
+    public Global.MapAreaType getTransformationAnimationType() {
+        return currentAnimation.getMapAreaType();
+    }
+
+    public boolean inclosedArea() {
+        return inclosedArea;
+    }
+
+    public void setInclosedArea(boolean inclosedArea) {
+        this.inclosedArea = inclosedArea;
     }
 }

@@ -32,6 +32,7 @@ import java.util.List;
 
 public class GameScene extends Scene implements CommandSolver.MouseCommandListener, CommandSolver.KeyListener {
     private ArrayList<GameObject> gameObjectList; //將Game要畫的所有GameObject存起來
+    private ArrayList<Props> propsArrayList = ObjectArr.propsArr;
     //留意畫的順序
     private Player mainPlayer;
     //    private ComputerPlayer cp;
@@ -48,8 +49,9 @@ public class GameScene extends Scene implements CommandSolver.MouseCommandListen
     private Image imgVolcano;
     private Image imgVillage;
 
-
+    //道具生成與消失
     private Delay propsReProduce;
+    private Delay propsRemove;
 
     //時間計算
     private long startTime;
@@ -57,16 +59,12 @@ public class GameScene extends Scene implements CommandSolver.MouseCommandListen
     private long chooseTime; //選擇的遊戲時間
     private long lastTime;
 
-
     //關閉的區域（在裡面扣分）
-    private Position closedArea;
     private boolean inclosedArea;
 //    private Image imgWarning;
 
     //左下角的方格
-    Animation runnerLight;
-    Animation runnerDark;
-    Animation runnerNormal;
+    Animation runner;
     Animation changeBody;
     Animation imgWarning;
     //滑鼠
@@ -74,8 +72,6 @@ public class GameScene extends Scene implements CommandSolver.MouseCommandListen
 
     //提示訊息(畫面上所有的文字處理)
     private ArrayList<Label> labels;
-
-
 
     @Override
     public void sceneBegin() {
@@ -89,6 +85,9 @@ public class GameScene extends Scene implements CommandSolver.MouseCommandListen
         players = new ArrayList<>();
         labels =new ArrayList<Label>();
         propsReProduce = new Delay(900);
+        propsRemove = new Delay(1800);
+        propsRemove.play();
+        propsRemove.loop();
         propsReProduce.play();
         propsReProduce.loop();
 
@@ -99,6 +98,7 @@ public class GameScene extends Scene implements CommandSolver.MouseCommandListen
         players.add(mainPlayer);
         players.add(new ComputerPlayer(0, 0, AllImages.blue, Player.RoleState.PREY));
         players.add(new ComputerPlayer(500, 500, AllImages.blue, Player.RoleState.PREY));
+
         runnerDark=AllImages.runnerDark;
         runnerLight=AllImages.runnerLight;
         runnerNormal=AllImages.runnerNormal;
@@ -107,10 +107,10 @@ public class GameScene extends Scene implements CommandSolver.MouseCommandListen
         labels.add(new Label(Global.RUNNER_X+Global.GAME_SCENE_BOX_SIZE+5+75,Global.RUNNER_Y+85,"R",20));
         labels.add(new Label(Global.RUNNER_X+Global.GAME_SCENE_BOX_SIZE+5+15,Global.RUNNER_Y+30 , String.valueOf(mainPlayer.transformCDTime()),20));
 
+
         //將要畫的物件存進ArrayList 為了要能在ArrayList取比較 重疊時畫的先後順序（y軸）
         players.forEach(player -> gameObjectList.addAll(List.of(player)));
         transformObstacles.forEach(transformObstacle -> gameObjectList.addAll(List.of(transformObstacle)));
-//        gameObjectList.addAll(List.of(player, computerPlayers.forEach(computerPlayer -> ;));   //批次加入.addAll(List.of(物件1, 物件2.....))
 
         gameMap = new GameMap(Global.MAP_WIDTH, Global.MAP_HEIGHT);
         unPassMapObjects = gameMap.getMapObjects();
@@ -123,6 +123,7 @@ public class GameScene extends Scene implements CommandSolver.MouseCommandListen
         imgWinter = SceneController.getInstance().imageController().tryGetImage(new Path().img().background().winter());
         imgVolcano = SceneController.getInstance().imageController().tryGetImage(new Path().img().background().volcano());
         imgVillage = SceneController.getInstance().imageController().tryGetImage(new Path().img().background().village());
+
 
         closedArea = new Position(0,0);
 //        imgWarning = SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().warningLabel());
@@ -165,16 +166,26 @@ public class GameScene extends Scene implements CommandSolver.MouseCommandListen
         paintPoint(g);
 
         //判斷有沒有道具
+
         if(!mainPlayer.isCanUseTeleportation() && !mainPlayer.isUseTeleportation()){
             runnerDark.paint(Global.RUNNER_X,Global.RUNNER_Y,Global.GAME_SCENE_BOX_SIZE,Global.GAME_SCENE_BOX_SIZE,g);
         }else if(mainPlayer.isCanUseTeleportation() && !mainPlayer.isUseTeleportation()){
             runnerNormal.paint(Global.RUNNER_X,Global.RUNNER_Y,Global.GAME_SCENE_BOX_SIZE,Global.GAME_SCENE_BOX_SIZE,g);
         }else {
             runnerLight.paint(Global.RUNNER_X,Global.RUNNER_Y,Global.GAME_SCENE_BOX_SIZE,Global.GAME_SCENE_BOX_SIZE,g);
-        }
 
+//         if (mainPlayer.isCanUseTeleportation() && !mainPlayer.isUseTeleportation()) {
+//             runner = AllImages.runnerNormal;
+//         } else if (mainPlayer.isCanUseTeleportation() && mainPlayer.isUseTeleportation()) {
+//             runner = AllImages.runnerLight;
+//         } else {
+//             runner = AllImages.runnerDark;
+
+        }
+        runner.paint(0, Global.SCREEN_Y - 100, 100, 100, g);
 
         //變身格
+
         changeBody.paint(Global.RUNNER_X+Global.GAME_SCENE_BOX_SIZE+5,Global.RUNNER_Y,Global.GAME_SCENE_BOX_SIZE,Global.GAME_SCENE_BOX_SIZE,g);
         if(mainPlayer.getStoredTransformAnimation()!=null){
             mainPlayer.getStoredTransformAnimation().paint(Global.RUNNER_X+Global.GAME_SCENE_BOX_SIZE+25,Global.RUNNER_Y+20,60,60,g);
@@ -182,6 +193,11 @@ public class GameScene extends Scene implements CommandSolver.MouseCommandListen
 
         for (int i = 0; i < labels.size(); i++) {
             labels.get(i).paint(g);
+
+//         changeBody.paint(105, Global.SCREEN_Y - 100, 100, 100, g);
+//         if (mainPlayer.getStoredTransformAnimation() != null) {
+//             mainPlayer.getStoredTransformAnimation().paint(125, Global.SCREEN_Y - 80, 60, 60, g);
+
         }
 
 
@@ -203,13 +219,11 @@ public class GameScene extends Scene implements CommandSolver.MouseCommandListen
     @Override
     public void update() {
         mapAreaClosing();
-        checkPlayerInClosedArea();
 
         //為了解決player與npc重疊時 畫面物件顯示先後順序問題
         propsGenUpdate();
         sortObjectByPosition();
         //用forEach將ArrayList中每個gameObject去update()
-        keepNotPass(transformObstacles);
         keepNotPass(unPassMapObjects);
         allPropsUpdate();
         gameObjectList.forEach(gameObject -> gameObject.update());
@@ -268,7 +282,7 @@ public class GameScene extends Scene implements CommandSolver.MouseCommandListen
 
     private void paintTime(Graphics g) {
         g.setColor(Color.WHITE);
-        g.drawString(String.format("剩餘時間 %s 秒", lastTime),Global.SCREEN_X - 100 , 30);
+        g.drawString(String.format("剩餘時間 %s 秒", lastTime), Global.SCREEN_X - 100, 30);
         g.setColor(Color.BLACK);
     }
 
@@ -285,11 +299,12 @@ public class GameScene extends Scene implements CommandSolver.MouseCommandListen
             }
         }
     }
+
     /**
      * 道具的update
-     * */
-    public void allPropsUpdate(){
-        for(Props props : ObjectArr.propsArr) {
+     */
+    public void allPropsUpdate() {
+        for (Props props : propsArrayList) {
             props.update();
         }
     }
@@ -300,44 +315,50 @@ public class GameScene extends Scene implements CommandSolver.MouseCommandListen
     public void propsCollisionCheckUpdate() {
         //道具更新
         for (Player player : players) {
-            for (int i = 0; i < ObjectArr.propsArr.size(); i++) {
-                Props props = ObjectArr.propsArr.get(i);
+            for (int i = 0; i < propsArrayList.size(); i++) {
+                Props props = propsArrayList.get(i);
                 if (player.isCollision(props)) {
                     player.collideProps(props);
-                    ObjectArr.propsArr.remove(i--);
+                    propsArrayList.remove(i--);
                 }
             }
         }
     }
 
     private void mapAreaClosing() {
-        if (gameTime >= 10 && gameTime < 30) {
-            closedArea.setX(Global.UNIT_WIDTH * Global.MAP_WIDTH / 2);
-            closedArea.setY(Global.UNIT_HEIGHT * Global.MAP_HEIGHT / 2);
-        }
-        if (gameTime >= 30 && gameTime < 60){
-            closedArea.setY(Global.UNIT_HEIGHT * Global.MAP_HEIGHT);
-        }
-        if (gameTime >= 90 && gameTime < 120){
-            closedArea.setX(Global.UNIT_WIDTH * Global.MAP_WIDTH);
-        }
-
-    }
-
-
-    private void checkPlayerInClosedArea() {
-        if (mainPlayer.painter().left() < closedArea.getX() && mainPlayer.painter().top() < closedArea.getY()) {
-//            System.out.print("角色x" + mainPlayer.painter().left() + "  ");
-//            System.out.print("角色y" + mainPlayer.painter().top() + " ");
-//
-//            System.out.print("關閉x" + closedArea.getX() + "  ");
-//            System.out.print("關閉y" + closedArea.getY());
-//            System.out.println("Warning");
-            inclosedArea = true;
-        }else {
-            inclosedArea = false;
+        if (gameTime > 30 && gameTime <= 60) {
+            if (mainPlayer.getPositionType() == Global.MapAreaType.FOREST) {
+                inclosedArea = true;
+            } else {
+                inclosedArea = false;
+            }
+        } else if (gameTime > 60 && gameTime <= 120) {
+            if (mainPlayer.getPositionType() == Global.MapAreaType.FOREST ||
+                    mainPlayer.getPositionType() == Global.MapAreaType.ICEFIELD) {
+                inclosedArea = true;
+            } else {
+                inclosedArea = false;
+            }
+        } else if (gameTime > 120) {
+            if (mainPlayer.getPositionType() != Global.MapAreaType.VILLAGE) {
+                inclosedArea = true;
+            } else {
+                inclosedArea = false;
+            }
         }
     }
+
+
+//    private void checkPlayerInClosedArea() {
+//        if (mainPlayer.getPositionType() == Global.MapAreaType.FOREST) {
+//            inclosedArea = true;
+//        }
+//        {
+//            inclosedArea = true;
+//        } else{
+//            inclosedArea = false;
+//        }
+//    }
 
     private void paintWarning(Graphics g) {
         if (inclosedArea) {
@@ -356,11 +377,16 @@ public class GameScene extends Scene implements CommandSolver.MouseCommandListen
      * 道具產生更新
      */
     public void propsGenUpdate() {
-        if (ObjectArr.propsArr.size() >= 6) {
-            return;
+        if (propsRemove.count()) {
+            if (propsArrayList.size() > 0) {
+                propsArrayList.remove(0);
+            }
         }
         if (propsReProduce.count()) {
-            ObjectArr.propsArr.add(new Props());
+            if (propsArrayList.size() >= Global.PROPS_AMOUNT_MAX) {
+                return;
+            }
+            propsArrayList.add(new Props());
         }
     }
 
