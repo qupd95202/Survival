@@ -62,9 +62,7 @@ public class GameScene extends Scene implements CommandSolver.MouseCommandListen
 
 
     //左下角的方格
-    Animation runnerLight;
-    Animation runnerDark;
-    Animation runnerNormal;
+    Animation runner;
     Animation changeBody;
     Animation imgWarning;
     //滑鼠
@@ -129,8 +127,6 @@ public class GameScene extends Scene implements CommandSolver.MouseCommandListen
         imgVolcano = SceneController.getInstance().imageController().tryGetImage(new Path().img().background().volcano());
         imgVillage = SceneController.getInstance().imageController().tryGetImage(new Path().img().background().village());
 
-        imgWarning=AllImages.WARNING;
-
 
         imgWarning = new Animation(AllImages.WARNING);
 
@@ -178,6 +174,8 @@ public class GameScene extends Scene implements CommandSolver.MouseCommandListen
         } else {
             runner.setImg(AllImages.runnerDark);
         }
+        runner.paint(0, Global.SCREEN_Y - 100, 100, 100, g);
+
 
         //變身格
         changeBody.paint(105, Global.SCREEN_Y - 100, 100, 100, g);

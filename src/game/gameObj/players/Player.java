@@ -101,7 +101,6 @@ public class Player extends GameObject implements CommandSolver.KeyListener {
 
         movingState = MovingState.STAND;
 
-        inclosedArea = false;
 
     }
 

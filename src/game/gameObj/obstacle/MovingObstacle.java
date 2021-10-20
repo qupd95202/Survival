@@ -22,9 +22,7 @@ public class MovingObstacle extends TransformObstacle {
     //動畫處理部分拉出
     private Animation animation;
 
-    //給能變身物件也能移動
-    private Movement movement;
-    private Delay movementDeley; //每隔一小段時間再動
+
 
 
     public MovingObstacle(int x, int y, ImgArrAndType animation) {
@@ -32,15 +30,9 @@ public class MovingObstacle extends TransformObstacle {
         this.animation = new Animation(animation);
         this.canPass = false;
 
-        //給能變身物件也能移動
-        movement = new Movement(1);
-        movementDeley =  new Delay(120);
     }
 
-    private void move() {
-        
-        translate(Global.random(-1, 1), Global.random(-1, 1));
-    }
+
 
     @Override
     public void paintComponent(Graphics g) {
@@ -55,6 +47,6 @@ public class MovingObstacle extends TransformObstacle {
     @Override
     public void update() {
         animation.update();
-        move();
+
     }
 }
