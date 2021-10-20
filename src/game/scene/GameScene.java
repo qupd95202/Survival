@@ -64,7 +64,9 @@ public class GameScene extends Scene implements CommandSolver.MouseCommandListen
 //    private Image imgWarning;
 
     //左下角的方格
-    Animation runner;
+    Animation runnerLight;
+    Animation runnerDark;
+    Animation runnerNormal;
     Animation changeBody;
     Animation imgWarning;
     //滑鼠
@@ -72,6 +74,7 @@ public class GameScene extends Scene implements CommandSolver.MouseCommandListen
 
     //提示訊息(畫面上所有的文字處理)
     private ArrayList<Label> labels;
+
 
     @Override
     public void sceneBegin() {
@@ -98,14 +101,14 @@ public class GameScene extends Scene implements CommandSolver.MouseCommandListen
         players.add(mainPlayer);
         players.add(new ComputerPlayer(0, 0, AllImages.blue, Player.RoleState.PREY));
         players.add(new ComputerPlayer(500, 500, AllImages.blue, Player.RoleState.PREY));
-
         runnerDark=AllImages.runnerDark;
         runnerLight=AllImages.runnerLight;
         runnerNormal=AllImages.runnerNormal;
-        changeBody=AllImages.changeBody;
+        changeBody = AllImages.changeBody;
         labels.add(new Label(Global.RUNNER_X+75,Global.RUNNER_Y+85,"F",20));
         labels.add(new Label(Global.RUNNER_X+Global.GAME_SCENE_BOX_SIZE+5+75,Global.RUNNER_Y+85,"R",20));
         labels.add(new Label(Global.RUNNER_X+Global.GAME_SCENE_BOX_SIZE+5+15,Global.RUNNER_Y+30 , String.valueOf(mainPlayer.transformCDTime()),20));
+
 
 
         //將要畫的物件存進ArrayList 為了要能在ArrayList取比較 重疊時畫的先後順序（y軸）
@@ -125,11 +128,8 @@ public class GameScene extends Scene implements CommandSolver.MouseCommandListen
         imgVillage = SceneController.getInstance().imageController().tryGetImage(new Path().img().background().village());
 
 
-        closedArea = new Position(0,0);
 //        imgWarning = SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().warningLabel());
         imgWarning=AllImages.WARNING;
-
-
 
         mouse=new Mouse(0,0,50,50);
     }
@@ -166,38 +166,22 @@ public class GameScene extends Scene implements CommandSolver.MouseCommandListen
         paintPoint(g);
 
         //判斷有沒有道具
-
         if(!mainPlayer.isCanUseTeleportation() && !mainPlayer.isUseTeleportation()){
             runnerDark.paint(Global.RUNNER_X,Global.RUNNER_Y,Global.GAME_SCENE_BOX_SIZE,Global.GAME_SCENE_BOX_SIZE,g);
         }else if(mainPlayer.isCanUseTeleportation() && !mainPlayer.isUseTeleportation()){
             runnerNormal.paint(Global.RUNNER_X,Global.RUNNER_Y,Global.GAME_SCENE_BOX_SIZE,Global.GAME_SCENE_BOX_SIZE,g);
         }else {
             runnerLight.paint(Global.RUNNER_X,Global.RUNNER_Y,Global.GAME_SCENE_BOX_SIZE,Global.GAME_SCENE_BOX_SIZE,g);
-
-//         if (mainPlayer.isCanUseTeleportation() && !mainPlayer.isUseTeleportation()) {
-//             runner = AllImages.runnerNormal;
-//         } else if (mainPlayer.isCanUseTeleportation() && mainPlayer.isUseTeleportation()) {
-//             runner = AllImages.runnerLight;
-//         } else {
-//             runner = AllImages.runnerDark;
-
         }
-        runner.paint(0, Global.SCREEN_Y - 100, 100, 100, g);
 
         //變身格
-
-        changeBody.paint(Global.RUNNER_X+Global.GAME_SCENE_BOX_SIZE+5,Global.RUNNER_Y,Global.GAME_SCENE_BOX_SIZE,Global.GAME_SCENE_BOX_SIZE,g);
-        if(mainPlayer.getStoredTransformAnimation()!=null){
-            mainPlayer.getStoredTransformAnimation().paint(Global.RUNNER_X+Global.GAME_SCENE_BOX_SIZE+25,Global.RUNNER_Y+20,60,60,g);
+        changeBody.paint(105, Global.SCREEN_Y - 100, 100, 100, g);
+        if (mainPlayer.getStoredTransformAnimation() != null) {
+            mainPlayer.getStoredTransformAnimation().paint(125, Global.SCREEN_Y - 80, 60, 60, g);
         }
 
         for (int i = 0; i < labels.size(); i++) {
             labels.get(i).paint(g);
-
-//         changeBody.paint(105, Global.SCREEN_Y - 100, 100, 100, g);
-//         if (mainPlayer.getStoredTransformAnimation() != null) {
-//             mainPlayer.getStoredTransformAnimation().paint(125, Global.SCREEN_Y - 80, 60, 60, g);
-
         }
 
 
@@ -213,7 +197,6 @@ public class GameScene extends Scene implements CommandSolver.MouseCommandListen
 //        smallMap.paint(g, cp, Color.YELLOW, 100, 100);
 
         camera.paint(g);
-
     }
 
     @Override
@@ -224,8 +207,10 @@ public class GameScene extends Scene implements CommandSolver.MouseCommandListen
         propsGenUpdate();
         sortObjectByPosition();
         //用forEach將ArrayList中每個gameObject去update()
+        keepNotPass(transformObstacles);
         keepNotPass(unPassMapObjects);
         allPropsUpdate();
+
         gameObjectList.forEach(gameObject -> gameObject.update());
         cPlayerCheckOthersUpdate();
         playerCollisionCheckUpdate();
@@ -419,7 +404,6 @@ public class GameScene extends Scene implements CommandSolver.MouseCommandListen
 
     @Override
     public void mouseTrig(MouseEvent e, CommandSolver.MouseState state, long trigTime) {
-
         if (state == CommandSolver.MouseState.CLICKED) {
             int mouseX = e.getX() + camera.painter().left();
             int mouseY = e.getY() + camera.painter().top();

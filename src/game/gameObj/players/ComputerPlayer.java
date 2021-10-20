@@ -1,6 +1,7 @@
 package game.gameObj.players;
 
 import game.core.Global;
+import game.gameObj.Props;
 import game.graphic.AllImages;
 import game.graphic.Animation;
 import game.utils.Delay;
@@ -10,7 +11,8 @@ public class ComputerPlayer extends Player {
 
     private boolean isChase;
     private boolean isRun;
-    public Player chasedPlayer;
+    private Player chasedPlayer;
+    private Props chaserProps;
     private float nearest;
     private Delay randomMoveDelay;
     private int iniMoveOnX;
@@ -131,6 +133,13 @@ public class ComputerPlayer extends Player {
         cpMove(moveOnX, moveOnY);
     }
 
+    public void whichPropIsNear(Props props) {
+        float dx = Math.abs(props.collider().centerX() - painter().centerX());
+        float dy = Math.abs(props.collider().bottom() - painter().centerY() - 10);
+        float dc = (float) Math.sqrt(dx * dx + dy * dy);//計算斜邊,怪物與人物的距離
+
+    }
+
     public void whoIsNear(Player player) {
         float dx = Math.abs(player.collider().centerX() - painter().centerX());
         float dy = Math.abs(player.collider().bottom() - painter().centerY() - 10);
@@ -147,8 +156,10 @@ public class ComputerPlayer extends Player {
                 }
             }
             if (nearest < Global.WINDOW_WIDTH / 2) {
-                if (player.getPositionType() != player.getTransformationAnimationType()) {
-                    isChase = true;
+                if (this.chasedPlayer != null) {
+                    if (chasedPlayer.getPositionType() != chasedPlayer.getTransformationAnimationType()) {
+                        isChase = true;
+                    }
                 }
             }
             if (isChase) {
@@ -162,9 +173,7 @@ public class ComputerPlayer extends Player {
             }
         } else {
             if (dc < Global.WINDOW_WIDTH / 2) {
-                if (player.roleState == RoleState.HUNTER) {
-                    isRun = true;
-                }
+                isRun = true;
             } else {
                 isRun = false;
             }
