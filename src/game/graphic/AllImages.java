@@ -47,7 +47,7 @@ public class AllImages {
     //蝙蝠(火山)
     public static Animation bat = new Animation(new ArrayList<Image>(java.util.List.of(
             SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().move().bat1()),
-            SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().move().bat2()))), Global.MapAreaType.VILLAGE);
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().move().bat2()))), Global.MapAreaType.VOLCANO);
     //蜜蜂(森林)
     public static Animation bee = new Animation(new ArrayList<Image>(java.util.List.of(
             SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().move().bee1()),
@@ -55,11 +55,11 @@ public class AllImages {
     //bunny1(森林)
     public static Animation bunny1 = new Animation(new ArrayList<Image>(java.util.List.of(
             SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().move().bunny1()),
-            SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().move().bunny2()))), Global.MapAreaType.VILLAGE);
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().move().bunny2()))), Global.MapAreaType.FOREST);
     //bunny2(森林)
     public static Animation bunny2 = new Animation(new ArrayList<Image>(java.util.List.of(
             SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().move().bunny21()),
-            SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().move().bunny22()))), Global.MapAreaType.ICEFIELD);
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().move().bunny22()))), Global.MapAreaType.FOREST);
     //fishGreen
     public static Animation fishGreen = new Animation(new ArrayList<Image>(java.util.List.of(
             SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().move().fishGreen1()),
@@ -82,17 +82,17 @@ public class AllImages {
             SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().move().flyMan3()),
             SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().move().flyMan4()),
             SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().move().flyMan5()),
-            SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().move().flyMan6()))), Global.MapAreaType.VOLCANO);
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().move().flyMan6()))), Global.MapAreaType.VILLAGE);
 
     //frog(森林)
     public static Animation frog = new Animation(new ArrayList<Image>(java.util.List.of(
             SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().move().frog1()),
-            SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().move().frog2()))), Global.MapAreaType.VOLCANO);
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().move().frog2()))), Global.MapAreaType.FOREST);
 
     //ladyBug(火山)
     public static Animation ladyBug = new Animation(new ArrayList<Image>(java.util.List.of(
             SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().move().ladyBug1()),
-            SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().move().ladyBug2()))), Global.MapAreaType.FOREST);
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().move().ladyBug2()))), Global.MapAreaType.VOLCANO);
 
     //mouse(村莊)
     public static Animation mouse = new Animation(new ArrayList<Image>(java.util.List.of(
@@ -102,7 +102,7 @@ public class AllImages {
     //slime(冰原)
     public static Animation slime = new Animation(new ArrayList<Image>(java.util.List.of(
             SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().move().slime1()),
-            SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().move().slime2()))), Global.MapAreaType.FOREST);
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().move().slime2()))), Global.MapAreaType.ICEFIELD);
 
     //slimeBlue(冰原)
     public static Animation slimeBlue = new Animation(new ArrayList<Image>(java.util.List.of(
@@ -112,7 +112,7 @@ public class AllImages {
     //slimeGreen(冰原)
     public static Animation slimeGreen = new Animation(new ArrayList<Image>(java.util.List.of(
             SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().move().slimeGreen1()),
-            SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().move().slimeGreen2()))), Global.MapAreaType.FOREST);
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().move().slimeGreen2()))), Global.MapAreaType.ICEFIELD);
 
     //snail(森林)
     public static Animation snail = new Animation(new ArrayList<Image>(java.util.List.of(
@@ -127,12 +127,12 @@ public class AllImages {
     //snakeLava(火山)
     public static Animation snakeLava = new Animation(new ArrayList<Image>(java.util.List.of(
             SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().move().snakeLava1()),
-            SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().move().snakeLava2()))), Global.MapAreaType.FOREST);
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().move().snakeLava2()))), Global.MapAreaType.VOLCANO);
 
     //snakeSlime(火山)
     public static Animation snakeSlime = new Animation(new ArrayList<Image>(java.util.List.of(
             SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().move().snakeSlime1()),
-            SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().move().snakeSlime2()))), Global.MapAreaType.FOREST);
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().move().snakeSlime2()))), Global.MapAreaType.VOLCANO);
 
     //spider(村莊)
     public static Animation spider = new Animation(new ArrayList<Image>(java.util.List.of(

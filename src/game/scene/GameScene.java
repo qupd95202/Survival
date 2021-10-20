@@ -97,9 +97,8 @@ public class GameScene extends Scene implements CommandSolver.MouseCommandListen
         //先將要畫的物件初始
         mainPlayer = new Player(Global.SCREEN_X / 2, Global.SCREEN_Y / 2, AllImages.beige, Player.RoleState.HUNTER);
 
-//        transformObstacles.add(new TransformObstacle(400, 500, AllImages.bunny1));
-//        transformObstacles.add(new MovingObstacle(300, 300, AllImages.bee));
-        transformObstacles = ObjectArr.transformObstaclList2();
+        //取得地圖可變身物件
+        transformObstacles = ObjectArr.transformObstaclList1;
 
         players.add(mainPlayer);
         players.add(new ComputerPlayer(0, 0, AllImages.blue, Player.RoleState.PREY));
@@ -112,12 +111,9 @@ public class GameScene extends Scene implements CommandSolver.MouseCommandListen
         labels.add(new Label(Global.RUNNER_X+Global.GAME_SCENE_BOX_SIZE+5+75,Global.RUNNER_Y+85,"R",20));
         labels.add(new Label(Global.RUNNER_X+Global.GAME_SCENE_BOX_SIZE+5+15,Global.RUNNER_Y+30 , String.valueOf(mainPlayer.transformCDTime()),20));
 
-
-
         //將要畫的物件存進ArrayList 為了要能在ArrayList取比較 重疊時畫的先後順序（y軸）
         players.forEach(player -> gameObjectList.addAll(List.of(player)));
 
-        //
         transformObstacles.forEach(transformObstacle -> gameObjectList.addAll(List.of(transformObstacle)));
 
         gameMap = new GameMap(Global.MAP_WIDTH, Global.MAP_HEIGHT);
@@ -313,6 +309,7 @@ public class GameScene extends Scene implements CommandSolver.MouseCommandListen
         }
     }
 
+
     private void mapAreaClosing() {
         if (gameTime > 30 && gameTime <= 60) {
             if (mainPlayer.getPositionType() == Global.MapAreaType.FOREST) {
@@ -335,18 +332,6 @@ public class GameScene extends Scene implements CommandSolver.MouseCommandListen
             }
         }
     }
-
-
-//    private void checkPlayerInClosedArea() {
-//        if (mainPlayer.getPositionType() == Global.MapAreaType.FOREST) {
-//            inclosedArea = true;
-//        }
-//        {
-//            inclosedArea = true;
-//        } else{
-//            inclosedArea = false;
-//        }
-//    }
 
     private void paintWarning(Graphics g) {
         if (inclosedArea) {

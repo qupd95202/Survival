@@ -59,7 +59,7 @@ public class Global {
         NONE;
     }
 
-    public static final boolean IS_DEBUG = true;
+    public static final boolean IS_DEBUG = false;
 
     public static final int UPDATE_TIMES_PER_SEC = 60;
     public static final int NANOSECOUND_PER_UPDATE = 1000000000 / UPDATE_TIMES_PER_SEC;

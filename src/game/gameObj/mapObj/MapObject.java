@@ -51,7 +51,7 @@ public class MapObject extends GameObject {
 
             case "winterTree1" :
                 this.type = Type.winterTree1;
-                collider().scale(painter().width() - 50, painter().height() - 60);
+                collider().scale(painter().width() - 50, painter().height() - 65);
                 painter().setCenter(collider().centerX() , collider().centerY() - 30);
                 break;
             case "rock" :

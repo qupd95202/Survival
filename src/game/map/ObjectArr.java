@@ -20,71 +20,73 @@ public class ObjectArr {
     public static ArrayList<TransformObstacle> transformObstaclList1 = new ArrayList<>(List.of(
             //森林
             new MovingObstacle(900, 900, AllImages.bee),
+            new MovingObstacle(1200, 480, AllImages.bee),
             new MovingObstacle(1700, 300, AllImages.bunny1),
+            new MovingObstacle(30, 500, AllImages.bunny1),
             new MovingObstacle(600, 1700, AllImages.bunny2),
+            new MovingObstacle(490, 700, AllImages.bunny2),
             new MovingObstacle(550, 1100, AllImages.frog),
+            new MovingObstacle(1300, 1250, AllImages.frog),
             new MovingObstacle(1400, 780, AllImages.snail),
-            new MovingObstacle(1100, 1600, AllImages.snack),
+            new MovingObstacle(1400, 780, AllImages.snail),
+            new MovingObstacle(600, 300, AllImages.snack),
+            new MovingObstacle(550, 1200, AllImages.snack),
 
             //火山
-            new MovingObstacle(2300, 900, AllImages.barnacle),
-            new MovingObstacle(3000, 450, AllImages.bat),
-            new MovingObstacle(2200, 230, AllImages.ladyBug),
+            new MovingObstacle(2313, 900, AllImages.barnacle),
+            new MovingObstacle(2072, 1400, AllImages.barnacle),
+            new MovingObstacle(2738, 450, AllImages.bat),
+            new MovingObstacle(2845, 755, AllImages.bat),
+            new MovingObstacle(3504, 413, AllImages.ladyBug),
+            new MovingObstacle(2100, 789, AllImages.ladyBug),
             new MovingObstacle(2800, 1700, AllImages.snakeLava),
-            new MovingObstacle(3700, 600, AllImages.snakeSlime),
+            new MovingObstacle(2800, 1068, AllImages.snakeLava),
+            new MovingObstacle(1955, 1432, AllImages.snakeSlime),
+            new MovingObstacle(3631, 185, AllImages.snakeSlime),
             //冰原
-            new MovingObstacle(1800, 3300, AllImages.slime),
-            new MovingObstacle(340, 2600, AllImages.slimeBlue),
-            new MovingObstacle(980, 2000, AllImages.slimeGreen),
+            new MovingObstacle(587, 1944, AllImages.slime),
+            new MovingObstacle(966, 2147, AllImages.slime),
+            new MovingObstacle(1800, 3535, AllImages.slime),
+            new MovingObstacle(400, 2424, AllImages.slimeBlue),
+            new MovingObstacle(200, 3041, AllImages.slimeBlue),
+            new MovingObstacle(770, 2004, AllImages.slimeBlue),
+            new MovingObstacle(1309, 2701, AllImages.slimeGreen),
+            new MovingObstacle(980, 3650, AllImages.slimeGreen),
+            new MovingObstacle(398, 1937, AllImages.slimeGreen),
 
             //村莊
-            new MovingObstacle(3300, 2000, AllImages.fly),
-            new MovingObstacle(2500, 3000, AllImages.flyMan),
+            new MovingObstacle(3300, 2791, AllImages.fly),
+            new MovingObstacle(2381, 2965, AllImages.fly),
+            new MovingObstacle(3301, 3083, AllImages.fly),
+            new MovingObstacle(2515, 2699, AllImages.flyMan),
+            new MovingObstacle(2634, 2718, AllImages.flyMan),
+            new MovingObstacle(2500, 2769, AllImages.flyMan),
+            new MovingObstacle(3691, 2305, AllImages.mouse),
             new MovingObstacle(2700, 3700, AllImages.mouse),
-            new MovingObstacle(2900, 2900, AllImages.spider)
+            new MovingObstacle(3168, 2777, AllImages.mouse),
+            new MovingObstacle(2900, 2900, AllImages.spider),
+            new MovingObstacle(2728, 3024, AllImages.spider),
+            new MovingObstacle(3246, 2900, AllImages.spider)
+
 
     ));
 
-    public static ArrayList<TransformObstacle> transformObstaclList2 () {
-        ArrayList<TransformObstacle> allBeeList = new ArrayList<>();
-        for(int i = 0; i < 100; i ++) {
-            allBeeList.add(new MovingObstacle(Global.random(0, 1920), Global.random(0, 1920), AllImages.bee));
+    public static ArrayList<TransformObstacle> transformObstacRandomlList () {
+        ArrayList<TransformObstacle> randomList = new ArrayList<>();
+        for(int i = 0; i < 10; i ++) {
+            randomList.add(new MovingObstacle(Global.random(0, 1920), Global.random(0, 1920), AllImages.bee));
         }
-        return allBeeList;
+        for(int i = 0; i < 10; i ++) {
+            randomList.add(new MovingObstacle(Global.random(1920, 3840), Global.random(0, 1920), AllImages.bat));
+        }
+        for(int i = 0; i < 10; i ++) {
+            randomList.add(new MovingObstacle(Global.random(0, 1920), Global.random(1920, 3840), AllImages.slimeBlue));
+        }
+        for(int i = 0; i < 10; i ++) {
+            randomList.add(new MovingObstacle(Global.random(1920, 3840), Global.random(1920, 3840), AllImages.mouse));
+        }
+        return randomList;
     }
 
-    public static ArrayList<TransformObstacle> transformObstaclList3 = new ArrayList<>(List.of(
-            //森林
-            new MovingObstacle(Global.random(0, 1920), Global.random(0, 1920), AllImages.bee),
-            new MovingObstacle(Global.random(0, 1920), Global.random(0, 1920), AllImages.bee),
-            new MovingObstacle(Global.random(0, 1920), Global.random(0, 1920), AllImages.bee),
-            new MovingObstacle(Global.random(0, 1920), Global.random(0, 1920), AllImages.bee),
-            new MovingObstacle(Global.random(0, 1920), Global.random(0, 1920), AllImages.bee),
-            new MovingObstacle(Global.random(0, 1920), Global.random(0, 1920), AllImages.bee),
-            new MovingObstacle(Global.random(0, 1920), Global.random(0, 1920), AllImages.bee),
-            new MovingObstacle(Global.random(0, 1920), Global.random(0, 1920), AllImages.bee),
-            new MovingObstacle(Global.random(0, 1920), Global.random(0, 1920), AllImages.bee),
-            new MovingObstacle(Global.random(0, 1920), Global.random(0, 1920), AllImages.bee),
-            new MovingObstacle(Global.random(0, 1920), Global.random(0, 1920), AllImages.bee),
-            new MovingObstacle(Global.random(0, 1920), Global.random(0, 1920), AllImages.bee),
-            new MovingObstacle(Global.random(0, 1920), Global.random(0, 1920), AllImages.bee),
-            new MovingObstacle(Global.random(0, 1920), Global.random(0, 1920), AllImages.bee),
-            //火山
-            new MovingObstacle(2300, 900, AllImages.barnacle),
-            new MovingObstacle(3000, 450, AllImages.bat),
-            new MovingObstacle(2200, 230, AllImages.ladyBug),
-            new MovingObstacle(2800, 1700, AllImages.snakeLava),
-            new MovingObstacle(3700, 600, AllImages.snakeSlime),
-            //冰原
-            new MovingObstacle(1800, 3300, AllImages.slime),
-            new MovingObstacle(340, 2600, AllImages.slimeBlue),
-            new MovingObstacle(980, 2000, AllImages.slimeGreen),
-
-            //村莊
-            new MovingObstacle(3300, 2000, AllImages.fly),
-            new MovingObstacle(2500, 3000, AllImages.flyMan),
-            new MovingObstacle(2700, 3700, AllImages.mouse),
-            new MovingObstacle(2900, 2900, AllImages.spider)
-    ));
 
 }
