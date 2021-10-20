@@ -38,7 +38,7 @@ public class Mouse extends GameObject implements CommandSolver.MouseCommandListe
         if(state==CommandSolver.MouseState.MOVED){
             e.setSource(img);
             painter().setCenter(e.getX(),e.getY());
-
+            collider().setCenter(e.getX(),e.getY());
         }
 
     }

@@ -5,7 +5,9 @@ import game.core.Global;
 import game.utils.GameKernel;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.awt.image.BufferedImage;
 
 public class Display extends JFrame {
 
@@ -14,6 +16,13 @@ public class Display extends JFrame {
         setSize(width, height);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setResizable(false); //是否可調整大小
+        // Transparent 16 x 16 pixel cursor image.
+        BufferedImage cursorImg = new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB);
+        // Create a new blank cursor.
+        Cursor blankCursor = Toolkit.getDefaultToolkit().createCustomCursor(
+                cursorImg, new Point(0, 0), "blank cursor");
+        // Set the blank cursor to the JFrame.
+        getContentPane().setCursor(blankCursor);
 
         int[][] commands = {
                 {KeyEvent.VK_A, Global.KeyCommand.LEFT.getValue()},

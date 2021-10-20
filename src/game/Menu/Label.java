@@ -13,6 +13,7 @@ public class Label extends GameObject {
         this.size=size;
     }
 
+
     @Override
     public void paintComponent(Graphics g) {
         Font font=new Font("", Font.BOLD, size);
@@ -24,5 +25,9 @@ public class Label extends GameObject {
     @Override
     public void update() {
 
+    }
+
+    public void setWords(String words) {
+        this.words = words;
     }
 }

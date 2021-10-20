@@ -165,4 +165,8 @@ public class AllImages {
     public static Animation changeBody=new Animation(new ArrayList<Image>(java.util.List.of(
             SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().dontMove().changeBody()))),Global.MapAreaType.NONE);
 
+    //WARNING
+    public static Animation WARNING=new Animation(new ArrayList<Image>(java.util.List.of(
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().warningLabel()),
+    SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().dontMove().nothing()))),Global.MapAreaType.NONE);;
 }

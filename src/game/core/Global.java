@@ -108,6 +108,11 @@ public class Global {
     //地圖上道具數量上限
     public static final int PROPS_AMOUNT_MAX = 10;
 
+    //瞬間移動格的位子
+    public static final int RUNNER_X = 0;
+    public static final int RUNNER_Y = Global.SCREEN_Y-100;
+    public static final int GAME_SCENE_BOX_SIZE = 100;
+
     public static ArrayList<Image> bumpImg = new ArrayList<Image>(List.of(SceneController.getInstance().imageController().tryGetImage(
                     new Path().img().actors().bump().Bump1()),
             SceneController.getInstance().imageController().tryGetImage(
