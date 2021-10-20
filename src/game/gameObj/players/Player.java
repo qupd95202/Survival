@@ -66,8 +66,10 @@ public class Player extends GameObject implements CommandSolver.KeyListener {
     private boolean canUseTeleportation; //有沒有撿到此道具
     private Delay trapDelay;
 
+
     //扣分相關
     private boolean isInClosedArea;
+
 
 
     public Player(int x, int y, ImgArrAndType imageArrayList, RoleState roleState) {
@@ -99,7 +101,11 @@ public class Player extends GameObject implements CommandSolver.KeyListener {
 
         movingState = MovingState.STAND;
 
+        inclosedArea = false;
+
     }
+
+
 
     @Override
     public void paintComponent(Graphics g) {
@@ -315,6 +321,7 @@ public class Player extends GameObject implements CommandSolver.KeyListener {
                 }
             } else if (movingState == MovingState.WALK) {
                 point++;
+
             }
         }
     }
@@ -424,11 +431,13 @@ public class Player extends GameObject implements CommandSolver.KeyListener {
         return currentAnimation.getMapAreaType();
     }
 
+
     public void setInClosedArea(boolean inClosedArea) {
         isInClosedArea = inClosedArea;
     }
 
     public boolean isInClosedArea() {
         return isInClosedArea;
+
     }
 }

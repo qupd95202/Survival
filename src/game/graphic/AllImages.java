@@ -41,6 +41,7 @@ public class AllImages {
 
     //可移動物件
     //怪物(火山)
+
     public static ImgArrAndType barnacle = new ImgArrAndType(new ArrayList<Image>(java.util.List.of(
             SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().move().barnacle1()),
             SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().move().barnacle2()))), Global.MapAreaType.VOLCANO);
@@ -85,12 +86,14 @@ public class AllImages {
             SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().move().flyMan6()))), Global.MapAreaType.VILLAGE);
 
     //frog(森林)
+
     public static ImgArrAndType frog = new ImgArrAndType(new ArrayList<Image>(java.util.List.of(
             SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().move().frog1()),
             SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().move().frog2()))), Global.MapAreaType.FOREST);
 
     //ladyBug(火山)
     public static ImgArrAndType ladyBug = new ImgArrAndType(new ArrayList<Image>(java.util.List.of(
+
             SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().move().ladyBug1()),
             SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().move().ladyBug2()))), Global.MapAreaType.VOLCANO);
 
@@ -100,6 +103,7 @@ public class AllImages {
             SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().move().mouse2()))), Global.MapAreaType.VILLAGE);
 
     //slime(冰原)
+
     public static ImgArrAndType slime = new ImgArrAndType(new ArrayList<Image>(java.util.List.of(
             SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().move().slime1()),
             SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().move().slime2()))), Global.MapAreaType.ICEFIELD);
@@ -111,6 +115,7 @@ public class AllImages {
 
     //slimeGreen(冰原)
     public static ImgArrAndType slimeGreen = new ImgArrAndType(new ArrayList<Image>(java.util.List.of(
+
             SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().move().slimeGreen1()),
             SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().move().slimeGreen2()))), Global.MapAreaType.ICEFIELD);
 
@@ -130,6 +135,7 @@ public class AllImages {
             SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().move().snakeLava2()))), Global.MapAreaType.VOLCANO);
 
     //snakeSlime(火山)
+
     public static ImgArrAndType snakeSlime = new ImgArrAndType(new ArrayList<Image>(java.util.List.of(
             SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().move().snakeSlime1()),
             SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().move().snakeSlime2()))), Global.MapAreaType.VOLCANO);
@@ -192,4 +198,5 @@ public class AllImages {
     public static ImgArrAndType WARNING=new ImgArrAndType(new ArrayList<Image>(java.util.List.of(
             SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().warningLabel()),
             SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().dontMove().nothing()))),Global.MapAreaType.NONE);
+
 }

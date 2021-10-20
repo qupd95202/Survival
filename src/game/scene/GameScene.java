@@ -59,11 +59,12 @@ public class GameScene extends Scene implements CommandSolver.MouseCommandListen
     private long chooseTime; //選擇的遊戲時間
     private long lastTime;
 
-    //關閉的區域（在裡面扣分）
 
 
     //左下角的方格
-    Animation runner;
+    Animation runnerLight;
+    Animation runnerDark;
+    Animation runnerNormal;
     Animation changeBody;
     Animation imgWarning;
     //滑鼠
@@ -74,6 +75,7 @@ public class GameScene extends Scene implements CommandSolver.MouseCommandListen
     private Label transFormCDLabel;
 
 
+
     @Override
     public void sceneBegin() {
         //遊戲時間
@@ -82,7 +84,9 @@ public class GameScene extends Scene implements CommandSolver.MouseCommandListen
 
         gameObjectList = new ArrayList<>();//初始ArrayList
         transformObstacles = new ArrayList<>();
+
         players = new ArrayList<>();
+
         labels = new ArrayList<Label>();
         propsReProduce = new Delay(900);
         propsRemove = new Delay(1800);
@@ -93,11 +97,14 @@ public class GameScene extends Scene implements CommandSolver.MouseCommandListen
 
         //先將要畫的物件初始
         mainPlayer = new Player(Global.SCREEN_X / 2, Global.SCREEN_Y / 2, AllImages.beige, Player.RoleState.HUNTER);
-        transformObstacles.add(new TransformObstacle(400, 500, AllImages.bunny1));
-        transformObstacles.add(new MovingObstacle(300, 300, AllImages.bee));
+
+        //取得地圖可變身物件
+        transformObstacles = ObjectArr.transformObstaclList1;
+
         players.add(mainPlayer);
         players.add(new ComputerPlayer(0, 0, AllImages.blue, Player.RoleState.PREY));
         players.add(new ComputerPlayer(500, 500, AllImages.blue, Player.RoleState.PREY));
+
         runner = new Animation(AllImages.runnerDark);
         changeBody = new Animation(AllImages.changeBody);
         transFormCDLabel = new Label(Global.RUNNER_X + Global.GAME_SCENE_BOX_SIZE + 5 + 15, Global.RUNNER_Y + 30, String.valueOf(mainPlayer.transformCDTime()), 20);
@@ -105,9 +112,9 @@ public class GameScene extends Scene implements CommandSolver.MouseCommandListen
         labels.add(new Label(Global.RUNNER_X + Global.GAME_SCENE_BOX_SIZE + 5 + 75, Global.RUNNER_Y + 85, "R", 20));
         labels.add(transFormCDLabel);
 
-
         //將要畫的物件存進ArrayList 為了要能在ArrayList取比較 重疊時畫的先後順序（y軸）
         players.forEach(player -> gameObjectList.addAll(List.of(player)));
+
         transformObstacles.forEach(transformObstacle -> gameObjectList.addAll(List.of(transformObstacle)));
 
         gameMap = new GameMap(Global.MAP_WIDTH, Global.MAP_HEIGHT);
@@ -122,11 +129,13 @@ public class GameScene extends Scene implements CommandSolver.MouseCommandListen
         imgVolcano = SceneController.getInstance().imageController().tryGetImage(new Path().img().background().volcano());
         imgVillage = SceneController.getInstance().imageController().tryGetImage(new Path().img().background().village());
 
+        imgWarning=AllImages.WARNING;
 
-//        imgWarning = SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().warningLabel());
+
         imgWarning = new Animation(AllImages.WARNING);
 
         mouse = new Mouse(0, 0, 50, 50);
+
     }
 
 
@@ -161,6 +170,7 @@ public class GameScene extends Scene implements CommandSolver.MouseCommandListen
         paintPoint(g);
 
         //判斷有沒有道具
+
         if (mainPlayer.isCanUseTeleportation() && !mainPlayer.isUseTeleportation()) {
             runner.setImg(AllImages.runnerNormal);
         } else if (mainPlayer.isCanUseTeleportation() && mainPlayer.isUseTeleportation()) {
@@ -168,7 +178,6 @@ public class GameScene extends Scene implements CommandSolver.MouseCommandListen
         } else {
             runner.setImg(AllImages.runnerDark);
         }
-        runner.paint(0, Global.SCREEN_Y - 100, 100, 100, g);
 
         //變身格
         changeBody.paint(105, Global.SCREEN_Y - 100, 100, 100, g);
@@ -179,6 +188,7 @@ public class GameScene extends Scene implements CommandSolver.MouseCommandListen
         for (int i = 0; i < labels.size(); i++) {
             labels.get(i).paint(g);
         }
+
         mouse.paint(g);
 
         //要畫在小地圖的要加在下方
@@ -201,6 +211,7 @@ public class GameScene extends Scene implements CommandSolver.MouseCommandListen
         propsGenUpdate();
         sortObjectByPosition();
         //用forEach將ArrayList中每個gameObject去update()
+        keepNotPass(transformObstacles);
         keepNotPass(unPassMapObjects);
         allPropsUpdate();
 
@@ -211,7 +222,9 @@ public class GameScene extends Scene implements CommandSolver.MouseCommandListen
         propsCollisionCheckUpdate();
         imgWarning.update();
         camera.update();
+
         transFormCDLabel.setWords(String.valueOf(mainPlayer.transformCDTime()));
+
     }
 
     @Override
@@ -314,6 +327,7 @@ public class GameScene extends Scene implements CommandSolver.MouseCommandListen
         }
     }
 
+
     private void mapAreaClosing() {
         if (gameTime > 30 && gameTime <= 60) {
             if (mainPlayer.getPositionType() == Global.MapAreaType.FOREST) {
@@ -336,18 +350,6 @@ public class GameScene extends Scene implements CommandSolver.MouseCommandListen
             }
         }
     }
-
-
-//    private void checkPlayerInClosedArea() {
-//        if (mainPlayer.getPositionType() == Global.MapAreaType.FOREST) {
-//            inclosedArea = true;
-//        }
-//        {
-//            inclosedArea = true;
-//        } else{
-//            inclosedArea = false;
-//        }
-//    }
 
     private void paintWarning(Graphics g) {
         if (mainPlayer.isInClosedArea()) {
@@ -424,22 +426,10 @@ public class GameScene extends Scene implements CommandSolver.MouseCommandListen
             }
             mainPlayer.useTeleportation(mouseX, mouseY);
         }
+
         mouse.mouseTrig(e, state, trigTime);
+
     }
 
 
 }
-//    public void computerUpdate() {
-//        cp.whoIsNear(player);
-//        cp.update();
-//    }
-//    public void nearUpdate() {
-//
-//    }
-
-
-//    public void computerUpdate() {
-//        cp.whoIsNear(player);
-//        cp.update();
-//    }
-//}

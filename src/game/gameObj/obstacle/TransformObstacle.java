@@ -1,6 +1,7 @@
 package game.gameObj.obstacle;
 
 import game.core.Global;
+import game.core.Movement;
 import game.gameObj.GameObject;
 import game.gameObj.Transformation;
 import game.graphic.Animation;
@@ -18,6 +19,7 @@ public class TransformObstacle extends GameObject implements Transformation {
         this.animation = new Animation(imgArrAndType);
         collider().scale(painter().width() - 10, painter().height() - 10);
         painter().setCenter(collider().centerX(), collider().centerY());
+
     }
 
 
@@ -27,6 +29,7 @@ public class TransformObstacle extends GameObject implements Transformation {
         }
         return false;
     }
+
 
 
     @Override
@@ -42,6 +45,8 @@ public class TransformObstacle extends GameObject implements Transformation {
     @Override
     public void update() {
         animation.update();
+
+
     }
 
 

@@ -41,20 +41,40 @@ public class MapObject extends GameObject {
     //要能帶入資源 以利格子上決定哪個圖
     public MapObject(int x, int y, int width, int height, String MapObjectName) {
         super(x, y, width, height);
-        this.canPass = canPass;
 
         switch (MapObjectName) {
-            case "tree1" -> this.type = Type.tree1;
-            case "winterTree1" -> this.type = Type.winterTree1;
-            case "rock" -> this.type = Type.rock;
-            case "house1" -> this.type = Type.house1;
-            case "house2" -> this.type = Type.house2;
+            case "tree1" :
+                this.type = Type.tree1;
+                collider().scale(painter().width() - 50, painter().height() - 80);
+                painter().setCenter(collider().centerX() , collider().centerY() - 40);
+                break;
 
-            default -> this.type = Type.tree1;
+            case "winterTree1" :
+                this.type = Type.winterTree1;
+                collider().scale(painter().width() - 50, painter().height() - 65);
+                painter().setCenter(collider().centerX() , collider().centerY() - 30);
+                break;
+            case "rock" :
+                this.type = Type.rock;
+                collider().scale(painter().width() - 40, painter().height() - 40);
+                painter().setCenter(collider().centerX() , collider().centerY() - 20);
+                break;
+            case "house1" :
+                this.type = Type.house1;
+                collider().scale(painter().width() - 100, painter().height() - 100);
+                painter().setCenter(collider().centerX(), collider().centerY());
+                break;
+            case "house2" :
+                this.type = Type.house2;
+                collider().scale(painter().width() - 100, painter().height() - 100);
+                painter().setCenter(collider().centerX(), collider().centerY());
+                break;
+
+            default :
+                this.type = Type.tree1;
+                break;
         }
         img = SceneController.getInstance().imageController().tryGetImage(this.type.path);
-        collider().scale(painter().width() - 50, painter().height() - 50);
-        painter().setCenter(collider().centerX(), collider().centerY());
     }
 
     public Image getImg() {

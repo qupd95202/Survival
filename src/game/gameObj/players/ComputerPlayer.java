@@ -1,7 +1,9 @@
 package game.gameObj.players;
 
 import game.core.Global;
+
 import game.gameObj.GameObject;
+
 import game.gameObj.Props;
 import game.graphic.AllImages;
 import game.graphic.Animation;
@@ -16,6 +18,7 @@ public class ComputerPlayer extends Player {
 
     private boolean isChase;
     private boolean isRun;
+
     private boolean isStopByWall;
     private boolean canPassWall;
     private Delay notStopDelay;
@@ -24,6 +27,7 @@ public class ComputerPlayer extends Player {
     private Player chasedPlayer;
     private Props chasedProps;
     private boolean isChaseProps;
+
     private float nearest;
     private float propsNearest;
     private Delay randomMoveDelay;
@@ -154,6 +158,7 @@ public class ComputerPlayer extends Player {
         cpMove(moveOnX, moveOnY);
     }
 
+<
     public void chaseProps() {
         if (chasedProps == null || isChase) {
             isChaseProps = false;
@@ -175,10 +180,12 @@ public class ComputerPlayer extends Player {
         }
     }
 
+
     public void whichPropIsNear(Props props) {
         float dx = Math.abs(props.collider().centerX() - painter().centerX());
         float dy = Math.abs(props.collider().bottom() - painter().centerY() - 10);
         float dc = (float) Math.sqrt(dx * dx + dy * dy);//計算斜邊,怪物與人物的距離
+
         if (dc < propsNearest) {
             propsNearest = dc;
             chasedProps = props;
@@ -210,6 +217,7 @@ public class ComputerPlayer extends Player {
                     isChase = true;
                 }
             }
+
             if (nearest < Global.WINDOW_WIDTH / 2) { //玩家圖片屬性與當前地區物件屬性不同
                 if (this.chasedPlayer != null) {
                     if (chasedPlayer.getPositionType() != chasedPlayer.getTransformationAnimationType()) {
