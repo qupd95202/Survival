@@ -61,7 +61,6 @@ public class GameScene extends Scene implements CommandSolver.MouseCommandListen
 
     //關閉的區域（在裡面扣分）
     private boolean inclosedArea;
-//    private Image imgWarning;
 
     //左下角的方格
     Animation runnerLight;
@@ -85,6 +84,7 @@ public class GameScene extends Scene implements CommandSolver.MouseCommandListen
 
         gameObjectList = new ArrayList<>();//初始ArrayList
         transformObstacles = new ArrayList<>();
+
         players = new ArrayList<>();
         labels =new ArrayList<Label>();
         propsReProduce = new Delay(900);
@@ -96,8 +96,11 @@ public class GameScene extends Scene implements CommandSolver.MouseCommandListen
 
         //先將要畫的物件初始
         mainPlayer = new Player(Global.SCREEN_X / 2, Global.SCREEN_Y / 2, AllImages.beige, Player.RoleState.HUNTER);
-        transformObstacles.add(new TransformObstacle(400, 500, AllImages.bunny1));
-        transformObstacles.add(new MovingObstacle(300, 300, AllImages.bee));
+
+//        transformObstacles.add(new TransformObstacle(400, 500, AllImages.bunny1));
+//        transformObstacles.add(new MovingObstacle(300, 300, AllImages.bee));
+        transformObstacles = ObjectArr.transformObstaclList2();
+
         players.add(mainPlayer);
         players.add(new ComputerPlayer(0, 0, AllImages.blue, Player.RoleState.PREY));
         players.add(new ComputerPlayer(500, 500, AllImages.blue, Player.RoleState.PREY));
@@ -113,6 +116,8 @@ public class GameScene extends Scene implements CommandSolver.MouseCommandListen
 
         //將要畫的物件存進ArrayList 為了要能在ArrayList取比較 重疊時畫的先後順序（y軸）
         players.forEach(player -> gameObjectList.addAll(List.of(player)));
+
+        //
         transformObstacles.forEach(transformObstacle -> gameObjectList.addAll(List.of(transformObstacle)));
 
         gameMap = new GameMap(Global.MAP_WIDTH, Global.MAP_HEIGHT);
@@ -127,8 +132,6 @@ public class GameScene extends Scene implements CommandSolver.MouseCommandListen
         imgVolcano = SceneController.getInstance().imageController().tryGetImage(new Path().img().background().volcano());
         imgVillage = SceneController.getInstance().imageController().tryGetImage(new Path().img().background().village());
 
-
-//        imgWarning = SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().warningLabel());
         imgWarning=AllImages.WARNING;
 
         mouse=new Mouse(0,0,50,50);
