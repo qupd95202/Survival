@@ -584,6 +584,9 @@ public class Path {
             public String changeBody() {
                 return this + "/changeRoleButton.png";
             }
+            public String nothing() {
+                return this + "/nothing.png";
+            }
 
         }
 

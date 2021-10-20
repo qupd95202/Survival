@@ -188,4 +188,8 @@ public class AllImages {
 
     }
 
+    //WARNING
+    public static Animation WARNING=new Animation(new ArrayList<Image>(java.util.List.of(
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().warningLabel()),
+    SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().dontMove().nothing()))),Global.MapAreaType.NONE);;
 }
