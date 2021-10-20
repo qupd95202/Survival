@@ -70,7 +70,7 @@ public class GameScene extends Scene implements CommandSolver.MouseCommandListen
         //遊戲時間
         startTime = System.nanoTime();
         chooseTime = 300; //單位：秒
-
+        inclosedArea = false;
 
         gameObjectList = new ArrayList<>();//初始ArrayList
         transformObstacles = new ArrayList<>();
@@ -138,8 +138,8 @@ public class GameScene extends Scene implements CommandSolver.MouseCommandListen
         camera.paint(g);
         camera.endCamera(g);
 
-        //顯示遊戲剩餘時間
-        paintLastGameTime(g);
+        //顯示遊戲時間
+        paintTime(g);
         //顯示警告
         paintWarning(g);
         //顯示積分
@@ -235,7 +235,7 @@ public class GameScene extends Scene implements CommandSolver.MouseCommandListen
         g.setColor(Color.BLACK);
     }
 
-    private void paintLastGameTime(Graphics g) {
+    private void paintTime(Graphics g) {
         g.setColor(Color.WHITE);
         g.drawString(String.format("剩餘時間 %s 秒", lastTime), Global.SCREEN_X - 100, 30);
         g.setColor(Color.BLACK);
@@ -303,24 +303,30 @@ public class GameScene extends Scene implements CommandSolver.MouseCommandListen
         }
     }
 
-    private void checkPlayerInClosedArea() {
-        if (mainPlayer.painter().left() < closedArea.getX() && mainPlayer.painter().top() < closedArea.getY()) {
-            mainPlayer.setInclosedArea(true);
-        }else {
-            mainPlayer.setInclosedArea(false);;
-        }
-    }
+
+//    private void checkPlayerInClosedArea() {
+//        if (mainPlayer.getPositionType() == Global.MapAreaType.FOREST) {
+//            inclosedArea = true;
+//        }
+//        {
+//            inclosedArea = true;
+//        } else{
+//            inclosedArea = false;
+//        }
+//    }
 
     private void paintWarning(Graphics g) {
-        if (mainPlayer.inclosedArea()) {
+        if (inclosedArea) {
+            g.setColor(Color.RED);
             g.drawImage(
                     imgWarning,
-                    Global.SCREEN_X / 2 - 100 ,
-                    0,
-                    200,
-                    37,
+                    Global.SCREEN_X / 2 - 50,
+                    Global.SCREEN_Y / 2 - 82,
+                    100,
+                    40,
                     null
             );
+            g.setColor(Color.BLACK);
         }
     }
 
