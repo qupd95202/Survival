@@ -3,10 +3,6 @@ package game.utils;
 
 import game.Menu.MenuScene;
 import game.controllers.SceneController;
-import game.core.Global;
-import game.scene.GameScene;
-import game.utils.CommandSolver;
-import game.utils.GameKernel;
 
 
 import java.awt.*;

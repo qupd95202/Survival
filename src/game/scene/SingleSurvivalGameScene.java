@@ -1,15 +1,13 @@
 package game.scene;
 
 import game.Menu.Label;
+import game.Menu.MenuScene;
 import game.Menu.Mouse;
 import game.controllers.SceneController;
 import game.core.Global;
-import game.core.Position;
 import game.gameObj.GameObject;
 import game.gameObj.Props;
 import game.gameObj.mapObj.MapObject;
-import game.gameObj.obstacle.MovingObstacle;
-import game.gameObj.obstacle.Obstacle;
 import game.gameObj.obstacle.TransformObstacle;
 import game.gameObj.players.Player;
 import game.gameObj.players.ComputerPlayer;
@@ -29,17 +27,17 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-
-public class GameScene extends Scene implements CommandSolver.MouseCommandListener, CommandSolver.KeyListener {
+/**
+ * 獵人吃到道具不會加速，道具多點，道具功能增加
+ */
+public class SingleSurvivalGameScene extends Scene implements CommandSolver.MouseCommandListener, CommandSolver.KeyListener {
     private ArrayList<GameObject> gameObjectList; //將Game要畫的所有GameObject存起來
-    private ArrayList<Props> propsArrayList = ObjectArr.propsArr;
     //留意畫的順序
     private Player mainPlayer;
-    //    private ComputerPlayer cp;
-//    private ComputerPlayer cp2;
-    private ArrayList<Player> players;
-    private ArrayList<TransformObstacle> transformObstacles;
+    private ArrayList<ComputerPlayer> computerPlayers;
+    private ArrayList<TransformObstacle> transformObstacles = ObjectArr.transformObstaclList1;
     private ArrayList<MapObject> unPassMapObjects;
+    private ArrayList<Props> propsArrayList = ObjectArr.propsArrSurvivalGame;
     private Camera camera;
     private SmallMap smallMap;
     private GameMap gameMap;
@@ -60,13 +58,9 @@ public class GameScene extends Scene implements CommandSolver.MouseCommandListen
     private long lastTime;
 
 
-
     //左下角的方格
-    Animation runnerLight;
-    Animation runnerDark;
-    Animation runnerNormal;
+    Animation runner;
     Animation changeBody;
-    Animation imgWarning;
     //滑鼠
     private Mouse mouse;
 
@@ -75,36 +69,38 @@ public class GameScene extends Scene implements CommandSolver.MouseCommandListen
     private Label transFormCDLabel;
 
 
-
     @Override
     public void sceneBegin() {
         //遊戲時間
         startTime = System.nanoTime();
         chooseTime = 300; //單位：秒
-
-        gameObjectList = new ArrayList<>();//初始ArrayList
-        transformObstacles = new ArrayList<>();
-
-        players = new ArrayList<>();
-
+        //初始ArrayList
+        gameObjectList = new ArrayList<>();
+        computerPlayers = new ArrayList<>();
         labels = new ArrayList<Label>();
-        propsReProduce = new Delay(900);
-        propsRemove = new Delay(1800);
+
+        //道具相關
+        propsReProduce = new Delay(150);
+        propsRemove = new Delay(300);
         propsRemove.play();
         propsRemove.loop();
         propsReProduce.play();
         propsReProduce.loop();
 
-        //先將要畫的物件初始
-        mainPlayer = new Player(Global.SCREEN_X / 2, Global.SCREEN_Y / 2, AllImages.beige, Player.RoleState.HUNTER);
-
-        //取得地圖可變身物件
-        transformObstacles = ObjectArr.transformObstaclList1;
-
-        players.add(mainPlayer);
-        players.add(new ComputerPlayer(0, 0, AllImages.blue, Player.RoleState.PREY));
-        players.add(new ComputerPlayer(500, 500, AllImages.blue, Player.RoleState.PREY));
-
+        //主角
+        mainPlayer = new Player(Global.SCREEN_X / 2, Global.SCREEN_Y / 2, AllImages.beige, Player.RoleState.PREY);
+        //新增電腦玩家
+        computerPlayers.add(new ComputerPlayer(100, 100, AllImages.blue, Player.RoleState.HUNTER, ComputerPlayer.Mode.SINGLE_SURVIVAL_GAME));
+        computerPlayers.add(new ComputerPlayer(900, 3200, AllImages.blue, Player.RoleState.HUNTER, ComputerPlayer.Mode.SINGLE_SURVIVAL_GAME));
+        computerPlayers.add(new ComputerPlayer(2300, 3000, AllImages.blue, Player.RoleState.HUNTER, ComputerPlayer.Mode.SINGLE_SURVIVAL_GAME));
+        computerPlayers.add(new ComputerPlayer(100, 2300, AllImages.blue, Player.RoleState.HUNTER, ComputerPlayer.Mode.SINGLE_SURVIVAL_GAME));
+        computerPlayers.add(new ComputerPlayer(1599, 500, AllImages.blue, Player.RoleState.HUNTER, ComputerPlayer.Mode.SINGLE_SURVIVAL_GAME));
+        computerPlayers.add(new ComputerPlayer(100, 2500, AllImages.blue, Player.RoleState.HUNTER, ComputerPlayer.Mode.SINGLE_SURVIVAL_GAME));
+        //預設難度一
+        for (ComputerPlayer computerPlayer : computerPlayers) {
+            computerPlayer.AILevel1();
+        }
+        //畫面上相關
         runner = new Animation(AllImages.runnerDark);
         changeBody = new Animation(AllImages.changeBody);
         transFormCDLabel = new Label(Global.RUNNER_X + Global.GAME_SCENE_BOX_SIZE + 5 + 15, Global.RUNNER_Y + 30, String.valueOf(mainPlayer.transformCDTime()), 20);
@@ -113,10 +109,10 @@ public class GameScene extends Scene implements CommandSolver.MouseCommandListen
         labels.add(transFormCDLabel);
 
         //將要畫的物件存進ArrayList 為了要能在ArrayList取比較 重疊時畫的先後順序（y軸）
-        players.forEach(player -> gameObjectList.addAll(List.of(player)));
-
+        computerPlayers.forEach(player -> gameObjectList.addAll(List.of(player)));
         transformObstacles.forEach(transformObstacle -> gameObjectList.addAll(List.of(transformObstacle)));
 
+        //地圖與鏡頭相關
         gameMap = new GameMap(Global.MAP_WIDTH, Global.MAP_HEIGHT);
         unPassMapObjects = gameMap.getMapObjects();
         unPassMapObjects.forEach(mapObject -> gameObjectList.addAll(List.of(mapObject)));
@@ -124,16 +120,13 @@ public class GameScene extends Scene implements CommandSolver.MouseCommandListen
         camera.setTarget(mainPlayer);
         smallMap = new SmallMap(0, 0, Global.MAP_WIDTH, Global.MAP_HEIGHT, 0.05, 0.05);
 
+        //背景地圖
         imgForest = SceneController.getInstance().imageController().tryGetImage(new Path().img().background().forest());
         imgWinter = SceneController.getInstance().imageController().tryGetImage(new Path().img().background().winter());
         imgVolcano = SceneController.getInstance().imageController().tryGetImage(new Path().img().background().volcano());
         imgVillage = SceneController.getInstance().imageController().tryGetImage(new Path().img().background().village());
 
-        imgWarning=AllImages.WARNING;
-
-
-        imgWarning = new Animation(AllImages.WARNING);
-
+        //滑鼠
         mouse = new Mouse(0, 0, 50, 50);
 
     }
@@ -141,7 +134,12 @@ public class GameScene extends Scene implements CommandSolver.MouseCommandListen
 
     @Override
     public void sceneEnd() {
-
+//        gameObjectList = null;
+//        unPassMapObjects = null;
+//        transformObstacles = null;
+//        gameMap = null;
+//        camera = null;
+        SceneController.getInstance().change(new MenuScene());
     }
 
     @Override
@@ -149,12 +147,9 @@ public class GameScene extends Scene implements CommandSolver.MouseCommandListen
         gameTime = (System.nanoTime() - startTime) / 1000000000;
         lastTime = chooseTime - gameTime;
         camera.startCamera(g);
-        g.drawImage(imgForest, 0, 0, 1920, 1920, null);
-        g.drawImage(imgVolcano, 1920, 0, 1920, 1920, null);
-        g.drawImage(imgWinter, 0, 1920, 1920, 1920, null);
-        g.drawImage(imgVillage, 1920, 1920, 1920, 1920, null);
-        gameMap.paint(g);
+        mapPaint(g);
         //用forEach將ArrayList中每個gameObject去paint()
+        mainPlayer.paint(g);
         gameObjectList.forEach(gameObject -> gameObject.paint(g));
         propsPaint(g);
 
@@ -164,67 +159,45 @@ public class GameScene extends Scene implements CommandSolver.MouseCommandListen
 
         //顯示遊戲時間
         paintTime(g);
-        //顯示警告
-        paintWarning(g);
-        //顯示積分
-        paintPoint(g);
-
-        //判斷有沒有道具
-
-        if (mainPlayer.isCanUseTeleportation() && !mainPlayer.isUseTeleportation()) {
-            runner.setImg(AllImages.runnerNormal);
-        } else if (mainPlayer.isCanUseTeleportation() && mainPlayer.isUseTeleportation()) {
-            runner.setImg(AllImages.runnerLight);
-        } else {
-            runner.setImg(AllImages.runnerDark);
-        }
-
-        //變身格
-        changeBody.paint(105, Global.SCREEN_Y - 100, 100, 100, g);
-        if (mainPlayer.getStoredTransformAnimation() != null) {
-            mainPlayer.getStoredTransformAnimation().paint(125, Global.SCREEN_Y - 80, 60, 60, g);
-        }
-
-        for (int i = 0; i < labels.size(); i++) {
-            labels.get(i).paint(g);
-        }
-
+        //顯示技能
+        skillPaint(g);
+        //畫滑鼠
         mouse.paint(g);
 
         //要畫在小地圖的要加在下方
         smallMap.start(g);
         gameMap.paint(g);
         smallMap.paint(g, mainPlayer, Color.red, 100, 100);//小地圖的需要另外再paint一次
-        for (int i = 1; i < players.size(); i++) {
-            smallMap.paint(g, players.get(i), Color.YELLOW, 100, 100);
+        if (Global.IS_DEBUG || mainPlayer.isHunterWatcher) {
+            for (int i = 1; i < computerPlayers.size(); i++) {
+                smallMap.paint(g, computerPlayers.get(i), Color.YELLOW, 100, 100);
+            }
         }
-//        smallMap.paint(g, cp, Color.YELLOW, 100, 100);
-
         camera.paint(g);
     }
 
     @Override
     public void update() {
-        mapAreaClosing();
-
-        //為了解決player與npc重疊時 畫面物件顯示先後順序問題
+        //道具生成與更新
         propsGenUpdate();
-        sortObjectByPosition();
-        //用forEach將ArrayList中每個gameObject去update()
-        keepNotPass(transformObstacles);
-        keepNotPass(unPassMapObjects);
         allPropsUpdate();
-
+        propsEffectUpdate();
+        //難度更新
+        levelUpdate();
+        //為了解決player與npc重疊時 畫面物件顯示先後順序問題
+        sortObjectByPosition();
+        //無法穿越部分物件
+        keepNotPass(unPassMapObjects);
+        //用forEach將ArrayList中每個gameObject去update()
+        mainPlayer.update();
         gameObjectList.forEach(gameObject -> gameObject.update());
         cPlayerCheckOthersUpdate();
         cPlayerCheckPropsUpdate();
         playerCollisionCheckUpdate();
         propsCollisionCheckUpdate();
-        imgWarning.update();
         camera.update();
-
+        //cd時間顯示之資料
         transFormCDLabel.setWords(String.valueOf(mainPlayer.transformCDTime()));
-
     }
 
     @Override
@@ -245,41 +218,38 @@ public class GameScene extends Scene implements CommandSolver.MouseCommandListen
         gameObjectList.sort(Comparator.comparing(gameObject -> gameObject.painter().bottom()));
     }
 
+    /**
+     * 電腦玩家偵查玩家
+     */
     public void cPlayerCheckOthersUpdate() {
-        for (int i = 1; i < players.size(); i++) {
-            ComputerPlayer computerPlayer = (ComputerPlayer) players.get(i);
-            for (int j = 0; j < players.size(); j++) {
-                Player player = players.get(j);
-                if (computerPlayer != player) {
-                    computerPlayer.whoIsNear(player);
-                }
-            }
+        for (ComputerPlayer computerPlayer : computerPlayers) {
+            computerPlayer.whoIsNearInSurvivalGame(mainPlayer);
         }
     }
 
+    /**
+     * 電腦玩家偵查道具
+     */
     public void cPlayerCheckPropsUpdate() {
-        for (int i = 1; i < players.size(); i++) {
-            ComputerPlayer computerPlayer = (ComputerPlayer) players.get(i);
+        for (int i = 1; i < computerPlayers.size(); i++) {
+            ComputerPlayer computerPlayer = computerPlayers.get(i);
             for (int j = 0; j < propsArrayList.size(); j++) {
                 computerPlayer.whichPropIsNear(propsArrayList.get(j));
             }
         }
     }
 
+    /**
+     * 遊戲結束
+     */
     public void playerCollisionCheckUpdate() {
-        players.forEach(player -> {
-            players.forEach(player1 -> {
-                if (player != player1) {
-                    player.exchangeRole(player1);
+        computerPlayers.forEach(player -> {
+            if (player.isCollision(mainPlayer)) {
+                if (!mainPlayer.isSuperStar) {
+                    sceneEnd();
                 }
-            });
+            }
         });
-    }
-
-    public void paintPoint(Graphics g) {
-        g.setColor(Color.RED);
-        g.drawString("你的積分:" + mainPlayer.getPoint(), 600, 30);
-        g.setColor(Color.BLACK);
     }
 
     private void paintTime(Graphics g) {
@@ -288,15 +258,44 @@ public class GameScene extends Scene implements CommandSolver.MouseCommandListen
         g.setColor(Color.BLACK);
     }
 
+    public void mapPaint(Graphics g) {
+        g.drawImage(imgForest, 0, 0, 1920, 1920, null);
+        g.drawImage(imgVolcano, 1920, 0, 1920, 1920, null);
+        g.drawImage(imgWinter, 0, 1920, 1920, 1920, null);
+        g.drawImage(imgVillage, 1920, 1920, 1920, 1920, null);
+        gameMap.paint(g);
+    }
+
+    public void skillPaint(Graphics g) {
+        if (mainPlayer.isCanUseTeleportation() && !mainPlayer.isUseTeleportation()) {
+            runner.setImg(AllImages.runnerNormal);
+        } else if (mainPlayer.isCanUseTeleportation() && mainPlayer.isUseTeleportation()) {
+            runner.setImg(AllImages.runnerLight);
+        } else {
+            runner.setImg(AllImages.runnerDark);
+        }
+        runner.paint(0, Global.SCREEN_Y - 100, 100, 100, g);
+        changeBody.paint(105, Global.SCREEN_Y - 100, 100, 100, g);
+        if (mainPlayer.getStoredTransformAnimation() != null) {
+            mainPlayer.getStoredTransformAnimation().paint(125, Global.SCREEN_Y - 80, 60, 60, g);
+        }
+        for (int i = 0; i < labels.size(); i++) {
+            labels.get(i).paint(g);
+        }
+    }
+
     /**
      * 讓角色無法穿過該物件
      */
     public void keepNotPass(ArrayList<? extends GameObject> gameObjects) {
-        for (Player player : players) {
-            player.setNothingBlock(true);
-            for (int i = 0; i < gameObjects.size(); i++) {
-                if (player.isCollisionForMovement(gameObjects.get(i))) {
-                    player.notMove();
+        mainPlayer.setNothingBlock(true);
+        for (GameObject gameObject : gameObjects) {
+            if (mainPlayer.isCollisionForMovement(gameObject)) {
+                mainPlayer.notMove();
+            }
+            for (ComputerPlayer computerPlayer : computerPlayers) {
+                if (computerPlayer.isCollisionForMovement(gameObject)) {
+                    computerPlayer.notMove();
                 }
             }
         }
@@ -315,52 +314,22 @@ public class GameScene extends Scene implements CommandSolver.MouseCommandListen
      * 碰撞道具的update
      */
     public void propsCollisionCheckUpdate() {
-        //道具更新
-        for (Player player : players) {
-            for (int i = 0; i < propsArrayList.size(); i++) {
-                Props props = propsArrayList.get(i);
-                if (player.isCollision(props)) {
-                    player.collideProps(props);
+        for (int i = 0; i < propsArrayList.size(); i++) {
+            Props props = propsArrayList.get(i);
+            if (mainPlayer.isCollision(props)) {
+                mainPlayer.collidePropsInSurvivalMode(props);
+                props.setGotByPlayer(true);
+                propsArrayList.remove(i--);
+                continue;
+            }
+            for (ComputerPlayer computerPlayer : computerPlayers) {
+                if (computerPlayer.isCollision(props)) {
+                    computerPlayer.collidePropsInSurvivalMode(props);
+                    props.setGotByPlayer(true);
                     propsArrayList.remove(i--);
+                    break;
                 }
             }
-        }
-    }
-
-
-    private void mapAreaClosing() {
-        if (gameTime > 30 && gameTime <= 60) {
-            if (mainPlayer.getPositionType() == Global.MapAreaType.FOREST) {
-                mainPlayer.setInClosedArea(true);
-            } else {
-                mainPlayer.setInClosedArea(false);
-            }
-        } else if (gameTime > 60 && gameTime <= 120) {
-            if (mainPlayer.getPositionType() == Global.MapAreaType.FOREST ||
-                    mainPlayer.getPositionType() == Global.MapAreaType.ICEFIELD) {
-                mainPlayer.setInClosedArea(true);
-            } else {
-                mainPlayer.setInClosedArea(false);
-            }
-        } else if (gameTime > 120) {
-            if (mainPlayer.getPositionType() != Global.MapAreaType.VILLAGE) {
-                mainPlayer.setInClosedArea(true);
-            } else {
-                mainPlayer.setInClosedArea(false);
-            }
-        }
-    }
-
-    private void paintWarning(Graphics g) {
-        if (mainPlayer.isInClosedArea()) {
-            g.setColor(Color.RED);
-            imgWarning.paint(
-                    Global.SCREEN_X / 2 - 50,
-                    100,
-                    120,
-                    50,
-                    g);
-            g.setColor(Color.BLACK);
         }
     }
 
@@ -374,10 +343,10 @@ public class GameScene extends Scene implements CommandSolver.MouseCommandListen
             }
         }
         if (propsReProduce.count()) {
-            if (propsArrayList.size() >= Global.PROPS_AMOUNT_MAX) {
+            if (propsArrayList.size() >= Global.PROPS_AMOUNT_MAX_SURVIVAL_GAME) {
                 return;
             }
-            propsArrayList.add(new Props());
+            propsArrayList.add(new Props(1));
         }
     }
 
@@ -387,8 +356,42 @@ public class GameScene extends Scene implements CommandSolver.MouseCommandListen
      * @param g
      */
     public void propsPaint(Graphics g) {
-        for (Props props : ObjectArr.propsArr) {
+        for (Props props : propsArrayList) {
             props.paint(g);
+        }
+    }
+
+    public void levelUpdate() {
+        if ((int) lastTime == 150) {
+            for (ComputerPlayer computerPlayer : computerPlayers) {
+                computerPlayer.AILevel2();
+            }
+        }
+        if ((int) lastTime == 50) {
+            for (ComputerPlayer computerPlayer : computerPlayers) {
+                computerPlayer.AILevel3();
+            }
+        }
+    }
+
+    public void propsEffectUpdate() {
+        if (mainPlayer.isThunder) {
+            for (ComputerPlayer computerPlayer : computerPlayers) {
+                computerPlayer.decreaseSpeed();
+            }
+            mainPlayer.isThunder = false;
+        }
+        if (mainPlayer.isHunterStop) {
+            for (ComputerPlayer computerPlayer : computerPlayers) {
+                computerPlayer.propsStopTimeDelay.play();
+                computerPlayer.setCanMove(false);
+            }
+            mainPlayer.isHunterStop = false;
+        }
+
+        if (mainPlayer.isDecreaseGameTime) {
+            chooseTime -= 20;
+            mainPlayer.isDecreaseGameTime = false;
         }
     }
 
@@ -418,7 +421,6 @@ public class GameScene extends Scene implements CommandSolver.MouseCommandListen
                     mainPlayer.chooseTransformObject(transformObstacle);
                 }
             }
-
             for (MapObject mapObject : unPassMapObjects) {
                 if (mapObject.isXYin(mouseX, mouseY)) {
                     return;
@@ -426,10 +428,6 @@ public class GameScene extends Scene implements CommandSolver.MouseCommandListen
             }
             mainPlayer.useTeleportation(mouseX, mouseY);
         }
-
         mouse.mouseTrig(e, state, trigTime);
-
     }
-
-
 }

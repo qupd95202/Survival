@@ -2,7 +2,7 @@ package game.Menu;
 
 import game.controllers.SceneController;
 import game.core.Global;
-import game.scene.GameScene;
+import game.scene.SinglePointGameScene;
 import game.scene.Scene;
 import game.utils.CommandSolver;
 import game.utils.Path;
@@ -105,7 +105,7 @@ public class CreateRoomScene extends Scene implements CommandSolver.MouseCommand
         }
         if(state== CommandSolver.MouseState.CLICKED){
             if(mouse.isCollision(buttons.get(3))){
-                SceneController.getInstance().change(new GameScene());
+                SceneController.getInstance().change(new SinglePointGameScene());
             }
             if(mouse.isCollision(buttons.get(2))){
                 SceneController.getInstance().change(new MenuScene());

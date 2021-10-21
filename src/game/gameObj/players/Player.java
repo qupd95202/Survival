@@ -30,7 +30,6 @@ public class Player extends GameObject implements CommandSolver.KeyListener {
         RUN,
         STAND,
         BUMP;
-
     }
 
     public static final Animation bumpAnimation = new Animation(AllImages.bump);
@@ -39,7 +38,7 @@ public class Player extends GameObject implements CommandSolver.KeyListener {
     //移動相關
     protected Movement movement;
     protected boolean canMove;
-    private Delay canMoveDelay;
+    public Delay canMoveDelay;
     private boolean isNothingBlock;
     protected MovingState movingState;
 
@@ -64,12 +63,19 @@ public class Player extends GameObject implements CommandSolver.KeyListener {
     //道具相關
     private boolean isUseTeleportation;//判斷是否按F(瞬間移動鍵)
     private boolean canUseTeleportation; //有沒有撿到此道具
-    private Delay trapDelay;
+    protected Delay trapDelay;
+    public boolean isThunder;
+    public boolean isSuperStar;
+    private int currentSpeed;
+    private Delay superStarDelay;
+    public boolean isHunterStop;
+    public boolean isDecreaseGameTime;
+    public boolean isHunterWatcher;
+    private Delay hunterWatcherDelay;
 
 
     //扣分相關
     private boolean isInClosedArea;
-
 
 
     public Player(int x, int y, ImgArrAndType imageArrayList, RoleState roleState) {
@@ -98,13 +104,12 @@ public class Player extends GameObject implements CommandSolver.KeyListener {
         transformCD = new Delay(600); //十秒
         transformTime = new Delay(900); //十五秒
         trapDelay = new Delay(120);
-
+        superStarDelay = new Delay(600);
+        hunterWatcherDelay = new Delay(600);
         movingState = MovingState.STAND;
 
-        inclosedArea = false;
 
     }
-
 
 
     @Override
@@ -114,6 +119,7 @@ public class Player extends GameObject implements CommandSolver.KeyListener {
 
     @Override
     public void update() {
+        propsEffectUpdate();
         transformResetUpdate();
         if (trapDelay.count()) {
             canMove = true;
@@ -361,25 +367,97 @@ public class Player extends GameObject implements CommandSolver.KeyListener {
     public void collideProps(Props props) {
         switch (props.getPropsType()) {
             case addSpeed:
-                System.out.println("加速");
+                if (Global.IS_DEBUG) {
+                    System.out.println("加速");
+                }
                 if (movement.getSpeed() < Global.SPEED_MAX) {
                     movement.addSpeed(1);
                 }
                 break;
 
             case teleportation:
-                System.out.println("瞬移");
+                if (Global.IS_DEBUG) {
+                    System.out.println("瞬移");
+                }
                 canUseTeleportation = true;
                 break;
 
             case trap:
-                System.out.println("不能動");
+                if (Global.IS_DEBUG) {
+                    System.out.println("不能動");
+                }
                 canMove = false;
                 trapDelay.play();
                 break;
             default:
-                System.out.println("加分");
+                if (Global.IS_DEBUG) {
+                    System.out.println("加分");
+                }
                 point += 10;
+        }
+    }
+
+    public void collidePropsInSurvivalMode(Props props) {
+        switch (props.getPropsType()) {
+            case addSpeed:
+                if (Global.IS_DEBUG)
+                    System.out.println("加速");
+                if (movement.getSpeed() < Global.SPEED_MAX) {
+                    movement.addSpeed(2);
+                }
+                break;
+
+            case teleportation:
+                if (Global.IS_DEBUG)
+                    System.out.println("瞬移");
+                canUseTeleportation = true;
+                break;
+
+            case trap:
+                if (Global.IS_DEBUG)
+                    System.out.println("不能動");
+                canMove = false;
+                trapDelay.play();
+                break;
+            case thunder:
+                if (Global.IS_DEBUG)
+                    System.out.println("打雷");
+                isThunder = true;
+                break;
+            case superStar:
+                if (Global.IS_DEBUG)
+                    System.out.println("超級星星");
+                superStarDelay.play();
+                isSuperStar = true;
+                currentSpeed = movement.getSpeed();
+                movement.setSpeed(Global.SPEED_MAX);
+                break;
+            case timeStop:
+                if (Global.IS_DEBUG)
+                    System.out.println("獵人時間暫停");
+                isHunterStop = true;
+                break;
+            case hunterWatcher:
+                if (Global.IS_DEBUG) {
+                    System.out.println("透視");
+                }
+                hunterWatcherDelay.play();
+                isHunterWatcher = true;
+            default:
+                if (Global.IS_DEBUG)
+                    System.out.println("遊戲時間減少");
+                isDecreaseGameTime = true;
+
+        }
+    }
+
+    public void propsEffectUpdate() {
+        if (superStarDelay.count()) {
+            isSuperStar = false;
+            movement.setSpeed(currentSpeed);
+        }
+        if (hunterWatcherDelay.count()) {
+            isHunterWatcher = false;
         }
     }
 
@@ -439,5 +517,9 @@ public class Player extends GameObject implements CommandSolver.KeyListener {
     public boolean isInClosedArea() {
         return isInClosedArea;
 
+    }
+
+    public void setCanMove(boolean canMove) {
+        this.canMove = canMove;
     }
 }
