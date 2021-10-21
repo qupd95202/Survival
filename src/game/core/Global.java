@@ -59,7 +59,7 @@ public class Global {
         NONE;
     }
 
-    public static final boolean IS_DEBUG = false;
+    public static final boolean IS_DEBUG = true;
 
     public static final int UPDATE_TIMES_PER_SEC = 60;
     public static final int NANOSECOUND_PER_UPDATE = 1000000000 / UPDATE_TIMES_PER_SEC;
@@ -93,8 +93,21 @@ public class Global {
     public static final int MAP_PIXEL_HEIGHT = MAP_HEIGHT * UNIT_HEIGHT;
 
     //角色移動速度
-    public static final int NORMAL_SPEED = 5;
-    public static final int COMPUTER_SPEED = 3;
+    public static final int NORMAL_SPEED = 2;
+    public static final int COMPUTER_SPEED1 = 1;
+    public static final int COMPUTER_SPEED2 = 3;
+    public static final int COMPUTER_SPEED3 = 7;
+
+    //電腦追蹤移動獵物範圍
+    public static final int COMPUTER_CHASE_DISTANCE1 = 300;
+    public static final int COMPUTER_CHASE_DISTANCE2 = 700;
+    public static final int COMPUTER_CHASE_DISTANCE3 = 1100;
+
+    //電腦追蹤道具範圍
+    public static final int COMPUTER_PROPS_CHASE_DISTANCE1 = 200;
+    public static final int COMPUTER_PROPS_CHASE_DISTANCE2 = 400;
+    public static final int COMPUTER_PROPS_CHASE_DISTANCE3 = 600;
+
 
     //預設AI感知之最近距離
     public static final float NEAREST = 500f;
@@ -109,13 +122,12 @@ public class Global {
     //選擇遊戲時間
     public static final int CHOOSE_GAMETIME = 300;
 
-
-
+    public static final int PROPS_AMOUNT_MAX_SURVIVAL_GAME = 10;
 
 
     //瞬間移動格的位子
     public static final int RUNNER_X = 0;
-    public static final int RUNNER_Y = Global.SCREEN_Y-100;
+    public static final int RUNNER_Y = Global.SCREEN_Y - 100;
     public static final int GAME_SCENE_BOX_SIZE = 100;
 
     public static ArrayList<Image> bumpImg = new ArrayList<Image>(List.of(SceneController.getInstance().imageController().tryGetImage(

@@ -2,8 +2,9 @@ package game.Menu;
 
 import game.controllers.SceneController;
 import game.core.Global;
-import game.scene.GameScene;
+import game.scene.SinglePointGameScene;
 import game.scene.Scene;
+import game.scene.SingleSurvivalGameScene;
 import game.utils.CommandSolver;
 import game.utils.Path;
 import java.awt.*;
@@ -94,16 +95,16 @@ public class MenuScene extends Scene  implements CommandSolver.MouseCommandListe
     public void mouseTrig(MouseEvent e, CommandSolver.MouseState state, long trigTime) {
         if(state== CommandSolver.MouseState.CLICKED){
             if(mouse.isCollision(buttons.get(0))){
-                SceneController.getInstance().change(new GameScene());
+                SceneController.getInstance().change(new SinglePointGameScene());
             }
             if(mouse.isCollision(buttons.get(1))){
-                SceneController.getInstance().change(new CreateRoomScene());
+                SceneController.getInstance().change(new SingleSurvivalGameScene());
             }
             if(mouse.isCollision(buttons.get(2))){
                 SceneController.getInstance().change(new ConnectScene());
             }
             if(mouse.isCollision(buttons.get(3))){
-                SceneController.getInstance().change(new GameScene());
+                SceneController.getInstance().change(new SinglePointGameScene());
             }
         }
         mouse.mouseTrig(e,state,trigTime);
