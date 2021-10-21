@@ -66,6 +66,7 @@ public class SinglePointGameScene extends Scene implements CommandSolver.MouseCo
     Animation runner;
     Animation changeBody;
     Animation imgWarning;
+    Animation no;//當玩家為獵人時變身格會放
     //滑鼠
     private Mouse mouse;
 
@@ -101,14 +102,15 @@ public class SinglePointGameScene extends Scene implements CommandSolver.MouseCo
         //新增玩家
         players.add(mainPlayer);
         //電腦
-        players.add(new ComputerPlayer(100, 100, AllImages.blue, Player.RoleState.PREY,ComputerPlayer.Mode.SINGLE_POINT_GAME));
-        players.add(new ComputerPlayer(3000, 100, AllImages.blue, Player.RoleState.PREY, ComputerPlayer.Mode.SINGLE_POINT_GAME));
-        players.add(new ComputerPlayer(100, 3000, AllImages.blue, Player.RoleState.PREY,ComputerPlayer.Mode.SINGLE_POINT_GAME));
+        players.add(new ComputerPlayer(100, 100, AllImages.blue, Player.RoleState.PREY));
+        players.add(new ComputerPlayer(3000, 100, AllImages.blue, Player.RoleState.PREY));
+        players.add(new ComputerPlayer(100, 3000, AllImages.blue, Player.RoleState.PREY));
 
         //畫面上相關
         runner = new Animation(AllImages.runnerDark);
         changeBody = new Animation(AllImages.changeBody);
         imgWarning = new Animation(AllImages.WARNING);
+        no = new Animation(AllImages.no);
         transFormCDLabel = new Label(Global.RUNNER_X + Global.GAME_SCENE_BOX_SIZE + 5 + 15, Global.RUNNER_Y + 30, String.valueOf(mainPlayer.transformCDTime()), 20);
         labels.add(new Label(Global.RUNNER_X + 75, Global.RUNNER_Y + 85, "F", 20));
         labels.add(new Label(Global.RUNNER_X + Global.GAME_SCENE_BOX_SIZE + 5 + 75, Global.RUNNER_Y + 85, "R", 20));
@@ -345,6 +347,9 @@ public class SinglePointGameScene extends Scene implements CommandSolver.MouseCo
         }
         for (int i = 0; i < labels.size(); i++) {
             labels.get(i).paint(g);
+        }
+        if (mainPlayer.roleState == Player.RoleState.HUNTER) {
+            no.paint(105, Global.SCREEN_Y - 100, 100, 100, g);
         }
     }
 

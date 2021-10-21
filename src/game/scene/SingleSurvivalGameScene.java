@@ -61,6 +61,7 @@ public class SingleSurvivalGameScene extends Scene implements CommandSolver.Mous
     //左下角的方格
     Animation runner;
     Animation changeBody;
+    Animation no;//當玩家為獵人時變身格會放
     //滑鼠
     private Mouse mouse;
 
@@ -90,12 +91,12 @@ public class SingleSurvivalGameScene extends Scene implements CommandSolver.Mous
         //主角
         mainPlayer = new Player(Global.SCREEN_X / 2, Global.SCREEN_Y / 2, AllImages.beige, Player.RoleState.PREY);
         //新增電腦玩家
-        computerPlayers.add(new ComputerPlayer(100, 100, AllImages.blue, Player.RoleState.HUNTER, ComputerPlayer.Mode.SINGLE_SURVIVAL_GAME));
-        computerPlayers.add(new ComputerPlayer(900, 3200, AllImages.blue, Player.RoleState.HUNTER, ComputerPlayer.Mode.SINGLE_SURVIVAL_GAME));
-        computerPlayers.add(new ComputerPlayer(2300, 3000, AllImages.blue, Player.RoleState.HUNTER, ComputerPlayer.Mode.SINGLE_SURVIVAL_GAME));
-        computerPlayers.add(new ComputerPlayer(100, 2300, AllImages.blue, Player.RoleState.HUNTER, ComputerPlayer.Mode.SINGLE_SURVIVAL_GAME));
-        computerPlayers.add(new ComputerPlayer(1599, 500, AllImages.blue, Player.RoleState.HUNTER, ComputerPlayer.Mode.SINGLE_SURVIVAL_GAME));
-        computerPlayers.add(new ComputerPlayer(100, 2500, AllImages.blue, Player.RoleState.HUNTER, ComputerPlayer.Mode.SINGLE_SURVIVAL_GAME));
+        computerPlayers.add(new ComputerPlayer(100, 100, AllImages.blue, Player.RoleState.HUNTER));
+        computerPlayers.add(new ComputerPlayer(900, 3200, AllImages.blue, Player.RoleState.HUNTER));
+        computerPlayers.add(new ComputerPlayer(2300, 3000, AllImages.blue, Player.RoleState.HUNTER));
+        computerPlayers.add(new ComputerPlayer(100, 2300, AllImages.blue, Player.RoleState.HUNTER));
+        computerPlayers.add(new ComputerPlayer(1599, 500, AllImages.blue, Player.RoleState.HUNTER));
+        computerPlayers.add(new ComputerPlayer(100, 2500, AllImages.blue, Player.RoleState.HUNTER));
         //預設難度一
         for (ComputerPlayer computerPlayer : computerPlayers) {
             computerPlayer.AILevel1();
@@ -103,6 +104,7 @@ public class SingleSurvivalGameScene extends Scene implements CommandSolver.Mous
         //畫面上相關
         runner = new Animation(AllImages.runnerDark);
         changeBody = new Animation(AllImages.changeBody);
+        no = new Animation(AllImages.no);
         transFormCDLabel = new Label(Global.RUNNER_X + Global.GAME_SCENE_BOX_SIZE + 5 + 15, Global.RUNNER_Y + 30, String.valueOf(mainPlayer.transformCDTime()), 20);
         labels.add(new Label(Global.RUNNER_X + 75, Global.RUNNER_Y + 85, "F", 20));
         labels.add(new Label(Global.RUNNER_X + Global.GAME_SCENE_BOX_SIZE + 5 + 75, Global.RUNNER_Y + 85, "R", 20));
@@ -281,6 +283,9 @@ public class SingleSurvivalGameScene extends Scene implements CommandSolver.Mous
         }
         for (int i = 0; i < labels.size(); i++) {
             labels.get(i).paint(g);
+        }
+        if (mainPlayer.roleState == Player.RoleState.HUNTER) {
+            no.paint(105, Global.SCREEN_Y - 100, 100, 100, g);
         }
     }
 

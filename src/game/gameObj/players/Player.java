@@ -443,6 +443,7 @@ public class Player extends GameObject implements CommandSolver.KeyListener {
                 }
                 hunterWatcherDelay.play();
                 isHunterWatcher = true;
+                break;
             default:
                 if (Global.IS_DEBUG)
                     System.out.println("遊戲時間減少");

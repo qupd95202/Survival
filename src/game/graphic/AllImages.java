@@ -198,6 +198,8 @@ public class AllImages {
     public static ImgArrAndType WARNING=new ImgArrAndType(new ArrayList<Image>(java.util.List.of(
             SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().warningLabel()),
             SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().dontMove().nothing()))),Global.MapAreaType.NONE);
-
+    //no
+    public static ImgArrAndType no=new ImgArrAndType(new ArrayList<Image>(java.util.List.of(
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().no()))),Global.MapAreaType.NONE);
 
 }

@@ -544,7 +544,9 @@ public class Path {
                 }
 
             }
-
+            public String no() {
+                return this + "/no.png";
+            }
             public String addSpeed() {
                 return this + "/addSpeed.png";
             }

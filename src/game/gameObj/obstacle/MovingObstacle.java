@@ -77,6 +77,6 @@ public class MovingObstacle extends TransformObstacle {
     @Override
     public void update() {
         animation.update();
-
+        move();
     }
 }

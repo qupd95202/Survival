@@ -1,5 +1,6 @@
 package game.Menu;
 
+import game.Teach.TeachScene;
 import game.controllers.SceneController;
 import game.core.Global;
 import game.scene.SinglePointGameScene;
@@ -95,7 +96,7 @@ public class MenuScene extends Scene  implements CommandSolver.MouseCommandListe
     public void mouseTrig(MouseEvent e, CommandSolver.MouseState state, long trigTime) {
         if(state== CommandSolver.MouseState.CLICKED){
             if(mouse.isCollision(buttons.get(0))){
-                SceneController.getInstance().change(new SinglePointGameScene());
+                SceneController.getInstance().change(new SingleChooseScene());
             }
             if(mouse.isCollision(buttons.get(1))){
                 SceneController.getInstance().change(new SingleSurvivalGameScene());
@@ -104,7 +105,7 @@ public class MenuScene extends Scene  implements CommandSolver.MouseCommandListe
                 SceneController.getInstance().change(new ConnectScene());
             }
             if(mouse.isCollision(buttons.get(3))){
-                SceneController.getInstance().change(new SinglePointGameScene());
+                SceneController.getInstance().change(new TeachScene());
             }
         }
         mouse.mouseTrig(e,state,trigTime);
