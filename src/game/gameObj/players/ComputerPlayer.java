@@ -20,7 +20,7 @@ public class ComputerPlayer extends Player {
         SINGLE_SURVIVAL_GAME;
     }
 
-    private Mode mode;
+//    private Mode mode;
 
     private boolean isChase;
     private boolean isRun;
@@ -48,9 +48,8 @@ public class ComputerPlayer extends Player {
     public Delay propsStopTimeDelay;
     //可不可穿牆
 
-    public ComputerPlayer(int x, int y, ImgArrAndType imageArrayList, RoleState roleState, Mode mode) {
+    public ComputerPlayer(int x, int y, ImgArrAndType imageArrayList, RoleState roleState) {
         super(x, y, imageArrayList, roleState);
-        this.mode = mode;
         speed = Global.COMPUTER_SPEED2;
         chaseDistance = Global.COMPUTER_CHASE_DISTANCE2;
         transformTime.play();

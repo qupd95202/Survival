@@ -90,12 +90,12 @@ public class SingleSurvivalGameScene extends Scene implements CommandSolver.Mous
         //主角
         mainPlayer = new Player(Global.SCREEN_X / 2, Global.SCREEN_Y / 2, AllImages.beige, Player.RoleState.PREY);
         //新增電腦玩家
-        computerPlayers.add(new ComputerPlayer(100, 100, AllImages.blue, Player.RoleState.HUNTER, ComputerPlayer.Mode.SINGLE_SURVIVAL_GAME));
-        computerPlayers.add(new ComputerPlayer(900, 3200, AllImages.blue, Player.RoleState.HUNTER, ComputerPlayer.Mode.SINGLE_SURVIVAL_GAME));
-        computerPlayers.add(new ComputerPlayer(2300, 3000, AllImages.blue, Player.RoleState.HUNTER, ComputerPlayer.Mode.SINGLE_SURVIVAL_GAME));
-        computerPlayers.add(new ComputerPlayer(100, 2300, AllImages.blue, Player.RoleState.HUNTER, ComputerPlayer.Mode.SINGLE_SURVIVAL_GAME));
-        computerPlayers.add(new ComputerPlayer(1599, 500, AllImages.blue, Player.RoleState.HUNTER, ComputerPlayer.Mode.SINGLE_SURVIVAL_GAME));
-        computerPlayers.add(new ComputerPlayer(100, 2500, AllImages.blue, Player.RoleState.HUNTER, ComputerPlayer.Mode.SINGLE_SURVIVAL_GAME));
+        computerPlayers.add(new ComputerPlayer(100, 100, AllImages.blue, Player.RoleState.HUNTER));
+        computerPlayers.add(new ComputerPlayer(900, 3200, AllImages.blue, Player.RoleState.HUNTER));
+        computerPlayers.add(new ComputerPlayer(2300, 399, AllImages.blue, Player.RoleState.HUNTER));
+        computerPlayers.add(new ComputerPlayer(200, 2300, AllImages.blue, Player.RoleState.HUNTER));
+        computerPlayers.add(new ComputerPlayer(1599, 500, AllImages.blue, Player.RoleState.HUNTER));
+        computerPlayers.add(new ComputerPlayer(3000, 3000, AllImages.blue, Player.RoleState.HUNTER));
         //預設難度一
         for (ComputerPlayer computerPlayer : computerPlayers) {
             computerPlayer.AILevel1();
