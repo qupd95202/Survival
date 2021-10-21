@@ -188,6 +188,7 @@ public class ComputerPlayer extends Player {
         cpMove(moveOnX, moveOnY);
     }
 
+
     public void chaseProps() {
         if (chasedProps == null || isChase) {
             isChaseProps = false;
