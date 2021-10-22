@@ -6,7 +6,9 @@ import game.Menu.MenuScene;
 import game.Menu.SingleChooseScene;
 import game.controllers.SceneController;
 import game.scene.ConnectPointGameScene;
+import game.scene.SinglePointGameScene;
 import game.scene.SingleSurvivalGameScene;
+
 
 
 import java.awt.*;
