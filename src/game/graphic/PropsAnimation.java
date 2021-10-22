@@ -10,16 +10,25 @@ public class PropsAnimation extends Animation {
     private Delay AnimationTime;//動畫播放多久
     private boolean playPropsAnimation;
     private int count;
+    //動畫顯示位置
+    private int x;
+    private int y;
+    private int width;
+    private int height;
 
-    public PropsAnimation(ImgArrAndType imgArrAndType, int animationSpeed, int animationTime) {
+    public PropsAnimation(int x, int y, int width, int height, ImgArrAndType imgArrAndType, int animationSpeed, int animationTime) {
         super(imgArrAndType);
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
         animationSpeedDelay = new Delay(animationSpeed);
         count = 0;
         AnimationTime = new Delay(animationTime);
         playPropsAnimation = false;
     }
 
-    public void paint(int x, int y, int width, int height,Graphics g) {
+    public void paint(Graphics g) {
         if (playPropsAnimation) {
             if (AnimationTime.getCount() == 0) {
                 AnimationTime.play();
@@ -33,9 +42,18 @@ public class PropsAnimation extends Animation {
     }
 
     public void update() {
-        if (animationSpeedDelay.count()) {
-            count = ++count % img.getImageArrayList().size();
+        if (playPropsAnimation) {
+            if (animationSpeedDelay.count()) {
+                count = ++count % img.getImageArrayList().size();
+            }
         }
     }
 
+    public boolean isPlayPropsAnimation() {
+        return playPropsAnimation;
+    }
+
+    public void setPlayPropsAnimation(boolean playPropsAnimation) {
+        this.playPropsAnimation = playPropsAnimation;
+    }
 }
