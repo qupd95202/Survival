@@ -20,11 +20,15 @@ public class Props extends GameObject {
         timeStop, //時間暫停
         gameTimeDecrease, // 遊戲時間減少20
         hunterWatcher; //透視獵人位置
+
     }
 
     private Animation animation;
     private Type propsType;
     private boolean isGotByPlayer;
+
+    Animation propsAnimation;
+    private boolean playPropsAnimation;
 
     //先預設道具出現為隨機
     //之後再用enum設定
@@ -36,6 +40,8 @@ public class Props extends GameObject {
         isGotByPlayer = false;
         collider().scale(painter().width() - 10, painter().height() - 10);
         painter().setCenter(collider().centerX(), collider().centerY());
+
+        playPropsAnimation = false;
     }
 
     public Props(int type) {
@@ -55,11 +61,15 @@ public class Props extends GameObject {
     @Override
     public void paintComponent(Graphics g) {
         animation.paint(painter().left(), painter().top(), painter().width(), painter().height(), g);
+
     }
 
     @Override
     public void update() {
         animation.update();
+       if (playPropsAnimation) {
+            propsAnimation.update();
+        }
     }
 
     public Type getPropsType() {
@@ -88,27 +98,43 @@ public class Props extends GameObject {
         int randomNum = Global.random(1, 8);
         switch (randomNum) {
             case 1 -> {
+                propsAnimation = new Animation(AllImages.lightning);
+                propsAnimation.setDelay(3);
                 return Type.addSpeed;
             }
             case 2 -> {
+                propsAnimation = new Animation(AllImages.star);
+                propsAnimation.setDelay(3);
                 return Type.teleportation;
             }
             case 3 -> {
+                propsAnimation = new Animation(AllImages.star);
+                propsAnimation.setDelay(3);
                 return Type.trap;
             }
             case 4 -> {
+                propsAnimation = new Animation(AllImages.star);
+                propsAnimation.setDelay(3);
                 return Type.gameTimeDecrease;
             }
             case 5 -> {
+                propsAnimation = new Animation(AllImages.star);
+                propsAnimation.setDelay(3);
                 return Type.superStar;
             }
-            case 6 -> {
+            case 6 -> {//道具動畫（閃電）
+                propsAnimation = new Animation(AllImages.lightning);
+                propsAnimation.setDelay(1);
                 return Type.thunder;
             }
             case 7 -> {
+                propsAnimation = new Animation(AllImages.star);
+                propsAnimation.setDelay(3);
                 return Type.hunterWatcher;
             }
             default -> {
+                propsAnimation = new Animation(AllImages.star);
+                propsAnimation.setDelay(1);
                 return Type.timeStop;
             }
         }
@@ -120,5 +146,17 @@ public class Props extends GameObject {
 
     public void setGotByPlayer(boolean gotByPlayer) {
         isGotByPlayer = gotByPlayer;
+    }
+
+    public Animation getPropsAnimation() {
+        return propsAnimation;
+    }
+
+    public void setPlayPropsAnimation(boolean playPropsAnimation) {
+        this.playPropsAnimation = playPropsAnimation;
+    }
+
+    public boolean isPlayPropsAnimation() {
+        return playPropsAnimation;
     }
 }
