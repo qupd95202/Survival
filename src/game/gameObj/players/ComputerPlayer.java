@@ -119,6 +119,12 @@ public class ComputerPlayer extends Player {
             }
             if (isRun) {
                 if (Global.getProbability(50)) {
+                    translate(10, 10);
+                }
+                if (Global.getProbability(50)) {
+                    translate(-10, -10);
+                }
+                if (Global.getProbability(50)) {
                     iniMoveOnX = 1;
                 } else {
                     iniMoveOnX = -1;
@@ -152,6 +158,7 @@ public class ComputerPlayer extends Player {
             cpMove();
         }
     }
+
 
     public void cpMove(double moveOnX, double moveOnY) {
         movement.move(moveOnX, moveOnY);
@@ -260,7 +267,7 @@ public class ComputerPlayer extends Player {
             float chaseDx = Math.abs(chasedPlayer.collider().centerX() - painter().centerX());
             float chaseDy = Math.abs(chasedPlayer.collider().bottom() - painter().centerY() - 10);
             float chaseDc = (float) Math.sqrt(chaseDx * chaseDx + chaseDy * chaseDy);//計算斜邊,怪物與人物的距離
-            if (chaseDc >= Global.WINDOW_WIDTH + 500) {
+            if (chaseDc >= Global.WINDOW_WIDTH) {
                 isChase = false;
                 nearest = Global.NEAREST;
             }
@@ -318,34 +325,6 @@ public class ComputerPlayer extends Player {
         super.transform();
     }
 
-    @Override
-    public boolean isCollisionForMovement(GameObject gameObject) {
-        if (collider().bottom() + movement.getVector2D().getY() < gameObject.collider().top()) {
-            isStopByWall = false;
-            return false;
-        }
-        if (collider().top() + movement.getVector2D().getY() > gameObject.collider().bottom()) {
-            isStopByWall = false;
-            return false;
-        }
-        if (collider().right() + movement.getVector2D().getX() < gameObject.collider().left()) {
-            isStopByWall = false;
-            return false;
-        }
-        if (collider().left() + movement.getVector2D().getX() > gameObject.collider().right()) {
-            isStopByWall = false;
-            return false;
-        }
-        isStopByWall = true;
-        return true;
-    }
-
-    @Override
-    public void notMove() {
-        if (!canPassWall) {
-            translate(-movement.getVector2D().getX(), -movement.getVector2D().getY());
-        }
-    }
 
     public void nonStopUpdate() {
         if (notStopDelay.count()) {
@@ -358,11 +337,16 @@ public class ComputerPlayer extends Player {
         }
     }
 
+    @Override
+    public void notMove() {
+        if (!canPassWall) {
+            translate(-movement.getVector2D().getX(), -movement.getVector2D().getY());
+        }
+    }
+
     public void collidePropsInSurvivalMode(Props props) {
         switch (props.getPropsType()) {
             case trap:
-                if (Global.IS_DEBUG)
-                    System.out.println("不能動");
                 canMove = false;
                 trapDelay.play();
                 break;

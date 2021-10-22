@@ -6,12 +6,9 @@ import game.controllers.SceneController;
 import game.core.GameTime;
 import game.core.Global;
 import game.core.Point;
-import game.core.Position;
 import game.gameObj.GameObject;
 import game.gameObj.Props;
 import game.gameObj.mapObj.MapObject;
-import game.gameObj.obstacle.MovingObstacle;
-import game.gameObj.obstacle.Obstacle;
 import game.gameObj.obstacle.TransformObstacle;
 import game.gameObj.players.Player;
 import game.gameObj.players.ComputerPlayer;
@@ -77,9 +74,6 @@ public class SinglePointGameScene extends Scene implements CommandSolver.MouseCo
     //積分動畫顯示
     private Point point;
     private Image imgPoint;
-
-
-
 
     @Override
     public void sceneBegin() {
@@ -357,11 +351,9 @@ public class SinglePointGameScene extends Scene implements CommandSolver.MouseCo
      */
     public void keepNotPass(ArrayList<? extends GameObject> gameObjects) {
         for (Player player : players) {
-            player.setNothingBlock(true);
-            for (int i = 0; i < gameObjects.size(); i++) {
-                if (player.isCollisionForMovement(gameObjects.get(i))) {
-                    player.notMove();
-                }
+//            player.setNothingBlock(true);
+            for (GameObject gameObject : gameObjects) {
+                player.isCollisionForMovement(gameObject);
             }
         }
     }
@@ -473,21 +465,6 @@ public class SinglePointGameScene extends Scene implements CommandSolver.MouseCo
 
     @Override
     public void mouseTrig(MouseEvent e, CommandSolver.MouseState state, long trigTime) {
-        if (state == CommandSolver.MouseState.CLICKED) {
-            int mouseX = e.getX() + camera.painter().left();
-            int mouseY = e.getY() + camera.painter().top();
-            for (TransformObstacle transformObstacle : transformObstacles) {
-                if (transformObstacle.isXYin(mouseX, mouseY)) {
-                    mainPlayer.chooseTransformObject(transformObstacle);
-                }
-            }
-            for (MapObject mapObject : unPassMapObjects) {
-                if (mapObject.isXYin(mouseX, mouseY)) {
-                    return;
-                }
-            }
-            mainPlayer.useTeleportation(mouseX, mouseY);
-        }
-        mouse.mouseTrig(e, state, trigTime);
+        mainPlayer.mouseTrig(e, state, trigTime, unPassMapObjects, transformObstacles, camera, mouse);
     }
 }

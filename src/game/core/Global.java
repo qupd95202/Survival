@@ -10,12 +10,12 @@ import java.util.List;
 public class Global {
 
     public enum KeyCommand {
-        UP(3),
-        DOWN(0),
-        LEFT(1),
-        RIGHT(2),
-        TRANSFORM(4),
-        TELEPORTATION(5);
+        UP(2),
+        DOWN(3),
+        LEFT(4),
+        RIGHT(5),
+        TRANSFORM(6),
+        TELEPORTATION(7);
 
 
         private int value;

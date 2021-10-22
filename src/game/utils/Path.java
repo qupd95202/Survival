@@ -544,6 +544,7 @@ public class Path {
                 }
 
             }
+
             public static class Lightning extends Flow {
                 private Lightning(Flow flow) {
                     super(flow, "/lightning");
@@ -733,6 +734,7 @@ public class Path {
 
         }
 
+
         public static class Props extends Flow {
             private Props(Flow flow) {
                 super(flow, "/props");
@@ -798,9 +800,11 @@ public class Path {
         public Numbers numbers() {
             return new Numbers(this);
         }
+
         public Props props() {
             return new Props(this);
         }
+
     }
 
     public static class Sound extends Flow {

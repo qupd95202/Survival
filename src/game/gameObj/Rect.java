@@ -112,6 +112,14 @@ public class Rect {
         return true;
     }
 
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
     public final void paint(Graphics g) {
         g.drawRect(x, y, width, height);
     }

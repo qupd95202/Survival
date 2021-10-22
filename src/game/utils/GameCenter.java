@@ -1,8 +1,11 @@
 package game.utils;
 
 
+import game.Menu.ConnectScene;
 import game.Menu.MenuScene;
+import game.Menu.SingleChooseScene;
 import game.controllers.SceneController;
+import game.scene.ConnectPointGameScene;
 
 
 import java.awt.*;
@@ -11,7 +14,7 @@ import java.awt.event.MouseEvent;
 public class GameCenter implements GameKernel.GameInterface, CommandSolver.MouseCommandListener, CommandSolver.KeyListener {
 
     public GameCenter() {
-        SceneController.getInstance().change(new MenuScene());
+        SceneController.getInstance().change(new SingleChooseScene());
     }
 
     @Override
