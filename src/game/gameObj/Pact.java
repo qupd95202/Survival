@@ -22,6 +22,7 @@ public class Pact {
     public static final int CHOOSE_STORED_ANIMATION = 16;
     public static final int COMPUTER_TRANSFORM = 17;
     public static final int PROPS_GEN = 18;
+//    public static final int PLAYER_POSITION = 19;
     //public static final int COMPUTER_CHASE 不確定
 //    public static final int GET_PROPS=11;
 //    public static final int ROUND_END=11;

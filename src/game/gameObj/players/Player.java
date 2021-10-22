@@ -5,6 +5,7 @@ import game.core.Global;
 import game.core.Movement;
 import game.core.Position;
 import game.gameObj.GameObject;
+import game.gameObj.Pact;
 import game.gameObj.Props;
 import game.gameObj.Transformation;
 import game.gameObj.mapObj.MapObject;
@@ -12,6 +13,7 @@ import game.gameObj.obstacle.TransformObstacle;
 import game.graphic.AllImages;
 import game.graphic.Animation;
 import game.graphic.ImgArrAndType;
+import game.network.Client.ClientClass;
 import game.scene_process.Camera;
 import game.utils.CommandSolver;
 import game.utils.Delay;
@@ -20,6 +22,7 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
+import static game.gameObj.Pact.bale;
 import static game.gameObj.Props.Type.trap;
 
 public class Player extends GameObject implements CommandSolver.KeyListener {
@@ -574,6 +577,18 @@ public class Player extends GameObject implements CommandSolver.KeyListener {
     public void setID(int id) {
         this.id = id;
     }
+
+    public int getX() {
+        return painter().getX();
+    }
+
+    public int getY() {
+        return painter().getY();
+    }
+
+//    public void sentPositionUpdate() {
+//        ClientClass.getInstance().sent(Pact.PLAYER_POSITION, bale(String.valueOf(painter().getX()), String.valueOf(painter().getY())));
+//    }
 
     public int ID() {
         return id;

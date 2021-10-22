@@ -37,7 +37,7 @@ public class ConnectPointGameScene extends Scene implements CommandSolver.MouseC
     //留意畫的順序
     private ConnectTool connectTool;
     private Player mainPlayer;
-    private ArrayList<Player> players;
+    private ArrayList<ComputerPlayer> computerPlayers;
     private final ArrayList<TransformObstacle> transformObstacles = ObjectArr.transformObstaclList1;
     private ArrayList<MapObject> unPassMapObjects;
     private ArrayList<Props> propsArrayList;
@@ -79,8 +79,12 @@ public class ConnectPointGameScene extends Scene implements CommandSolver.MouseC
     private game.core.Point point;
     private Image imgPoint;
 
+    //連線
+
+
     public ConnectPointGameScene() {
         connectTool = new ConnectTool();
+        computerPlayers = connectTool.getObjectArr().getComputerPlayersConnectPoint();
         propsArrayList = connectTool.getObjectArr().getPropsArrConnectPoint();
         connectTool.setMainPlayer(new Player(Global.SCREEN_X / 2, Global.SCREEN_Y / 2, AllImages.blue, Player.RoleState.PREY));
         connectTool.createRoom(5550);
@@ -89,7 +93,7 @@ public class ConnectPointGameScene extends Scene implements CommandSolver.MouseC
     @Override
     public void sceneBegin() {
         try {
-            connectTool.connect("192.168.1.50", 5550);
+            connectTool.connect("127.0.0.1", 5550);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -100,7 +104,6 @@ public class ConnectPointGameScene extends Scene implements CommandSolver.MouseC
         chooseTime = 300; //單位：秒
         //初始ArrayList
         gameObjectList = new ArrayList<>();
-        players = new ArrayList<>();
         labels = new ArrayList<game.Menu.Label>();
 
         //道具相關
@@ -113,14 +116,6 @@ public class ConnectPointGameScene extends Scene implements CommandSolver.MouseC
 
         //主角
         mainPlayer = connectTool.getSelf();
-//        mainPlayer.setID(1);
-
-        //新增玩家
-//        players.add(mainPlayer);
-        //電腦
-        players.add(new ComputerPlayer(100, 100, AllImages.beige, Player.RoleState.HUNTER));
-        players.add(new ComputerPlayer(3000, 100, AllImages.blue, Player.RoleState.PREY));
-        players.add(new ComputerPlayer(100, 3000, AllImages.blue, Player.RoleState.PREY));
 
         //畫面上相關
         runner = new Animation(AllImages.runnerDark);
@@ -133,7 +128,8 @@ public class ConnectPointGameScene extends Scene implements CommandSolver.MouseC
         labels.add(transFormCDLabel);
 
         //將要畫的物件存進ArrayList 為了要能在ArrayList取比較 重疊時畫的先後順序（y軸）
-        players.forEach(player -> gameObjectList.addAll(java.util.List.of(player)));
+        //電腦玩家 拉出來update
+        computerPlayers.forEach(player -> gameObjectList.addAll(java.util.List.of(player)));
         transformObstacles.forEach(transformObstacle -> gameObjectList.addAll(java.util.List.of(transformObstacle)));
 
         //地圖與鏡頭相關
@@ -198,8 +194,8 @@ public class ConnectPointGameScene extends Scene implements CommandSolver.MouseC
         gameMap.paint(g);
         smallMap.paint(g, mainPlayer, Color.red, 100, 100);//小地圖的需要另外再paint一次
         if (Global.IS_DEBUG) {
-            for (int i = 0; i < players.size(); i++) {
-                smallMap.paint(g, players.get(i), Color.YELLOW, 100, 100);
+            for (int i = 0; i < computerPlayers.size(); i++) {
+                smallMap.paint(g, computerPlayers.get(i), Color.YELLOW, 100, 100);
             }
         }
         camera.paint(g);
@@ -218,7 +214,6 @@ public class ConnectPointGameScene extends Scene implements CommandSolver.MouseC
         //無法穿越部分物件
         keepNotPass(unPassMapObjects);
         //用forEach將ArrayList中每個gameObject去update()
-        connectTool.update();
         gameObjectList.forEach(gameObject -> gameObject.update());
         cPlayerCheckOthersUpdate();
         cPlayerCheckPropsUpdate();
@@ -229,6 +224,7 @@ public class ConnectPointGameScene extends Scene implements CommandSolver.MouseC
         //cd時間顯示之資料
         transFormCDLabel.setWords(String.valueOf(mainPlayer.transformCDTime()));
         connectTool.consume();
+//        sentPositionUpdate();
     }
 
     @Override
@@ -250,11 +246,11 @@ public class ConnectPointGameScene extends Scene implements CommandSolver.MouseC
     }
 
     public void cPlayerCheckOthersUpdate() {
-        for (int i = 0; i < players.size(); i++) {
-            ComputerPlayer computerPlayer = (ComputerPlayer) players.get(i);
+        for (int i = 0; i < computerPlayers.size(); i++) {
+            ComputerPlayer computerPlayer = (ComputerPlayer) computerPlayers.get(i);
             computerPlayer.whoIsNear(mainPlayer);
-            for (int j = 0; j < players.size(); j++) {
-                Player player = players.get(j);
+            for (int j = 0; j < computerPlayers.size(); j++) {
+                Player player = computerPlayers.get(j);
                 if (computerPlayer != player) {
                     computerPlayer.whoIsNear(player);
                 }
@@ -263,8 +259,8 @@ public class ConnectPointGameScene extends Scene implements CommandSolver.MouseC
     }
 
     public void cPlayerCheckPropsUpdate() {
-        for (int i = 0; i < players.size(); i++) {
-            ComputerPlayer computerPlayer = (ComputerPlayer) players.get(i);
+        for (int i = 0; i < computerPlayers.size(); i++) {
+            ComputerPlayer computerPlayer = (ComputerPlayer) computerPlayers.get(i);
             for (int j = 0; j < propsArrayList.size(); j++) {
                 computerPlayer.whichPropIsNear(propsArrayList.get(j));
             }
@@ -279,9 +275,9 @@ public class ConnectPointGameScene extends Scene implements CommandSolver.MouseC
                 }
             });
         }
-        players.forEach(player -> {
+        computerPlayers.forEach(player -> {
             player.exchangeRole(mainPlayer);
-            players.forEach(player1 -> {
+            computerPlayers.forEach(player1 -> {
                 if (player != player1) {
                     player.exchangeRole(player1);
                 }
@@ -387,11 +383,10 @@ public class ConnectPointGameScene extends Scene implements CommandSolver.MouseC
      * 讓角色無法穿過該物件
      */
     public void keepNotPass(ArrayList<? extends GameObject> gameObjects) {
-
         for (GameObject gameObject : gameObjects) {
             mainPlayer.isCollisionForMovement(gameObject);
         }
-        for (Player player : players) {
+        for (Player player : computerPlayers) {
             for (GameObject gameObject : gameObjects) {
                 player.isCollisionForMovement(gameObject);
             }
@@ -422,7 +417,7 @@ public class ConnectPointGameScene extends Scene implements CommandSolver.MouseC
             }
         }
 
-        for (Player player : players) {
+        for (Player player : computerPlayers) {
             for (int i = 0; i < propsArrayList.size(); i++) {
                 Props props = propsArrayList.get(i);
                 if (player.isCollision(props)) {
@@ -483,7 +478,7 @@ public class ConnectPointGameScene extends Scene implements CommandSolver.MouseC
             if (propsArrayList.size() >= Global.PROPS_AMOUNT_MAX) {
                 return;
             }
-            ClientClass.getInstance().sent(PROPS_GEN,bale(String.valueOf(Global.random(0, Global.MAP_PIXEL_WIDTH)),String.valueOf(Global.random(0, Global.MAP_PIXEL_HEIGHT)),Props.genRandomType().toString()));
+            ClientClass.getInstance().sent(PROPS_GEN, bale(String.valueOf(Global.random(0, Global.MAP_PIXEL_WIDTH)), String.valueOf(Global.random(0, Global.MAP_PIXEL_HEIGHT)), Props.genRandomType().toString()));
         }
     }
 
@@ -523,16 +518,16 @@ public class ConnectPointGameScene extends Scene implements CommandSolver.MouseC
     @Override
     public void keyReleased(int commandCode, long trigTime) {
         if (commandCode == Global.KeyCommand.UP.getValue()) {
-            ClientClass.getInstance().sent(Global.KeyCommand.UP.getValue(), bale(String.valueOf(trigTime)));
+            ClientClass.getInstance().sent(RELEASE_UP, bale(String.valueOf(trigTime)));
         }
         if (commandCode == Global.KeyCommand.DOWN.getValue()) {
-            ClientClass.getInstance().sent(Global.KeyCommand.DOWN.getValue(), bale(String.valueOf(trigTime)));
+            ClientClass.getInstance().sent(RELEASE_DOWN, bale(String.valueOf(trigTime)));
         }
         if (commandCode == Global.KeyCommand.LEFT.getValue()) {
-            ClientClass.getInstance().sent(Global.KeyCommand.LEFT.getValue(), bale(String.valueOf(trigTime)));
+            ClientClass.getInstance().sent(RELEASE_LEFT, bale(String.valueOf(trigTime)));
         }
         if (commandCode == Global.KeyCommand.RIGHT.getValue()) {
-            ClientClass.getInstance().sent(Global.KeyCommand.RIGHT.getValue(), bale(String.valueOf(trigTime)));
+            ClientClass.getInstance().sent(RELEASE_RIGHT, bale(String.valueOf(trigTime)));
         }
     }
 
@@ -545,4 +540,6 @@ public class ConnectPointGameScene extends Scene implements CommandSolver.MouseC
     public void mouseTrig(MouseEvent e, CommandSolver.MouseState state, long trigTime) {
         mainPlayer.mouseTrig(e, state, trigTime, unPassMapObjects, transformObstacles, camera, mouse);
     }
+
+
 }

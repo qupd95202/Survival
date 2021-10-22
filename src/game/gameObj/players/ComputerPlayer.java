@@ -4,14 +4,18 @@ import game.core.Global;
 
 import game.gameObj.GameObject;
 
+import game.gameObj.Pact;
 import game.gameObj.Props;
 import game.graphic.AllImages;
 import game.graphic.Animation;
 import game.graphic.ImgArrAndType;
+import game.network.Client.ClientClass;
 import game.utils.Delay;
 
 import java.awt.*;
 import java.util.ArrayList;
+
+import static game.gameObj.Pact.bale;
 
 
 public class ComputerPlayer extends Player {
@@ -25,6 +29,7 @@ public class ComputerPlayer extends Player {
     private boolean isChase;
     private boolean isRun;
 
+    //可不可穿牆
     private boolean canPassWall;
     private Delay notStopDelay;
     private Delay stopDelay;
@@ -46,7 +51,10 @@ public class ComputerPlayer extends Player {
 
     //道具相關
     public Delay propsStopTimeDelay;
-    //可不可穿牆
+
+    //連線相關
+    private int id;
+    private boolean isConnect;
 
     public ComputerPlayer(int x, int y, ImgArrAndType imageArrayList, RoleState roleState) {
         super(x, y, imageArrayList, roleState);
@@ -75,11 +83,38 @@ public class ComputerPlayer extends Player {
         iniMoveOnY = Global.random(-2, 1);
     }
 
+    public ComputerPlayer(int x, int y, ImgArrAndType imageArrayList, RoleState roleState, int id) {
+        super(x, y, imageArrayList, roleState);
+        isConnect = true;
+        speed = Global.COMPUTER_SPEED2;
+        chaseDistance = Global.COMPUTER_CHASE_DISTANCE2;
+        transformTime.play();
+        transformTime.loop();
+        isChase = false;
+        isRun = false;
+        canPassWall = false;
+        isChaseProps = false;
+        nearest = Global.NEAREST;
+        propsNearest = Global.NEAREST;
+        pointDelay = new Delay(60);
+        notStopDelay = new Delay(300);
+        notStopDelay.play();
+        notStopDelay.loop();
+        stopDelay = new Delay(120);
+        propsStopTimeDelay = new Delay(180);
+        super.movement.setSpeed(speed);
+        randomMoveDelay = new Delay(180);
+        randomMoveDelay.play();
+        randomMoveDelay.loop();
+        iniMoveOnX = Global.random(-2, 1);
+        iniMoveOnY = Global.random(-2, 1);
+        this.id = id;
+    }
+
     @Override
     public void keyPressed(int commandCode, long trigTime) {
 
     }
-
 
     @Override
     public void update() {
@@ -119,10 +154,10 @@ public class ComputerPlayer extends Player {
             }
             if (isRun) {
                 if (Global.getProbability(50)) {
-                    translate(10, 10);
+                    translateInConnect(10, 10);
                 }
                 if (Global.getProbability(50)) {
-                    translate(-10, -10);
+                    translateInConnect(-10, -10);
                 }
                 if (Global.getProbability(50)) {
                     iniMoveOnX = 1;
@@ -167,7 +202,12 @@ public class ComputerPlayer extends Player {
         } else {
             movingState = MovingState.WALK;
         }
-        super.move();
+        if (!canMove) {
+            return;
+        }
+        //一般移動位置的部分
+        translateInConnect(movement.getVector2D().getX(), movement.getVector2D().getY());
+        keepInMap();
     }
 
     public void cpMove() {
@@ -195,7 +235,6 @@ public class ComputerPlayer extends Player {
         cpMove(moveOnX, moveOnY);
     }
 
-
     public void chaseProps() {
         if (chasedProps == null || isChase) {
             isChaseProps = false;
@@ -214,6 +253,13 @@ public class ComputerPlayer extends Player {
                 moveOnX = -moveOnX;
             }
             cpMove(moveOnX, moveOnY);
+        }
+    }
+
+    @Override
+    public void keepInMap() {
+        if (touchBottom() || touchLeft() || touchRight() || touchTop()) {
+            translateInConnect(-movement.getVector2D().getX(), -movement.getVector2D().getY());
         }
     }
 
@@ -340,7 +386,7 @@ public class ComputerPlayer extends Player {
     @Override
     public void notMove() {
         if (!canPassWall) {
-            translate(-movement.getVector2D().getX(), -movement.getVector2D().getY());
+            translateInConnect(-movement.getVector2D().getX(), -movement.getVector2D().getY());
         }
     }
 
@@ -389,5 +435,15 @@ public class ComputerPlayer extends Player {
         notStopDelay.play();
         notStopDelay.loop();
     }
+
+
+    public void translateInConnect(int x, int y) {
+        if (isConnect) {
+            ClientClass.getInstance().sent(Pact.COMPUTER_MOVE, bale(Integer.toString(id), Integer.toString(x), Integer.toString(y)));
+        } else {
+            translate(x, y);
+        }
+    }
+
 
 }

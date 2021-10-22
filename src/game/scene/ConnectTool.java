@@ -107,7 +107,17 @@ public class ConnectTool implements GameKernel.GameInterface {
                             }
                             break;
                         case COMPUTER_MOVE:
-
+                            if (serialNum == 100) {
+                                switch (Integer.parseInt(strs.get(0))) {
+                                    case 0:
+                                        objectArr.getComputerPlayersConnectPoint().get(0).translate(Integer.parseInt(strs.get(1)), Integer.parseInt(strs.get(2)));
+                                    case 1:
+                                        objectArr.getComputerPlayersConnectPoint().get(1).translate(Integer.parseInt(strs.get(1)), Integer.parseInt(strs.get(2)));
+                                    case 2:
+                                        objectArr.getComputerPlayersConnectPoint().get(2).translate(Integer.parseInt(strs.get(1)), Integer.parseInt(strs.get(2)));
+                                }
+                            }
+                            break;
                         case UP:
                             mainPlayers.forEach(player -> {
                                 if (serialNum == player.ID()) {
@@ -182,6 +192,12 @@ public class ConnectTool implements GameKernel.GameInterface {
                             if (serialNum == 100) {
                                 objectArr.getPropsArrConnectPoint().add(new Props(Integer.parseInt(strs.get(0)), Integer.parseInt(strs.get(1)), Props.propsTypeParse(strs.get(2))));
                             }
+//                        case PLAYER_POSITION:
+//                            for (Player player : mainPlayers) {
+//                                if (player.ID() == serialNum) {
+//                                    player.setXY(Integer.parseInt(strs.get(0)), Integer.parseInt(strs.get(1)));
+//                                }
+//                            }
                     }
                 }
             });
