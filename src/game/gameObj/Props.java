@@ -56,7 +56,10 @@ public class Props extends GameObject {
     public Props(int x, int y, Type type) {
         super(x, y, Global.UNIT_WIDTH, Global.UNIT_HEIGHT);
         this.animation = new Animation(AllImages.questionBox);
+        isGotByPlayer = false;
         this.propsType = type;
+        collider().scale(painter().width() - 10, painter().height() - 10);
+        painter().setCenter(collider().centerX(), collider().centerY());
     }
 
     @Override
@@ -75,7 +78,7 @@ public class Props extends GameObject {
         return propsType;
     }
 
-    public Type genRandomType() {
+    public static Type genRandomType() {
         int randomNum = Global.random(1, 4);
         switch (randomNum) {
             case 1 -> {
@@ -128,6 +131,21 @@ public class Props extends GameObject {
                 propsAnimation = new PropsAnimation(0, 0, 1100, 700, AllImages.lightning, 20, 120);
                 return Type.timeStop;
             }
+        }
+    }
+
+    public static Type propsTypeParse(String string) {
+        switch (string) {
+            case "trap":
+                return Type.trap;
+            case "addPoint":
+                return Type.addPoint;
+            case "addSpeed":
+                return Type.addSpeed;
+            case "teleportation":
+                return Type.teleportation;
+            default:
+                return null;
         }
     }
 
