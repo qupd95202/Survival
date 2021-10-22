@@ -189,7 +189,7 @@ public class ConnectTool implements GameKernel.GameInterface {
 
     @Override
     public void update() {
-        for (int i = 1; i < mainPlayers.size(); i++) {
+        for (int i = 0; i < mainPlayers.size(); i++) {
             mainPlayers.get(i).update();
         }
     }

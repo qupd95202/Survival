@@ -156,13 +156,13 @@ public class Player extends GameObject implements CommandSolver.KeyListener {
 
     @Override
     public void update() {
+        currentAnimation.update();
         propsEffectUpdate();
         transformResetUpdate();
         if (trapDelay.count()) {
             canMove = true;
         }
         addPoint();
-        currentAnimation.update();
     }
 
     @Override

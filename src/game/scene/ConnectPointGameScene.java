@@ -82,7 +82,7 @@ public class ConnectPointGameScene extends Scene implements CommandSolver.MouseC
 
     public ConnectPointGameScene() {
         connectTool = new ConnectTool();
-        connectTool.setMainPlayer(new Player(Global.SCREEN_X / 2, Global.SCREEN_Y / 2, AllImages.beige, Player.RoleState.HUNTER));
+        connectTool.setMainPlayer(new Player(Global.SCREEN_X / 2, Global.SCREEN_Y / 2, AllImages.blue, Player.RoleState.PREY));
         connectTool.createRoom(5550);
     }
 
@@ -116,9 +116,9 @@ public class ConnectPointGameScene extends Scene implements CommandSolver.MouseC
 //        mainPlayer.setID(1);
 
         //新增玩家
-        players.add(mainPlayer);
+//        players.add(mainPlayer);
         //電腦
-        players.add(new ComputerPlayer(100, 100, AllImages.blue, Player.RoleState.PREY));
+        players.add(new ComputerPlayer(100, 100, AllImages.beige, Player.RoleState.HUNTER));
         players.add(new ComputerPlayer(3000, 100, AllImages.blue, Player.RoleState.PREY));
         players.add(new ComputerPlayer(100, 3000, AllImages.blue, Player.RoleState.PREY));
 
@@ -174,6 +174,7 @@ public class ConnectPointGameScene extends Scene implements CommandSolver.MouseC
         mapPaint(g);
         //用forEach將ArrayList中每個gameObject去paint()
         gameObjectList.forEach(gameObject -> gameObject.paint(g));
+        connectTool.paint(g);
         propsPaint(g);
 
         //跟著鏡頭的在這之後paint
@@ -196,7 +197,7 @@ public class ConnectPointGameScene extends Scene implements CommandSolver.MouseC
         gameMap.paint(g);
         smallMap.paint(g, mainPlayer, Color.red, 100, 100);//小地圖的需要另外再paint一次
         if (Global.IS_DEBUG) {
-            for (int i = 1; i < players.size(); i++) {
+            for (int i = 0; i < players.size(); i++) {
                 smallMap.paint(g, players.get(i), Color.YELLOW, 100, 100);
             }
         }
@@ -205,6 +206,7 @@ public class ConnectPointGameScene extends Scene implements CommandSolver.MouseC
 
     @Override
     public void update() {
+        connectTool.update();
         //區域封閉
         mapAreaClosing();
         //道具生成與更新
@@ -246,8 +248,9 @@ public class ConnectPointGameScene extends Scene implements CommandSolver.MouseC
     }
 
     public void cPlayerCheckOthersUpdate() {
-        for (int i = 1; i < players.size(); i++) {
+        for (int i = 0; i < players.size(); i++) {
             ComputerPlayer computerPlayer = (ComputerPlayer) players.get(i);
+            computerPlayer.whoIsNear(mainPlayer);
             for (int j = 0; j < players.size(); j++) {
                 Player player = players.get(j);
                 if (computerPlayer != player) {
@@ -258,7 +261,7 @@ public class ConnectPointGameScene extends Scene implements CommandSolver.MouseC
     }
 
     public void cPlayerCheckPropsUpdate() {
-        for (int i = 1; i < players.size(); i++) {
+        for (int i = 0; i < players.size(); i++) {
             ComputerPlayer computerPlayer = (ComputerPlayer) players.get(i);
             for (int j = 0; j < propsArrayList.size(); j++) {
                 computerPlayer.whichPropIsNear(propsArrayList.get(j));
@@ -268,6 +271,7 @@ public class ConnectPointGameScene extends Scene implements CommandSolver.MouseC
 
     public void playerCollisionCheckUpdate() {
         players.forEach(player -> {
+            player.exchangeRole(mainPlayer);
             players.forEach(player1 -> {
                 if (player != player1) {
                     player.exchangeRole(player1);
@@ -374,6 +378,10 @@ public class ConnectPointGameScene extends Scene implements CommandSolver.MouseC
      * 讓角色無法穿過該物件
      */
     public void keepNotPass(ArrayList<? extends GameObject> gameObjects) {
+
+        for (GameObject gameObject : gameObjects) {
+            mainPlayer.isCollisionForMovement(gameObject);
+        }
         for (Player player : players) {
             for (GameObject gameObject : gameObjects) {
                 player.isCollisionForMovement(gameObject);
@@ -395,6 +403,16 @@ public class ConnectPointGameScene extends Scene implements CommandSolver.MouseC
      */
     public void propsCollisionCheckUpdate() {
         //道具更新
+
+        for (int i = 0; i < propsArrayList.size(); i++) {
+            Props props = propsArrayList.get(i);
+            if (mainPlayer.isCollision(props)) {
+                mainPlayer.collideProps(props);
+                props.setGotByPlayer(true);
+                propsArrayList.remove(i--);
+            }
+        }
+
         for (Player player : players) {
             for (int i = 0; i < propsArrayList.size(); i++) {
                 Props props = propsArrayList.get(i);
