@@ -34,7 +34,7 @@ import java.util.List;
 
 public class SinglePointGameScene extends Scene implements CommandSolver.MouseCommandListener, CommandSolver.KeyListener {
     private ArrayList<GameObject> gameObjectList; //將Game要畫的所有GameObject存起來
-    //留意畫的順序
+
     private Player mainPlayer;
     private ArrayList<Player> players;
     private final ArrayList<TransformObstacle> transformObstacles = ObjectArr.transformObstaclList1;
@@ -79,6 +79,8 @@ public class SinglePointGameScene extends Scene implements CommandSolver.MouseCo
     private Image imgPoint;
 
 
+
+
     @Override
     public void sceneBegin() {
         //遊戲時間
@@ -87,7 +89,7 @@ public class SinglePointGameScene extends Scene implements CommandSolver.MouseCo
         //初始ArrayList
         gameObjectList = new ArrayList<>();
         players = new ArrayList<>();
-        labels = new ArrayList<Label>();
+        labels = new ArrayList<>();
 
         //道具相關
         propsReProduce = new Delay(900);
@@ -142,6 +144,7 @@ public class SinglePointGameScene extends Scene implements CommandSolver.MouseCo
 
         printGameTime = new GameTime();
         imgClock = SceneController.getInstance().imageController().tryGetImage(new Path().img().numbers().clock());
+
     }
 
 
@@ -174,6 +177,7 @@ public class SinglePointGameScene extends Scene implements CommandSolver.MouseCo
         skillPaint(g);
         //畫滑鼠
         mouse.paint(g);
+
 
         //要畫在小地圖的要加在下方
         smallMap.start(g);
@@ -208,6 +212,8 @@ public class SinglePointGameScene extends Scene implements CommandSolver.MouseCo
         camera.update();
         //cd時間顯示之資料
         transFormCDLabel.setWords(String.valueOf(mainPlayer.transformCDTime()));
+
+
     }
 
     @Override
@@ -261,9 +267,6 @@ public class SinglePointGameScene extends Scene implements CommandSolver.MouseCo
 
     //積分顯示動畫
     public void paintPoint(Graphics g) {
-//        g.setColor(Color.RED);
-//        g.drawString("你的積分:" + mainPlayer.getPoint(), 700, 30);
-//        g.setColor(Color.BLACK);
         g.drawImage(imgPoint,
                 520,
                 5,
@@ -292,12 +295,8 @@ public class SinglePointGameScene extends Scene implements CommandSolver.MouseCo
 
     }
 
+    //顯示剩餘時間動畫
     private void paintTime(Graphics g) {
-//        g.setColor(Color.WHITE);
-//        g.drawString(String.format("剩餘時間 %s 秒", lastTime), Global.SCREEN_X - 100, 30);
-//        g.setColor(Color.BLACK);
-
-
         g.drawImage(imgClock,
                 Global.SCREEN_X - 150,
                 -5,

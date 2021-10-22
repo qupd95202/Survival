@@ -222,7 +222,6 @@ public class Player extends GameObject implements CommandSolver.KeyListener {
         return true;
     }
 
-
     public void exchangeRole(Player player) {
         if (roleState != player.roleState && roleState != RoleState.BUMPING && player.roleState != RoleState.BUMPING) {
             if (isCollision(player)) {
@@ -248,7 +247,6 @@ public class Player extends GameObject implements CommandSolver.KeyListener {
         setPoint(player.getPoint());
         player.setPoint(temp);
     }
-
 
     public void bump(Player player) {
         setCurrentAnimation(bumpAnimation);
@@ -509,7 +507,6 @@ public class Player extends GameObject implements CommandSolver.KeyListener {
     public Global.MapAreaType getTransformationAnimationType() {
         return currentAnimation.getMapAreaType();
     }
-
 
     public void setInClosedArea(boolean inClosedArea) {
         isInClosedArea = inClosedArea;
