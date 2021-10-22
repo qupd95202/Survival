@@ -202,4 +202,41 @@ public class AllImages {
     public static ImgArrAndType no=new ImgArrAndType(new ArrayList<Image>(java.util.List.of(
             SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().no()))),Global.MapAreaType.NONE);
 
+    //lightning
+    public static ImgArrAndType lightning = new ImgArrAndType(new ArrayList<>(List.of(
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().lightning().lightning0()),
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().lightning().lightning1()),
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().lightning().lightning2()),
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().lightning().lightning3()),
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().lightning().lightning4()),
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().lightning().lightning5()),
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().lightning().lightning6()),
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().lightning().lightning7()),
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().lightning().lightning8()),
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().lightning().lightning9()),
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().lightning().lightning10()),
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().lightning().lightning11()),
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().lightning().lightning12()),
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().lightning().lightning13()),
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().lightning().lightning14()),
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().lightning().lightning15()),
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().lightning().lightning16()),
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().lightning().lightning17()))),Global.MapAreaType.NONE);
+
+    public static ImgArrAndType star = new ImgArrAndType(new ArrayList<>(java.util.List.of(
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().props().star1()),
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().props().star2()),
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().props().star3()),
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().props().star4()),
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().props().star5()),
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().props().star6()),
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().props().star7()),
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().props().star8()),
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().props().star9()),
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().props().star10()),
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().props().star11()),
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().props().star12())
+            )),Global.MapAreaType.NONE);
+
+
 }

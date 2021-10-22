@@ -1,17 +1,13 @@
 package game.graphic;
 
-import game.controllers.SceneController;
 import game.core.Global;
 import game.utils.Delay;
-import game.utils.Path;
-
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.List;
+
 
 public class Animation {
 
-    private ImgArrAndType img;
+    protected ImgArrAndType img;
     private int count;
     private Delay delay;
 
@@ -43,5 +39,11 @@ public class Animation {
 
     public ImgArrAndType getImg() {
         return img;
+    }
+
+    //自訂動畫速度（數字越小越快）
+    public void setDelay(int animationSpeed) {
+        this.delay = new Delay(animationSpeed);
+        delay.loop();
     }
 }

@@ -544,6 +544,69 @@ public class Path {
                 }
 
             }
+
+            public static class Lightning extends Flow {
+                private Lightning(Flow flow) {
+                    super(flow, "/lightning");
+                }
+
+                public String lightning0() {
+                    return this + "/lightning0.png";
+                }
+                public String lightning1() {
+                    return this + "/lightning1.png";
+                }
+                public String lightning2() {
+                    return this + "/lightning2.png";
+                }
+                public String lightning3() {
+                    return this + "/lightning3.png";
+                }
+                public String lightning4() {
+                    return this + "/lightning4.png";
+                }
+                public String lightning5() {
+                    return this + "/lightning5.png";
+                }
+                public String lightning6() {
+                    return this + "/lightning6.png";
+                }
+                public String lightning7() {
+                    return this + "/lightning7.png";
+                }
+                public String lightning8() {
+                    return this + "/lightning8.png";
+                }
+                public String lightning9() {
+                    return this + "/lightning9.png";
+                }
+                public String lightning10() {
+                    return this + "/lightning10.png";
+                }
+                public String lightning11() {
+                    return this + "/lightning11.png";
+                }
+                public String lightning12() {
+                    return this + "/lightning12.png";
+                }
+                public String lightning13() {
+                    return this + "/lightning13.png";
+                }
+                public String lightning14() {
+                    return this + "/lightning14.png";
+                }
+                public String lightning15() {
+                    return this + "/lightning15.png";
+                }
+                public String lightning16() {
+                    return this + "/lightning16.png";
+                }
+                public String lightning17() {
+                    return this + "/lightning17.png";
+                }
+
+            }
+
             public String no() {
                 return this + "/no.png";
             }
@@ -559,6 +622,11 @@ public class Path {
             public DontMove dontMove() {
                 return new DontMove(this);
             }
+            public Lightning lightning() {
+                return new Lightning(this);
+            }
+
+
         }
 
         public static class DontMove extends Flow {
@@ -666,6 +734,51 @@ public class Path {
 
         }
 
+
+        public static class Props extends Flow {
+            private Props(Flow flow) {
+                super(flow, "/props");
+            }
+
+            public String star1() {
+                return this + "/star1.png";
+            }
+            public String star2() {
+                return this + "/star2.png";
+            }
+            public String star3() {
+                return this + "/star3.png";
+            }
+            public String star4() {
+                return this + "/star4.png";
+            }
+            public String star5() {
+                return this + "/star5.png";
+            }
+            public String star6() {
+                return this + "/star6.png";
+            }
+            public String star7() {
+                return this + "/star7.png";
+            }
+            public String star8() {
+                return this + "/star8.png";
+            }
+            public String star9() {
+                return this + "/star9.png";
+            }
+            public String star10() {
+                return this + "/star10.png";
+            }
+            public String star11() {
+                return this + "/star11.png";
+            }
+            public String star12() {
+                return this + "/star12.png";
+            }
+
+        }
+
         public Actors actors() {
             return new Actors(this);
         }
@@ -687,6 +800,11 @@ public class Path {
         public Numbers numbers() {
             return new Numbers(this);
         }
+
+        public Props props() {
+            return new Props(this);
+        }
+
     }
 
     public static class Sound extends Flow {

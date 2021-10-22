@@ -4,6 +4,7 @@ import game.Menu.Label;
 import game.Menu.MenuScene;
 import game.Menu.Mouse;
 import game.controllers.SceneController;
+import game.core.GameTime;
 import game.core.Global;
 import game.gameObj.GameObject;
 import game.gameObj.Props;
@@ -50,12 +51,15 @@ public class SingleSurvivalGameScene extends Scene implements CommandSolver.Mous
     //道具生成與消失
     private Delay propsReProduce;
     private Delay propsRemove;
+    private Delay propAnimationDelay;//計時吃到道具動畫播放時間
 
     //時間計算
     private long startTime;
     private long gameTime;
     private long chooseTime; //選擇的遊戲時間
     private long lastTime;
+    private GameTime printGameTime;
+    private Image imgClock;
 
 
     //左下角的方格
@@ -87,16 +91,19 @@ public class SingleSurvivalGameScene extends Scene implements CommandSolver.Mous
         propsRemove.loop();
         propsReProduce.play();
         propsReProduce.loop();
+        propAnimationDelay = new Delay(19);
 
         //主角
         mainPlayer = new Player(Global.SCREEN_X / 2, Global.SCREEN_Y / 2, AllImages.blue, Player.RoleState.PREY);
         //新增電腦玩家
+
         computerPlayers.add(new ComputerPlayer(100, 100, AllImages.beige, Player.RoleState.HUNTER));
         computerPlayers.add(new ComputerPlayer(900, 3200, AllImages.beige, Player.RoleState.HUNTER));
         computerPlayers.add(new ComputerPlayer(2300, 3000, AllImages.beige, Player.RoleState.HUNTER));
         computerPlayers.add(new ComputerPlayer(100, 2300, AllImages.beige, Player.RoleState.HUNTER));
         computerPlayers.add(new ComputerPlayer(1599, 500, AllImages.beige, Player.RoleState.HUNTER));
         computerPlayers.add(new ComputerPlayer(100, 2500, AllImages.beige, Player.RoleState.HUNTER));
+
         //預設難度一
         for (ComputerPlayer computerPlayer : computerPlayers) {
             computerPlayer.AILevel1();
@@ -131,6 +138,9 @@ public class SingleSurvivalGameScene extends Scene implements CommandSolver.Mous
         //滑鼠
         mouse = new Mouse(0, 0, 50, 50);
 
+        printGameTime = new GameTime();
+        imgClock = SceneController.getInstance().imageController().tryGetImage(new Path().img().numbers().clock());
+
     }
 
 
@@ -161,6 +171,24 @@ public class SingleSurvivalGameScene extends Scene implements CommandSolver.Mous
         //畫滑鼠
         mouse.paint(g);
 
+        //碰撞道具時播放動畫
+        for (int i = 0; i < propsArrayList.size(); i++) {
+            Props prop = propsArrayList.get(i);
+            if (prop.isPlayPropsAnimation()) {
+                if (propAnimationDelay.getCount() == 0) {
+                    propAnimationDelay.play();
+                }
+                System.out.println("吃到");
+                prop.getPropsAnimation().paint(0, 0, 1100, 700,g);
+                if (propAnimationDelay.count()) {
+                    System.out.println("刪除");
+                    prop.setPlayPropsAnimation(false);
+                    propsArrayList.remove(i--);
+                }
+            }
+        }
+
+
         //要畫在小地圖的要加在下方
         smallMap.start(g);
         gameMap.paint(g);
@@ -171,6 +199,7 @@ public class SingleSurvivalGameScene extends Scene implements CommandSolver.Mous
             }
         }
         camera.paint(g);
+
     }
 
     @Override
@@ -250,9 +279,30 @@ public class SingleSurvivalGameScene extends Scene implements CommandSolver.Mous
     }
 
     private void paintTime(Graphics g) {
-        g.setColor(Color.WHITE);
-        g.drawString(String.format("剩餘時間 %s 秒", lastTime), Global.SCREEN_X - 100, 30);
-        g.setColor(Color.BLACK);
+        g.drawImage(imgClock,
+                Global.SCREEN_X - 150,
+                -5,
+                60,
+                60,
+                null);
+        g.drawImage(printGameTime.imgHundreds(lastTime),
+                Global.SCREEN_X - 100,
+                10,
+                30,
+                30,
+                null);
+        g.drawImage(printGameTime.imgTens(lastTime),
+                Global.SCREEN_X - 80,
+                10,
+                30,
+                30,
+                null);
+        g.drawImage(printGameTime.imgDigits(lastTime),
+                Global.SCREEN_X - 60,
+                10,
+                30,
+                30,
+                null);
     }
 
     public void mapPaint(Graphics g) {
@@ -310,8 +360,11 @@ public class SingleSurvivalGameScene extends Scene implements CommandSolver.Mous
             Props props = propsArrayList.get(i);
             if (mainPlayer.isCollision(props)) {
                 mainPlayer.collidePropsInSurvivalMode(props);
+
+                props.setPlayPropsAnimation(true);
+
                 props.setGotByPlayer(true);
-                propsArrayList.remove(i--);
+//                propsArrayList.remove(i--);
                 continue;
             }
             for (ComputerPlayer computerPlayer : computerPlayers) {
@@ -371,6 +424,7 @@ public class SingleSurvivalGameScene extends Scene implements CommandSolver.Mous
             for (ComputerPlayer computerPlayer : computerPlayers) {
                 computerPlayer.decreaseSpeed();
             }
+
             mainPlayer.isThunder = false;
         }
         if (mainPlayer.isHunterStop) {
