@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
+import static game.gameObj.Pact.CONNECT;
 import static game.gameObj.Pact.bale;
 
 public class ConnectPointGameScene extends Scene implements CommandSolver.MouseCommandListener, CommandSolver.KeyListener {
@@ -79,16 +80,21 @@ public class ConnectPointGameScene extends Scene implements CommandSolver.MouseC
     private game.core.Point point;
     private Image imgPoint;
 
+    public ConnectPointGameScene() {
+        connectTool = new ConnectTool();
+        connectTool.setMainPlayer(new Player(Global.SCREEN_X / 2, Global.SCREEN_Y / 2, AllImages.beige, Player.RoleState.HUNTER));
+        connectTool.createRoom(5550);
+    }
 
     @Override
     public void sceneBegin() {
-        connectTool = new ConnectTool();
-        connectTool.createRoom(5550);
         try {
             connectTool.connect("127.0.0.1", 5550);
         } catch (IOException e) {
             e.printStackTrace();
         }
+        ClientClass.getInstance().sent(CONNECT, bale(""));
+        connectTool.consume();
         //遊戲時間
         startTime = System.nanoTime();
         chooseTime = 300; //單位：秒
@@ -369,7 +375,6 @@ public class ConnectPointGameScene extends Scene implements CommandSolver.MouseC
      */
     public void keepNotPass(ArrayList<? extends GameObject> gameObjects) {
         for (Player player : players) {
-//            player.setNothingBlock(true);
             for (GameObject gameObject : gameObjects) {
                 player.isCollisionForMovement(gameObject);
             }
