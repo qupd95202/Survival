@@ -44,7 +44,7 @@ public class Props extends GameObject {
         playPropsAnimation = false;
     }
 
-    public Props(int type) {
+    public Props(int forSurvivalMode) {
         super(Global.random(0, Global.MAP_PIXEL_WIDTH), Global.random(0, Global.MAP_PIXEL_HEIGHT), Global.UNIT_WIDTH, Global.UNIT_HEIGHT);
         this.animation = new Animation(AllImages.questionBox);
         this.propsType = genRandomTypeInSurvivalMode();
@@ -52,7 +52,8 @@ public class Props extends GameObject {
         collider().scale(painter().width() - 10, painter().height() - 10);
         painter().setCenter(collider().centerX(), collider().centerY());
     }
-    public Props(int x,int y,Type type){
+
+    public Props(int x, int y, Type type) {
         super(x, y, Global.UNIT_WIDTH, Global.UNIT_HEIGHT);
         this.animation = new Animation(AllImages.questionBox);
         this.propsType = type;
@@ -67,7 +68,7 @@ public class Props extends GameObject {
     @Override
     public void update() {
         animation.update();
-       if (playPropsAnimation) {
+        if (playPropsAnimation) {
             propsAnimation.update();
         }
     }
