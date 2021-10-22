@@ -96,7 +96,7 @@ public class ConnectTool implements GameKernel.GameInterface {
                                 }
                             }
                             if (!isburn) {
-                                Player newPlayer = new Player(Global.SCREEN_X / 2, Global.SCREEN_Y / 2, AllImages.beige, Player.RoleState.HUNTER);
+                                Player newPlayer = new Player(Global.SCREEN_X / 2, Global.SCREEN_Y / 2, AllImages.blue, Player.RoleState.PREY);
                                 newPlayer.setID(serialNum);
                                 mainPlayers.add(newPlayer);
                                 ClientClass.getInstance().sent(Pact.CONNECT, bale());

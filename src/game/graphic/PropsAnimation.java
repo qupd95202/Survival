@@ -45,6 +45,7 @@ public class PropsAnimation extends Animation {
         if (playPropsAnimation) {
             if (animationSpeedDelay.count()) {
                 count = ++count % img.getImageArrayList().size();
+
             }
         }
     }

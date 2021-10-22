@@ -218,7 +218,6 @@ public class ConnectPointGameScene extends Scene implements CommandSolver.MouseC
         //無法穿越部分物件
         keepNotPass(unPassMapObjects);
         //用forEach將ArrayList中每個gameObject去update()
-        connectTool.update();
         gameObjectList.forEach(gameObject -> gameObject.update());
         cPlayerCheckOthersUpdate();
         cPlayerCheckPropsUpdate();
@@ -272,6 +271,13 @@ public class ConnectPointGameScene extends Scene implements CommandSolver.MouseC
     }
 
     public void playerCollisionCheckUpdate() {
+        for (Player player : connectTool.getMainPlayers()) {
+            connectTool.getMainPlayers().forEach(player1 -> {
+                if (player != player1) {
+                    player.exchangeRole(player1);
+                }
+            });
+        }
         players.forEach(player -> {
             player.exchangeRole(mainPlayer);
             players.forEach(player1 -> {
