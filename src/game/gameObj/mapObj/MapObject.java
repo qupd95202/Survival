@@ -66,7 +66,7 @@ public class MapObject extends GameObject {
                 break;
             case "house2" :
                 this.type = Type.house2;
-                collider().scale(painter().width() - 100, painter().height() - 100);
+                collider().scale(painter().width() - 120, painter().height() - 120);
                 painter().setCenter(collider().centerX(), collider().centerY());
                 break;
 

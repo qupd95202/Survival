@@ -3,13 +3,12 @@ package game.scene;
 import game.Menu.Label;
 import game.Menu.Mouse;
 import game.controllers.SceneController;
+import game.core.GameTime;
 import game.core.Global;
-import game.core.Position;
+import game.core.Point;
 import game.gameObj.GameObject;
 import game.gameObj.Props;
 import game.gameObj.mapObj.MapObject;
-import game.gameObj.obstacle.MovingObstacle;
-import game.gameObj.obstacle.Obstacle;
 import game.gameObj.obstacle.TransformObstacle;
 import game.gameObj.players.Player;
 import game.gameObj.players.ComputerPlayer;
@@ -56,18 +55,25 @@ public class SinglePointGameScene extends Scene implements CommandSolver.MouseCo
     private long gameTime;
     private long chooseTime; //選擇的遊戲時間
     private long lastTime;
+    private GameTime printGameTime;
+    private Image imgClock;
 
 
     //左下角的方格
     Animation runner;
     Animation changeBody;
     Animation imgWarning;
+    Animation no;//當玩家為獵人時變身格會放
     //滑鼠
     private Mouse mouse;
 
     //提示訊息(畫面上所有的文字處理)
     private ArrayList<Label> labels;
     private Label transFormCDLabel;
+
+    //積分動畫顯示
+    private Point point;
+    private Image imgPoint;
 
 
     @Override
@@ -101,6 +107,7 @@ public class SinglePointGameScene extends Scene implements CommandSolver.MouseCo
         runner = new Animation(AllImages.runnerDark);
         changeBody = new Animation(AllImages.changeBody);
         imgWarning = new Animation(AllImages.WARNING);
+        no = new Animation(AllImages.no);
         transFormCDLabel = new Label(Global.RUNNER_X + Global.GAME_SCENE_BOX_SIZE + 5 + 15, Global.RUNNER_Y + 30, String.valueOf(mainPlayer.transformCDTime()), 20);
         labels.add(new Label(Global.RUNNER_X + 75, Global.RUNNER_Y + 85, "F", 20));
         labels.add(new Label(Global.RUNNER_X + Global.GAME_SCENE_BOX_SIZE + 5 + 75, Global.RUNNER_Y + 85, "R", 20));
@@ -127,6 +134,11 @@ public class SinglePointGameScene extends Scene implements CommandSolver.MouseCo
         //滑鼠
         mouse = new Mouse(0, 0, 50, 50);
 
+        point = new Point();
+        imgPoint = SceneController.getInstance().imageController().tryGetImage(new Path().img().numbers().coin());
+
+        printGameTime = new GameTime();
+        imgClock = SceneController.getInstance().imageController().tryGetImage(new Path().img().numbers().clock());
     }
 
 
@@ -244,16 +256,69 @@ public class SinglePointGameScene extends Scene implements CommandSolver.MouseCo
         });
     }
 
+    //積分顯示動畫
     public void paintPoint(Graphics g) {
-        g.setColor(Color.RED);
-        g.drawString("你的積分:" + mainPlayer.getPoint(), 600, 30);
-        g.setColor(Color.BLACK);
+//        g.setColor(Color.RED);
+//        g.drawString("你的積分:" + mainPlayer.getPoint(), 700, 30);
+//        g.setColor(Color.BLACK);
+        g.drawImage(imgPoint,
+                520,
+                5,
+                40,
+                40,
+                null);
+        g.drawImage(point.imgHundreds(mainPlayer.getPoint()),
+                560,
+                10,
+                20,
+                30,
+                null);
+        g.drawImage(point.imgTens(mainPlayer.getPoint()),
+                580,
+                10,
+                20,
+                30,
+                null);
+        g.drawImage(point.imgDigits(mainPlayer.getPoint()),
+                600,
+                10,
+                20,
+                30,
+                null);
+
+
     }
 
     private void paintTime(Graphics g) {
-        g.setColor(Color.WHITE);
-        g.drawString(String.format("剩餘時間 %s 秒", lastTime), Global.SCREEN_X - 100, 30);
-        g.setColor(Color.BLACK);
+//        g.setColor(Color.WHITE);
+//        g.drawString(String.format("剩餘時間 %s 秒", lastTime), Global.SCREEN_X - 100, 30);
+//        g.setColor(Color.BLACK);
+
+
+        g.drawImage(imgClock,
+                Global.SCREEN_X - 150,
+                -5,
+                60,
+                60,
+                null);
+        g.drawImage(printGameTime.imgHundreds(lastTime),
+                Global.SCREEN_X - 100,
+                10,
+                30,
+                30,
+                null);
+        g.drawImage(printGameTime.imgTens(lastTime),
+                Global.SCREEN_X - 80,
+                10,
+                30,
+                30,
+                null);
+        g.drawImage(printGameTime.imgDigits(lastTime),
+                Global.SCREEN_X - 60,
+                10,
+                30,
+                30,
+                null);
     }
 
     public void mapPaint(Graphics g) {
@@ -280,6 +345,9 @@ public class SinglePointGameScene extends Scene implements CommandSolver.MouseCo
         for (int i = 0; i < labels.size(); i++) {
             labels.get(i).paint(g);
         }
+        if (mainPlayer.roleState == Player.RoleState.HUNTER) {
+            no.paint(105, Global.SCREEN_Y - 100, 100, 100, g);
+        }
     }
 
     /**
@@ -287,11 +355,9 @@ public class SinglePointGameScene extends Scene implements CommandSolver.MouseCo
      */
     public void keepNotPass(ArrayList<? extends GameObject> gameObjects) {
         for (Player player : players) {
-            player.setNothingBlock(true);
-            for (int i = 0; i < gameObjects.size(); i++) {
-                if (player.isCollisionForMovement(gameObjects.get(i))) {
-                    player.notMove();
-                }
+//            player.setNothingBlock(true);
+            for (GameObject gameObject : gameObjects) {
+                player.isCollisionForMovement(gameObject);
             }
         }
     }
@@ -321,7 +387,6 @@ public class SinglePointGameScene extends Scene implements CommandSolver.MouseCo
             }
         }
     }
-
 
     private void mapAreaClosing() {
         if (gameTime > 100 && gameTime <= 180) {
@@ -387,7 +452,6 @@ public class SinglePointGameScene extends Scene implements CommandSolver.MouseCo
         }
     }
 
-
     @Override
     public void keyPressed(int commandCode, long trigTime) {
         mainPlayer.keyPressed(commandCode, trigTime);
@@ -405,21 +469,6 @@ public class SinglePointGameScene extends Scene implements CommandSolver.MouseCo
 
     @Override
     public void mouseTrig(MouseEvent e, CommandSolver.MouseState state, long trigTime) {
-        if (state == CommandSolver.MouseState.CLICKED) {
-            int mouseX = e.getX() + camera.painter().left();
-            int mouseY = e.getY() + camera.painter().top();
-            for (TransformObstacle transformObstacle : transformObstacles) {
-                if (transformObstacle.isXYin(mouseX, mouseY)) {
-                    mainPlayer.chooseTransformObject(transformObstacle);
-                }
-            }
-            for (MapObject mapObject : unPassMapObjects) {
-                if (mapObject.isXYin(mouseX, mouseY)) {
-                    return;
-                }
-            }
-            mainPlayer.useTeleportation(mouseX, mouseY);
-        }
-        mouse.mouseTrig(e, state, trigTime);
+        mainPlayer.mouseTrig(e, state, trigTime, unPassMapObjects, transformObstacles, camera, mouse);
     }
 }

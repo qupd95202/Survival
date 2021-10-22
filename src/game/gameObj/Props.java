@@ -46,6 +46,11 @@ public class Props extends GameObject {
         collider().scale(painter().width() - 10, painter().height() - 10);
         painter().setCenter(collider().centerX(), collider().centerY());
     }
+    public Props(int x,int y,Type type){
+        super(x, y, Global.UNIT_WIDTH, Global.UNIT_HEIGHT);
+        this.animation = new Animation(AllImages.questionBox);
+        this.propsType = type;
+    }
 
     @Override
     public void paintComponent(Graphics g) {

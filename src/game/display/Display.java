@@ -38,7 +38,6 @@ public class Display extends JFrame {
         GameKernel kernel = new GameKernel.Builder(gi, Global.LIMIT_DELTA_TIME, Global.NANOSECOUND_PER_UPDATE)
                 .initListener(commands)
                 .enableKeyboardTrack(gi)
-                .keyCleanMode()
                 .enableMouseTrack(gi)
                 .gen();
 

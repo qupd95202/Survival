@@ -226,7 +226,7 @@ public class Path {
             }
 
             public String village() {
-                return this + "/village.jpg";
+                return this + "/village.png";
             }
             //森林地圖物件
             public String tree1() {
@@ -544,7 +544,9 @@ public class Path {
                 }
 
             }
-
+            public String no() {
+                return this + "/no.png";
+            }
             public String addSpeed() {
                 return this + "/addSpeed.png";
             }
@@ -590,6 +592,80 @@ public class Path {
 
         }
 
+        public static class Numbers extends Flow {
+            private Numbers(Flow flow) {
+                super(flow, "/numbers");
+            }
+            public String number0() {
+                return this + "/number0.png";
+            }
+            public String number1() {
+                return this + "/number1.png";
+            }
+            public String number2() {
+                return this + "/number2.png";
+            }
+            public String number3() {
+                return this + "/number3.png";
+            }
+            public String number4() {
+                return this + "/number4.png";
+            }
+            public String number5() {
+                return this + "/number5.png";
+            }
+            public String number6() {
+                return this + "/number6.png";
+            }
+            public String number7() {
+                return this + "/number7.png";
+            }
+            public String number8() {
+                return this + "/number8.png";
+            }
+            public String number9() {
+                return this + "/number9.png";
+            }
+            public String coin() {
+                return this + "/coin.png";
+            }
+
+            public String numberTile0() {
+                return this + "/numberTile0.png";
+            }
+            public String numberTile1() {
+                return this + "/numberTile1.png";
+            }
+            public String numberTile2() {
+                return this + "/numberTile2.png";
+            }
+            public String numberTile3() {
+                return this + "/numberTile3.png";
+            }
+            public String numberTile4() {
+                return this + "/numberTile4.png";
+            }
+            public String numberTile5() {
+                return this + "/numberTile5.png";
+            }
+            public String numberTile6() {
+                return this + "/numberTile6.png";
+            }
+            public String numberTile7() {
+                return this + "/numberTile7.png";
+            }
+            public String numberTile8() {
+                return this + "/numberTile8.png";
+            }
+            public String numberTile9() {
+                return this + "/numberTile9.png";
+            }
+            public String clock() {
+                return this + "/clock.png";
+            }
+
+        }
+
         public Actors actors() {
             return new Actors(this);
         }
@@ -607,6 +683,9 @@ public class Path {
         }
         public Objs objs() {
             return new Objs(this);
+        }
+        public Numbers numbers() {
+            return new Numbers(this);
         }
     }
 

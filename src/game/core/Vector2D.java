@@ -21,10 +21,17 @@ public class Vector2D {
         return x;
     }
 
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public void setY(int y) {
+        this.y = y;
+    }
+
     public int getY() {
         return y;
     }
-
 
 
     //向量變化

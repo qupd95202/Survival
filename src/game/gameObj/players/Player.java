@@ -1,23 +1,29 @@
 package game.gameObj.players;
 
+import game.Menu.Mouse;
 import game.core.Global;
 import game.core.Movement;
 import game.core.Position;
 import game.gameObj.GameObject;
 import game.gameObj.Props;
 import game.gameObj.Transformation;
+import game.gameObj.mapObj.MapObject;
+import game.gameObj.obstacle.TransformObstacle;
 import game.graphic.AllImages;
 import game.graphic.Animation;
 import game.graphic.ImgArrAndType;
+import game.scene_process.Camera;
 import game.utils.CommandSolver;
 import game.utils.Delay;
 
 import java.awt.*;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 import static game.gameObj.Props.Type.trap;
 
 public class Player extends GameObject implements CommandSolver.KeyListener {
+
 
     public enum RoleState {
         HUNTER,
@@ -32,6 +38,7 @@ public class Player extends GameObject implements CommandSolver.KeyListener {
         BUMP;
     }
 
+
     public static final Animation bumpAnimation = new Animation(AllImages.bump);
 
 
@@ -39,7 +46,6 @@ public class Player extends GameObject implements CommandSolver.KeyListener {
     protected Movement movement;
     protected boolean canMove;
     public Delay canMoveDelay;
-    private boolean isNothingBlock;
     protected MovingState movingState;
 
     //交換身分相關
@@ -73,9 +79,43 @@ public class Player extends GameObject implements CommandSolver.KeyListener {
     public boolean isHunterWatcher;
     private Delay hunterWatcherDelay;
 
-
     //扣分相關
     private boolean isInClosedArea;
+
+    //連線相關
+    private int id;
+
+    //for連線用的Player 需要 set當前動畫 和 set是什麼身分
+//    public Player(int x, int y, ImgArrAndType imageArrayList, RoleState roleState) {
+//        super(x, y, Global.PLAYER_WIDTH, Global.PLAYER_HEIGHT);
+//        movement = new Movement(Global.NORMAL_SPEED);//一般角色移動
+//        collider().scale(painter().width() - 10, painter().height() - 10);
+//        painter().setCenter(collider().centerX(), collider().centerY());
+//        point = 0;
+//        this.id = id;
+//        canMove = true;
+//        isNothingBlock = true;
+//        canPass = true;
+//        canTransform = true;
+//        isUseTeleportation = false;
+//        canUseTeleportation = false;
+//        isInClosedArea = false;
+//
+//        this.roleState = roleState;
+//        roleStateBeforeBump = roleState;
+//        this.currentAnimation = new Animation(imageArrayList);
+//        originalAnimation = new Animation(imageArrayList);
+//
+//        pointDelay = new Delay(60);
+//        collisionDelay = new Delay(180);
+//        canMoveDelay = new Delay(300);
+//        transformCD = new Delay(600); //十秒
+//        transformTime = new Delay(900); //十五秒
+//        trapDelay = new Delay(120);
+//        superStarDelay = new Delay(600);
+//        hunterWatcherDelay = new Delay(600);
+//        movingState = MovingState.STAND;
+//    }
 
 
     public Player(int x, int y, ImgArrAndType imageArrayList, RoleState roleState) {
@@ -86,7 +126,6 @@ public class Player extends GameObject implements CommandSolver.KeyListener {
         point = 0;
 
         canMove = true;
-        isNothingBlock = true;
         canPass = true;
         canTransform = true;
         isUseTeleportation = false;
@@ -107,8 +146,6 @@ public class Player extends GameObject implements CommandSolver.KeyListener {
         superStarDelay = new Delay(600);
         hunterWatcherDelay = new Delay(600);
         movingState = MovingState.STAND;
-
-
     }
 
 
@@ -138,16 +175,13 @@ public class Player extends GameObject implements CommandSolver.KeyListener {
         }
         //觸發Movement監聽到的移動變化
         movement.keyPressed(commandCode, trigTime);
-        if (isNothingBlock) {
-            move();
-        }
-
         if (commandCode == Global.KeyCommand.TRANSFORM.getValue()) {
             transform();
         }
         if (commandCode == Global.KeyCommand.TELEPORTATION.getValue()) {
             clickedTeleportation();
         }
+        move();
     }
 
 
@@ -166,6 +200,26 @@ public class Player extends GameObject implements CommandSolver.KeyListener {
 
     }
 
+
+    public void mouseTrig(MouseEvent e, CommandSolver.MouseState state, long trigTime, ArrayList<MapObject> unPassMapObjects, ArrayList<TransformObstacle> transformObstacles, Camera camera, Mouse mouse) {
+        if (state == CommandSolver.MouseState.CLICKED) {
+            int mouseX = e.getX() + camera.painter().left();
+            int mouseY = e.getY() + camera.painter().top();
+            for (TransformObstacle transformObstacle : transformObstacles) {
+                if (transformObstacle.isXYin(mouseX, mouseY)) {
+                    chooseTransformObject(transformObstacle);
+                }
+            }
+            for (MapObject mapObject : unPassMapObjects) {
+                if (mapObject.isXYin(mouseX, mouseY)) {
+                    return;
+                }
+            }
+            useTeleportation(mouseX, mouseY);
+        }
+        mouse.mouseTrig(e, state, trigTime);
+    }
+
 //    /**
 //     * 改變角色動畫方向
 //     */
@@ -177,21 +231,12 @@ public class Player extends GameObject implements CommandSolver.KeyListener {
 
     public void move() {
         if (!canMove) {
-            movement.move(0, 0);
+            return;
         }
         //一般移動位置的部分
         translate(movement.getVector2D().getX(), movement.getVector2D().getY());
         keepInMap();
     }
-
-//    /**
-//     * 取得角色當前身分
-//     *
-//     * @return
-//     */
-//    public boolean isHunter() {
-//        return originType == 6;  // imageType.getImageType() == ImageType.MapAndRoleType.HUNTER
-//    }
 
     /**
      * 讓角色不會超出邊界
@@ -202,24 +247,25 @@ public class Player extends GameObject implements CommandSolver.KeyListener {
         }
     }
 
-//    public void notMove() {
-//        translate(-movement.getVector2D().getX(), -movement.getVector2D().getY());
-//    }
-
-    public boolean isCollisionForMovement(GameObject gameObject) {
+    public void isCollisionForMovement(GameObject gameObject) {
         if (collider().bottom() + movement.getVector2D().getY() < gameObject.collider().top()) {
-            return false;
+            return;
         }
         if (collider().top() + movement.getVector2D().getY() > gameObject.collider().bottom()) {
-            return false;
+            return;
         }
         if (collider().right() + movement.getVector2D().getX() < gameObject.collider().left()) {
-            return false;
+            return;
         }
         if (collider().left() + movement.getVector2D().getX() > gameObject.collider().right()) {
-            return false;
+            return;
         }
-        return true;
+        notMove();
+    }
+
+
+    public void notMove() {
+        translate(-movement.getVector2D().getX(), -movement.getVector2D().getY());
     }
 
 
@@ -340,13 +386,17 @@ public class Player extends GameObject implements CommandSolver.KeyListener {
 //    public void setCanMove(boolean canMove) {
 //        this.canMove = canMove;
 //    }
-    public void notMove() {
-        isNothingBlock = false;
+//    public void notMove() {
+//        isNothingBlock = false;
+//    }
+    public void notMoveInConnect() {
+        translate(-movement.getVector2D().getX(), -movement.getVector2D().getY());
     }
 
-    public void setNothingBlock(boolean nothingBlock) {
-        isNothingBlock = nothingBlock;
-    }
+
+//    public void setNothingBlock(boolean nothingBlock) {
+//        isNothingBlock = nothingBlock;
+//    }
 
     public void clickedTeleportation() {
         if (canUseTeleportation) {
@@ -443,6 +493,7 @@ public class Player extends GameObject implements CommandSolver.KeyListener {
                 }
                 hunterWatcherDelay.play();
                 isHunterWatcher = true;
+                break;
             default:
                 if (Global.IS_DEBUG)
                     System.out.println("遊戲時間減少");
@@ -521,5 +572,13 @@ public class Player extends GameObject implements CommandSolver.KeyListener {
 
     public void setCanMove(boolean canMove) {
         this.canMove = canMove;
+    }
+
+    public void setID(int id) {
+        this.id = id;
+    }
+
+    public int ID() {
+        return id;
     }
 }

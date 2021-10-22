@@ -10,12 +10,12 @@ import java.util.List;
 public class Global {
 
     public enum KeyCommand {
-        UP(3),
-        DOWN(0),
-        LEFT(1),
-        RIGHT(2),
-        TRANSFORM(4),
-        TELEPORTATION(5);
+        UP(2),
+        DOWN(3),
+        LEFT(4),
+        RIGHT(5),
+        TRANSFORM(6),
+        TELEPORTATION(7);
 
 
         private int value;
@@ -118,6 +118,10 @@ public class Global {
     public static final int SPEED_MAX = 10;
     //地圖上道具數量上限
     public static final int PROPS_AMOUNT_MAX = 6;
+
+    //選擇遊戲時間
+    public static final int CHOOSE_GAMETIME = 300;
+
     public static final int PROPS_AMOUNT_MAX_SURVIVAL_GAME = 10;
 
 

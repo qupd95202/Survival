@@ -13,6 +13,6 @@ import java.net.URL;
 public class Main {
     public static void main(String[] args) {
         Display display = new Display(Global.WINDOW_WIDTH, Global.WINDOW_HEIGHT);
-        System.out.println(Global.random(1,8));
+
     }
 }

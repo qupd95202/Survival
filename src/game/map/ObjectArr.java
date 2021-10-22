@@ -5,7 +5,6 @@ import game.gameObj.Props;
 import game.gameObj.obstacle.MovingObstacle;
 import game.gameObj.obstacle.TransformObstacle;
 import game.graphic.AllImages;
-import game.graphic.Animation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,9 +62,9 @@ public class ObjectArr {
             new MovingObstacle(2515, 2699, AllImages.flyMan),
             new MovingObstacle(2634, 2718, AllImages.flyMan),
             new MovingObstacle(2500, 2769, AllImages.flyMan),
-            new MovingObstacle(3691, 2305, AllImages.mouse),
+            new MovingObstacle(3691, 2405, AllImages.mouse),
             new MovingObstacle(2700, 3700, AllImages.mouse),
-            new MovingObstacle(3168, 2777, AllImages.mouse),
+            new MovingObstacle(3168, 2857, AllImages.mouse),
             new MovingObstacle(2900, 2900, AllImages.spider),
             new MovingObstacle(2728, 3024, AllImages.spider),
             new MovingObstacle(3246, 2900, AllImages.spider)
@@ -73,6 +72,8 @@ public class ObjectArr {
 
     ));
 
+
+    //隨機產生
     public static ArrayList<TransformObstacle> transformObstacRandomlList () {
         ArrayList<TransformObstacle> randomList = new ArrayList<>();
         for(int i = 0; i < 10; i ++) {
