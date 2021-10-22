@@ -172,21 +172,21 @@ public class SingleSurvivalGameScene extends Scene implements CommandSolver.Mous
         mouse.paint(g);
 
         //碰撞道具時播放動畫
-        for (int i = 0; i < propsArrayList.size(); i++) {
-            Props prop = propsArrayList.get(i);
-            if (prop.isPlayPropsAnimation()) {
-                if (propAnimationDelay.getCount() == 0) {
-                    propAnimationDelay.play();
-                }
-                System.out.println("吃到");
-                prop.getPropsAnimation().paint(0, 0, 1100, 700,g);
-                if (propAnimationDelay.count()) {
-                    System.out.println("刪除");
-                    prop.setPlayPropsAnimation(false);
-                    propsArrayList.remove(i--);
-                }
-            }
-        }
+//        for (int i = 0; i < propsArrayList.size(); i++) {
+//            Props prop = propsArrayList.get(i);
+//            if (prop.isPlayPropsAnimation()) {
+//                if (propAnimationDelay.getCount() == 0) {
+//                    propAnimationDelay.play();
+//                }
+//                System.out.println("吃到");
+//                prop.getPropsAnimation().paint(0, 0, 1100, 700,g);
+//                if (propAnimationDelay.count()) {
+//                    System.out.println("刪除");
+//                    prop.setPlayPropsAnimation(false);
+//                    propsArrayList.remove(i--);
+//                }
+//            }
+//        }
 
 
         //要畫在小地圖的要加在下方
@@ -361,10 +361,10 @@ public class SingleSurvivalGameScene extends Scene implements CommandSolver.Mous
             if (mainPlayer.isCollision(props)) {
                 mainPlayer.collidePropsInSurvivalMode(props);
 
-                props.setPlayPropsAnimation(true);
+                props.getPropsAnimation().setPlayPropsAnimation(true);
 
                 props.setGotByPlayer(true);
-//                propsArrayList.remove(i--);
+                propsArrayList.remove(i--);
                 continue;
             }
             for (ComputerPlayer computerPlayer : computerPlayers) {
