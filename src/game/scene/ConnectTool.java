@@ -47,10 +47,13 @@ public class ConnectTool implements GameKernel.GameInterface {
     }
 
     public void connect(String host, int port) throws IOException {
+        System.out.println("use connect");
         game.network.Client.ClientClass.getInstance().connect(host, port);
         if (mainPlayer != null) {
+            System.out.println("mainPlayer");
             mainPlayer.setID(game.network.Client.ClientClass.getInstance().getID());
             mainPlayers.add(mainPlayer);
+            System.out.println("connect Add");
         }
         isConnect = true;
     }
