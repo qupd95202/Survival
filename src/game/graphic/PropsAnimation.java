@@ -8,7 +8,7 @@ import java.awt.*;
 public class PropsAnimation extends Animation {
     private Delay animationSpeedDelay;//動畫播放速度
     private Delay AnimationTime;//動畫播放多久
-    private boolean playPropsAnimation;
+    private boolean playPropsAnimation; //是否播放動畫
     private int count;
     //動畫顯示位置
     private int x;

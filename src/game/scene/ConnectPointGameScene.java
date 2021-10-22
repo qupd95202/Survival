@@ -89,7 +89,7 @@ public class ConnectPointGameScene extends Scene implements CommandSolver.MouseC
     @Override
     public void sceneBegin() {
         try {
-            connectTool.connect("127.0.0.1", 5550);
+            connectTool.connect("192.168.1.50", 5550);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -116,7 +116,7 @@ public class ConnectPointGameScene extends Scene implements CommandSolver.MouseC
 //        mainPlayer.setID(1);
 
         //新增玩家
-        players.add(mainPlayer);
+//        players.add(mainPlayer);
         //電腦
         players.add(new ComputerPlayer(100, 100, AllImages.blue, Player.RoleState.PREY));
         players.add(new ComputerPlayer(3000, 100, AllImages.blue, Player.RoleState.PREY));
@@ -173,6 +173,7 @@ public class ConnectPointGameScene extends Scene implements CommandSolver.MouseC
         camera.startCamera(g);
         mapPaint(g);
         //用forEach將ArrayList中每個gameObject去paint()
+        connectTool.paint(g);
         gameObjectList.forEach(gameObject -> gameObject.paint(g));
         propsPaint(g);
 
@@ -215,6 +216,7 @@ public class ConnectPointGameScene extends Scene implements CommandSolver.MouseC
         //無法穿越部分物件
         keepNotPass(unPassMapObjects);
         //用forEach將ArrayList中每個gameObject去update()
+        connectTool.update();
         gameObjectList.forEach(gameObject -> gameObject.update());
         cPlayerCheckOthersUpdate();
         cPlayerCheckPropsUpdate();

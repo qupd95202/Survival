@@ -171,20 +171,13 @@ public class SingleSurvivalGameScene extends Scene implements CommandSolver.Mous
         //畫滑鼠
         mouse.paint(g);
 
-        //碰撞道具時播放動畫
+//        //碰撞道具時播放動畫
 //        for (int i = 0; i < propsArrayList.size(); i++) {
 //            Props prop = propsArrayList.get(i);
-//            if (prop.isPlayPropsAnimation()) {
-//                if (propAnimationDelay.getCount() == 0) {
-//                    propAnimationDelay.play();
-//                }
+//            if (prop.getPropsAnimation().isPlayPropsAnimation()) {
 //                System.out.println("吃到");
-//                prop.getPropsAnimation().paint(0, 0, 1100, 700,g);
-//                if (propAnimationDelay.count()) {
-//                    System.out.println("刪除");
-//                    prop.setPlayPropsAnimation(false);
-//                    propsArrayList.remove(i--);
-//                }
+//                prop.getPropsAnimation().paint(g);
+//                propsArrayList.remove(i--);
 //            }
 //        }
 
