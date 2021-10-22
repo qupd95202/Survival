@@ -65,7 +65,7 @@ public class SingleSurvivalGameScene extends Scene implements CommandSolver.Mous
     //左下角的方格
     Animation runner;
     Animation changeBody;
-    Animation no;//當玩家為獵人時變身格會放
+
     //滑鼠
     private Mouse mouse;
 
@@ -111,7 +111,7 @@ public class SingleSurvivalGameScene extends Scene implements CommandSolver.Mous
         //畫面上相關
         runner = new Animation(AllImages.runnerDark);
         changeBody = new Animation(AllImages.changeBody);
-        no = new Animation(AllImages.no);
+
         transFormCDLabel = new Label(Global.RUNNER_X + Global.GAME_SCENE_BOX_SIZE + 5 + 15, Global.RUNNER_Y + 30, String.valueOf(mainPlayer.transformCDTime()), 20);
         labels.add(new Label(Global.RUNNER_X + 75, Global.RUNNER_Y + 85, "F", 20));
         labels.add(new Label(Global.RUNNER_X + Global.GAME_SCENE_BOX_SIZE + 5 + 75, Global.RUNNER_Y + 85, "R", 20));
@@ -146,11 +146,6 @@ public class SingleSurvivalGameScene extends Scene implements CommandSolver.Mous
 
     @Override
     public void sceneEnd() {
-//        gameObjectList = null;
-//        unPassMapObjects = null;
-//        transformObstacles = null;
-//        gameMap = null;
-//        camera = null;
         SceneController.getInstance().change(new MenuScene());
     }
 
@@ -333,9 +328,6 @@ public class SingleSurvivalGameScene extends Scene implements CommandSolver.Mous
         }
         for (int i = 0; i < labels.size(); i++) {
             labels.get(i).paint(g);
-        }
-        if (mainPlayer.roleState == Player.RoleState.HUNTER) {
-            no.paint(105, Global.SCREEN_Y - 100, 100, 100, g);
         }
     }
 

@@ -11,7 +11,7 @@ import java.awt.image.BufferedImage;
 
 public class Display extends JFrame {
 
-    public Display (int width, int height) {
+    public Display(int width, int height) {
         setTitle("Survival");
         setSize(width, height);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -38,6 +38,7 @@ public class Display extends JFrame {
         GameKernel kernel = new GameKernel.Builder(gi, Global.LIMIT_DELTA_TIME, Global.NANOSECOUND_PER_UPDATE)
                 .initListener(commands)
                 .enableKeyboardTrack(gi)
+                .keyCleanMode()
                 .enableMouseTrack(gi)
                 .gen();
 

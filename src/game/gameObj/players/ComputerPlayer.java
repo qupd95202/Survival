@@ -25,7 +25,6 @@ public class ComputerPlayer extends Player {
     private boolean isChase;
     private boolean isRun;
 
-    private boolean isStopByWall;
     private boolean canPassWall;
     private Delay notStopDelay;
     private Delay stopDelay;
@@ -43,6 +42,7 @@ public class ComputerPlayer extends Player {
     private int speed;
     private int chaseDistance;
     private int propsChaseDistance;
+    private int giveUpDistance;
 
     //道具相關
     public Delay propsStopTimeDelay;
@@ -267,7 +267,7 @@ public class ComputerPlayer extends Player {
             float chaseDx = Math.abs(chasedPlayer.collider().centerX() - painter().centerX());
             float chaseDy = Math.abs(chasedPlayer.collider().bottom() - painter().centerY() - 10);
             float chaseDc = (float) Math.sqrt(chaseDx * chaseDx + chaseDy * chaseDy);//計算斜邊,怪物與人物的距離
-            if (chaseDc >= Global.WINDOW_WIDTH) {
+            if (chaseDc >= giveUpDistance) {
                 isChase = false;
                 nearest = Global.NEAREST;
             }
@@ -301,7 +301,7 @@ public class ComputerPlayer extends Player {
                 float chaseDx = Math.abs(chasedPlayer.collider().centerX() - painter().centerX());
                 float chaseDy = Math.abs(chasedPlayer.collider().bottom() - painter().centerY() - 10);
                 float chaseDc = (float) Math.sqrt(chaseDx * chaseDx + chaseDy * chaseDy);//計算斜邊,怪物與人物的距離
-                if (chaseDc >= Global.WINDOW_WIDTH + 500) {
+                if (chaseDc >= Global.COMPUTER_GIVE_UP_DISTANCE2) {
                     isChase = false;
                     nearest = Global.NEAREST;
                 }
@@ -368,6 +368,7 @@ public class ComputerPlayer extends Player {
         speed = Global.COMPUTER_SPEED1;
         chaseDistance = Global.COMPUTER_CHASE_DISTANCE1;
         propsChaseDistance = Global.COMPUTER_PROPS_CHASE_DISTANCE1;
+        giveUpDistance = Global.COMPUTER_GIVE_UP_DISTANCE1;
         notStopDelay.stop();
     }
 
@@ -375,6 +376,7 @@ public class ComputerPlayer extends Player {
         speed = Global.COMPUTER_SPEED2;
         chaseDistance = Global.COMPUTER_CHASE_DISTANCE2;
         propsChaseDistance = Global.COMPUTER_PROPS_CHASE_DISTANCE2;
+        giveUpDistance = Global.COMPUTER_GIVE_UP_DISTANCE2;
         notStopDelay.play();
         notStopDelay.loop();
     }
@@ -383,6 +385,7 @@ public class ComputerPlayer extends Player {
         speed = Global.COMPUTER_SPEED3;
         chaseDistance = Global.COMPUTER_CHASE_DISTANCE3;
         propsChaseDistance = Global.COMPUTER_PROPS_CHASE_DISTANCE3;
+        giveUpDistance = Global.COMPUTER_GIVE_UP_DISTANCE3;
         notStopDelay.play();
         notStopDelay.loop();
     }

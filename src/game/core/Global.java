@@ -103,6 +103,11 @@ public class Global {
     public static final int COMPUTER_CHASE_DISTANCE2 = 700;
     public static final int COMPUTER_CHASE_DISTANCE3 = 1100;
 
+    //電腦放棄追蹤範圍
+    public static final int COMPUTER_GIVE_UP_DISTANCE1 = 500;
+    public static final int COMPUTER_GIVE_UP_DISTANCE2 = 1000;
+    public static final int COMPUTER_GIVE_UP_DISTANCE3 = 1500;
+
     //電腦追蹤道具範圍
     public static final int COMPUTER_PROPS_CHASE_DISTANCE1 = 200;
     public static final int COMPUTER_PROPS_CHASE_DISTANCE2 = 400;

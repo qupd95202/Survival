@@ -30,9 +30,7 @@ public class ConnectTool implements GameKernel.GameInterface {
 
     public ConnectTool() {
         isConnect = false;
-        mainPlayer = new Player(Global.SCREEN_X / 2, Global.SCREEN_Y / 2, AllImages.beige, Player.RoleState.HUNTER);
         this.mainPlayers = new ArrayList<>();
-        mainPlayers.add(mainPlayer);
     }
 
     public void setIsConnect(boolean isConnect) {
@@ -52,6 +50,7 @@ public class ConnectTool implements GameKernel.GameInterface {
         game.network.Client.ClientClass.getInstance().connect(host, port);
         if (mainPlayer != null) {
             mainPlayer.setID(game.network.Client.ClientClass.getInstance().getID());
+            mainPlayers.add(mainPlayer);
         }
         isConnect = true;
     }
@@ -97,11 +96,9 @@ public class ConnectTool implements GameKernel.GameInterface {
                                 }
                             }
                             if (!isburn) {
-                                if (serialNum == 1) {
-                                    mainPlayers.add(new Player(Global.SCREEN_X / 2, Global.SCREEN_Y / 2, AllImages.beige, Player.RoleState.HUNTER));
-                                } else {
-                                    mainPlayers.add(new Player(Global.MAP_PIXEL_WIDTH - 300, Global.MAP_PIXEL_HEIGHT - 300, AllImages.beige, Player.RoleState.HUNTER));
-                                }
+                                Player newPlayer = new Player(Global.SCREEN_X / 2, Global.SCREEN_Y / 2, AllImages.beige, Player.RoleState.HUNTER);
+                                newPlayer.setID(serialNum);
+                                mainPlayers.add(newPlayer);
                                 ClientClass.getInstance().sent(Pact.CONNECT, bale());
                             }
                             break;
