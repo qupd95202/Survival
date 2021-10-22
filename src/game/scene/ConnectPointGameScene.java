@@ -30,8 +30,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-import static game.gameObj.Pact.CONNECT;
-import static game.gameObj.Pact.bale;
+import static game.gameObj.Pact.*;
 
 public class ConnectPointGameScene extends Scene implements CommandSolver.MouseCommandListener, CommandSolver.KeyListener {
     private ArrayList<GameObject> gameObjectList; //將Game要畫的所有GameObject存起來
@@ -41,7 +40,7 @@ public class ConnectPointGameScene extends Scene implements CommandSolver.MouseC
     private ArrayList<Player> players;
     private final ArrayList<TransformObstacle> transformObstacles = ObjectArr.transformObstaclList1;
     private ArrayList<MapObject> unPassMapObjects;
-    private final ArrayList<Props> propsArrayList = ObjectArr.propsArr;
+    private ArrayList<Props> propsArrayList;
     private Camera camera;
     private SmallMap smallMap;
     private GameMap gameMap;
@@ -82,6 +81,7 @@ public class ConnectPointGameScene extends Scene implements CommandSolver.MouseC
 
     public ConnectPointGameScene() {
         connectTool = new ConnectTool();
+        propsArrayList = connectTool.getObjectArr().getPropsArrConnectPoint();
         connectTool.setMainPlayer(new Player(Global.SCREEN_X / 2, Global.SCREEN_Y / 2, AllImages.blue, Player.RoleState.PREY));
         connectTool.createRoom(5550);
     }
@@ -270,6 +270,13 @@ public class ConnectPointGameScene extends Scene implements CommandSolver.MouseC
     }
 
     public void playerCollisionCheckUpdate() {
+        for (Player player : connectTool.getMainPlayers()) {
+            connectTool.getMainPlayers().forEach(player1 -> {
+                if (player != player1) {
+                    player.exchangeRole(player1);
+                }
+            });
+        }
         players.forEach(player -> {
             player.exchangeRole(mainPlayer);
             players.forEach(player1 -> {
@@ -474,7 +481,7 @@ public class ConnectPointGameScene extends Scene implements CommandSolver.MouseC
             if (propsArrayList.size() >= Global.PROPS_AMOUNT_MAX) {
                 return;
             }
-            propsArrayList.add(new Props());
+            ClientClass.getInstance().sent(PROPS_GEN,bale(String.valueOf(Global.random(0, Global.MAP_PIXEL_WIDTH)),String.valueOf(Global.random(0, Global.MAP_PIXEL_HEIGHT)),Props.genRandomType().toString()));
         }
     }
 

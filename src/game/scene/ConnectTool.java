@@ -2,15 +2,13 @@ package game.scene;
 
 ;
 
-import game.Menu.Mouse;
 import game.core.Global;
 import game.gameObj.Pact;
-import game.gameObj.mapObj.MapObject;
-import game.gameObj.obstacle.TransformObstacle;
+import game.gameObj.Props;
 import game.gameObj.players.Player;
 import game.graphic.AllImages;
+import game.map.ObjectArr;
 import game.network.Client.ClientClass;
-import game.scene_process.Camera;
 import game.utils.GameKernel;
 import network.Client.CommandReceiver;
 
@@ -24,11 +22,13 @@ public class ConnectTool implements GameKernel.GameInterface {
     private boolean isConnect;
     private Player mainPlayer;
     private ArrayList<Player> mainPlayers;
+    private ObjectArr objectArr;
 //    private ArrayList<MapObject> unPassMapObjects;      連接Scene時，建構子時{set自己角色(new 角色)，加進players}，Scenebegin()，再sent自己創角的訊息出去，server在等人連接的畫面只要一直consume即可。
 //    private ArrayList<TransformObstacle> transformObstacles;
 
 
     public ConnectTool() {
+        objectArr = new ObjectArr();
         isConnect = false;
         this.mainPlayers = new ArrayList<>();
     }
@@ -67,6 +67,10 @@ public class ConnectTool implements GameKernel.GameInterface {
         return mainPlayers;
     }
 
+    public ObjectArr getObjectArr() {
+        return objectArr;
+    }
+
     public void clear() {
         mainPlayer = null;
         mainPlayers = null;
@@ -96,13 +100,13 @@ public class ConnectTool implements GameKernel.GameInterface {
                                 }
                             }
                             if (!isburn) {
-                                Player newPlayer = new Player(Global.SCREEN_X / 2, Global.SCREEN_Y / 2, AllImages.beige, Player.RoleState.HUNTER);
+                                Player newPlayer = new Player(Global.SCREEN_X / 2, Global.SCREEN_Y / 2, AllImages.blue, Player.RoleState.PREY);
                                 newPlayer.setID(serialNum);
                                 mainPlayers.add(newPlayer);
                                 ClientClass.getInstance().sent(Pact.CONNECT, bale());
                             }
                             break;
-                        case UPDATE:
+                        case COMPUTER_MOVE:
 
                         case UP:
                             mainPlayers.forEach(player -> {
@@ -174,6 +178,10 @@ public class ConnectTool implements GameKernel.GameInterface {
                                 }
                             });
                             break;
+                        case PROPS_GEN:
+                            if (serialNum == 100) {
+                                objectArr.getPropsArrConnectPoint().add(new Props(Integer.parseInt(strs.get(0)), Integer.parseInt(strs.get(1)), Props.propsTypeParse(strs.get(2))));
+                            }
                     }
                 }
             });

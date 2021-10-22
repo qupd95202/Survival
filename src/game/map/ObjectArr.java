@@ -10,9 +10,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ObjectArr {
-    public static ArrayList<Props> propsArr = new ArrayList<Props>(List.of(new Props(), new Props(), new Props(),new Props(),new Props()));
+    public static ArrayList<Props> propsArr = new ArrayList<Props>(List.of(new Props(), new Props(), new Props(), new Props(), new Props()));
+    private ArrayList<Props> propsArrConnectPoint = new ArrayList<Props>(List.of(new Props(100, 500, Props.Type.addPoint), new Props(500, 500, Props.Type.addSpeed), new Props(2000, 500, Props.Type.teleportation), new Props(2500, 3000, Props.Type.trap)));
 
-    public static ArrayList<Props> propsArrSurvivalGame = new ArrayList<Props>(List.of(new Props(1), new Props(1), new Props(1),new Props(1),new Props(1)));
+    public static ArrayList<Props> propsArrSurvivalGame = new ArrayList<Props>(List.of(new Props(1), new Props(1), new Props(1), new Props(1), new Props(1)));
 
     //0-1920, 0-1920        森林有：bee bunny1 bunny2 frog snail snack
     //1920-3840, 0-1920     火山有：barnacle bat ladyBug snakeLava snakeSlime
@@ -74,22 +75,29 @@ public class ObjectArr {
 
 
     //隨機產生
-    public static ArrayList<TransformObstacle> transformObstacRandomlList () {
+    public static ArrayList<TransformObstacle> transformObstacRandomlList() {
         ArrayList<TransformObstacle> randomList = new ArrayList<>();
-        for(int i = 0; i < 10; i ++) {
+        for (int i = 0; i < 10; i++) {
             randomList.add(new MovingObstacle(Global.random(0, 1920), Global.random(0, 1920), AllImages.bee));
         }
-        for(int i = 0; i < 10; i ++) {
+        for (int i = 0; i < 10; i++) {
             randomList.add(new MovingObstacle(Global.random(1920, 3840), Global.random(0, 1920), AllImages.bat));
         }
-        for(int i = 0; i < 10; i ++) {
+        for (int i = 0; i < 10; i++) {
             randomList.add(new MovingObstacle(Global.random(0, 1920), Global.random(1920, 3840), AllImages.slimeBlue));
         }
-        for(int i = 0; i < 10; i ++) {
+        for (int i = 0; i < 10; i++) {
             randomList.add(new MovingObstacle(Global.random(1920, 3840), Global.random(1920, 3840), AllImages.mouse));
         }
         return randomList;
     }
 
+    //連線生產道具
+    public void genPropsInConnectPoint(int x, int y, Props.Type type) {
+        propsArrConnectPoint.add(new Props(x, y, type));
+    }
 
+    public ArrayList<Props> getPropsArrConnectPoint() {
+        return propsArrConnectPoint;
+    }
 }

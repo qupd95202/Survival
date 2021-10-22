@@ -2,6 +2,7 @@ package game;
 
 import game.core.Global;
 import game.display.Display;
+import game.gameObj.Props;
 import game.utils.GameCenter;
 import game.utils.GameKernel;
 
