@@ -372,7 +372,6 @@ public class ConnectPointGameScene extends Scene implements CommandSolver.MouseC
 //            player.setNothingBlock(true);
             for (GameObject gameObject : gameObjects) {
                 player.isCollisionForMovement(gameObject);
-//                player.isCollisionForMovementLeftAndRight(gameObject);
             }
         }
     }
