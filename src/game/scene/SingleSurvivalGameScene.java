@@ -15,6 +15,7 @@ import game.gameObj.players.Player;
 import game.gameObj.players.ComputerPlayer;
 import game.graphic.AllImages;
 import game.graphic.Animation;
+import game.graphic.PropsAnimation;
 import game.map.GameMap;
 import game.map.ObjectArr;
 import game.scene_process.Camera;
@@ -27,6 +28,7 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 
 
@@ -50,7 +52,7 @@ public class SingleSurvivalGameScene extends Scene implements CommandSolver.Mous
     //道具生成與消失
     private Delay propsReProduce;
     private Delay propsRemove;
-    private Delay propAnimationDelay;//計時吃到道具動畫播放時間
+    private PropsAnimation propsAnimation;
 
     //時間計算
     private long startTime;
@@ -72,6 +74,9 @@ public class SingleSurvivalGameScene extends Scene implements CommandSolver.Mous
     private ArrayList<Label> labels;
     private Label transFormCDLabel;
 
+    //道具動畫
+    private ArrayList<PropsAnimation> propsAnimationHashMap;
+
 
     @Override
     public void sceneBegin() {
@@ -91,7 +96,7 @@ public class SingleSurvivalGameScene extends Scene implements CommandSolver.Mous
         propsRemove.loop();
         propsReProduce.play();
         propsReProduce.loop();
-        propAnimationDelay = new Delay(19);
+
 
         //主角
         mainPlayer = new Player(Global.SCREEN_X / 2, Global.SCREEN_Y / 2, AllImages.blue, Player.RoleState.PREY);
@@ -141,6 +146,7 @@ public class SingleSurvivalGameScene extends Scene implements CommandSolver.Mous
         printGameTime = new GameTime();
         imgClock = SceneController.getInstance().imageController().tryGetImage(new Path().img().numbers().clock());
 
+        propsAnimationHashMap = new ArrayList<>();
     }
 
 
@@ -171,15 +177,14 @@ public class SingleSurvivalGameScene extends Scene implements CommandSolver.Mous
         //畫滑鼠
         mouse.paint(g);
 
-//        //碰撞道具時播放動畫
-//        for (int i = 0; i < propsArrayList.size(); i++) {
-//            Props prop = propsArrayList.get(i);
-//            if (prop.getPropsAnimation().isPlayPropsAnimation()) {
-//                System.out.println("吃到");
-//                prop.getPropsAnimation().paint(g);
-//                propsArrayList.remove(i--);
-//            }
-//        }
+        //碰撞道具時播放動畫
+        for (int i = 0; i < propsArrayList.size(); i++) {
+            if (propsAnimation.isPlayPropsAnimation()) {
+                System.out.println("吃到");
+                propsAnimation.paint(g);
+                propsArrayList.remove(i--);
+            }
+        }
 
 
         //要畫在小地圖的要加在下方
@@ -440,6 +445,10 @@ public class SingleSurvivalGameScene extends Scene implements CommandSolver.Mous
             chooseTime -= 20;
             mainPlayer.isDecreaseGameTime = false;
         }
+    }
+
+    private void propsAnimation () {
+        propsAnimationHashMap.add(new PropsAnimation(0, 0, 1100, 700, AllImages.lightning, 1, 20));
     }
 
 

@@ -7,9 +7,12 @@ import game.gameObj.obstacle.TransformObstacle;
 import game.gameObj.players.ComputerPlayer;
 import game.gameObj.players.Player;
 import game.graphic.AllImages;
+import game.graphic.PropsAnimation;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ObjectArr {
     public static ArrayList<Props> propsArr = new ArrayList<Props>(List.of(new Props(), new Props(), new Props(), new Props(), new Props()));
@@ -104,6 +107,7 @@ public class ObjectArr {
     public ArrayList<Props> getPropsArrConnectPoint() {
         return propsArrConnectPoint;
     }
+
 
     public ArrayList<ComputerPlayer> getComputerPlayersConnectPoint() {
         return computerPlayersConnectPoint;

@@ -28,6 +28,7 @@ import game.utils.Path;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -91,6 +92,7 @@ public class ConnectPointGameScene extends Scene implements CommandSolver.MouseC
         propsArrayList = connectTool.getObjectArr().getPropsArrConnectPoint();
         connectTool.setMainPlayer(new Player(Global.SCREEN_X / 2, Global.SCREEN_Y / 2, AllImages.blue, Player.RoleState.PREY));
         connectTool.createRoom(5550);
+        System.out.println("build");
     }
 
     @Override
@@ -102,7 +104,9 @@ public class ConnectPointGameScene extends Scene implements CommandSolver.MouseC
         upDatedelay.loop();
 
         try {
+
             connectTool.connect("127.0.0.1", 5550);
+
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -129,11 +129,15 @@ public class ClientClass {
         serverTCPPort = port;
         socket = null;
         ds = new DatagramSocket(UDP_PORT);//創建埠號為UDP_PORT代表UDP協議的Socket
+        System.out.println("test");
         socket = new Socket(serverIP, serverTCPPort);//創建TCP Socket 連接ip地址為serverIP 埠號為serverTCPPort
+        System.out.println("test1");
 //        DataInputStream dataInputStream = new DataInputStream(socket.getInputStream());//創建資料輸入流
         DataOutputStream dataOutputStream = new DataOutputStream(socket.getOutputStream());//創建資料輸出流
+        System.out.println("test2");
         dataOutputStream.writeInt(UDP_PORT);//向Server端發送此Client端的UDP埠號
         dataInputStream = new DataInputStream(socket.getInputStream());//跟120行重複
+        System.out.println("test3");
         int id = dataInputStream.readInt();//從Server端得到id
         this.serverUDPPort = dataInputStream.readInt();//從Server端得到該Server轉發客户端訊息的UDP埠號
         this.disconnectPort = dataInputStream.readInt();//從Server端得到該Sever轉發Client端訊息的UDPPort

@@ -28,7 +28,6 @@ public class Props extends GameObject {
     private Type propsType;
     private boolean isGotByPlayer;
 
-    PropsAnimation propsAnimation; //吃到道具時的特效動畫
 
 
     //先預設道具出現為隨機
@@ -65,13 +64,13 @@ public class Props extends GameObject {
     @Override
     public void paintComponent(Graphics g) {
         animation.paint(painter().left(), painter().top(), painter().width(), painter().height(), g);
-//        propsAnimation.paint(g);
+
     }
 
     @Override
     public void update() {
         animation.update();
-//        propsAnimation.update();
+
     }
 
     public Type getPropsType() {
@@ -100,35 +99,27 @@ public class Props extends GameObject {
         int randomNum = Global.random(1, 8);
         switch (randomNum) {
             case 1 -> {
-//                propsAnimation = new PropsAnimation(0, 0, 1100, 700, AllImages.lightning, 20, 120);
                 return Type.addSpeed;
             }
             case 2 -> {
-//                propsAnimation = new PropsAnimation(0, 0, 1100, 700, AllImages.lightning, 20, 120);
                 return Type.teleportation;
             }
             case 3 -> {
-//                propsAnimation = new PropsAnimation(0, 0, 1100, 700, AllImages.lightning, 20, 120);
                 return Type.trap;
             }
             case 4 -> {
-//                propsAnimation = new PropsAnimation(0, 0, 1100, 700, AllImages.lightning, 20, 120);
                 return Type.gameTimeDecrease;
             }
             case 5 -> {
-//                propsAnimation = new PropsAnimation(0, 0, 1100, 700, AllImages.lightning, 20, 120);
                 return Type.superStar;
             }
             case 6 -> {//道具動畫（閃電）
-//                propsAnimation = new PropsAnimation(0, 0, 1100, 700, AllImages.lightning, 20, 120);
                 return Type.thunder;
             }
             case 7 -> {
-//                propsAnimation = new PropsAnimation(0, 0, 1100, 700, AllImages.lightning, 20, 120);
                 return Type.hunterWatcher;
             }
             default -> {
-//                propsAnimation = new PropsAnimation(0, 0, 1100, 700, AllImages.lightning, 20, 120);
                 return Type.timeStop;
             }
         }
@@ -157,7 +148,4 @@ public class Props extends GameObject {
         isGotByPlayer = gotByPlayer;
     }
 
-    public PropsAnimation getPropsAnimation() {
-        return propsAnimation;
-    }
 }
