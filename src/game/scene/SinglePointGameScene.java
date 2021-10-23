@@ -2,6 +2,7 @@ package game.scene;
 
 import game.Menu.Label;
 import game.Menu.Mouse;
+import game.controllers.AudioResourceController;
 import game.controllers.SceneController;
 import game.core.GameTime;
 import game.core.Global;
@@ -77,6 +78,7 @@ public class SinglePointGameScene extends Scene implements CommandSolver.MouseCo
 
     @Override
     public void sceneBegin() {
+        AudioResourceController.getInstance().loop(new Path().sound().background().mainscene(), -1);
         //遊戲時間
         startTime = System.nanoTime();
         chooseTime = 300; //單位：秒
@@ -385,13 +387,17 @@ public class SinglePointGameScene extends Scene implements CommandSolver.MouseCo
     }
 
     private void mapAreaClosing() {
-        if (gameTime > 100 && gameTime <= 180) {
+        if (gameTime > 90 && gameTime <= 180) {
+            AudioResourceController.getInstance().stop(new Path().sound().background().mainscene());
+            AudioResourceController.getInstance().play(new Path().sound().background().gameFirst());
             if (mainPlayer.getPositionType() == Global.MapAreaType.FOREST) {
                 mainPlayer.setInClosedArea(true);
             } else {
                 mainPlayer.setInClosedArea(false);
             }
         } else if (gameTime > 180 && gameTime <= 270) {
+            AudioResourceController.getInstance().stop(new Path().sound().background().gameFirst());
+            AudioResourceController.getInstance().play(new Path().sound().background().normalgamebehind30());
             if (mainPlayer.getPositionType() == Global.MapAreaType.FOREST ||
                     mainPlayer.getPositionType() == Global.MapAreaType.ICEFIELD) {
                 mainPlayer.setInClosedArea(true);
@@ -399,6 +405,8 @@ public class SinglePointGameScene extends Scene implements CommandSolver.MouseCo
                 mainPlayer.setInClosedArea(false);
             }
         } else if (gameTime > 270) {
+            AudioResourceController.getInstance().stop(new Path().sound().background().normalgamebehind30());
+            AudioResourceController.getInstance().play(new Path().sound().background().normalgamebehind30final());
             if (mainPlayer.getPositionType() != Global.MapAreaType.VILLAGE) {
                 mainPlayer.setInClosedArea(true);
             } else {

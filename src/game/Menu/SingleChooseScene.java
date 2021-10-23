@@ -1,5 +1,6 @@
 package game.Menu;
 
+import game.controllers.AudioResourceController;
 import game.controllers.SceneController;
 import game.core.Global;
 import game.scene.Scene;
@@ -27,6 +28,7 @@ public class SingleChooseScene extends Scene implements CommandSolver.MouseComma
         //單人背景圖
         img = SceneController.getInstance().imageController().tryGetImage(new Path().img().menu().Scene().scene7());
 
+
         //按鈕
         buttons=new ArrayList<Button>();
         buttons.add(new Button(Global.SCREEN_X / 3 - 50, Global.SCREEN_Y / 4+80 , 360, 70));
@@ -51,6 +53,7 @@ public class SingleChooseScene extends Scene implements CommandSolver.MouseComma
         this.buttons=null;
         this.img=null;
         this.mouse=null;
+        AudioResourceController.getInstance().stop(new Path().sound().background().lovelyflower());
     }
 
     @Override

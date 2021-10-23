@@ -1,5 +1,6 @@
 package game.gameObj.players;
 
+import game.controllers.AudioResourceController;
 import game.core.Global;
 
 import game.gameObj.GameObject;
@@ -11,6 +12,7 @@ import game.graphic.Animation;
 import game.graphic.ImgArrAndType;
 import game.network.Client.ClientClass;
 import game.utils.Delay;
+import game.utils.Path;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -59,7 +61,7 @@ public class ComputerPlayer extends Player {
     public ComputerPlayer(int x, int y, ImgArrAndType imageArrayList, RoleState roleState) {
         super(x, y, imageArrayList, roleState);
         this.mode = mode;
-        speed = Global.COMPUTER_SPEED2;
+        speed = Global.COMPUTER_SPEED1;
         chaseDistance = Global.COMPUTER_CHASE_DISTANCE2;
         transformTime.play();
         transformTime.loop();
@@ -120,6 +122,7 @@ public class ComputerPlayer extends Player {
     public void update() {
         if (roleState == RoleState.HUNTER) {
             hunterUpdate();
+            ;
         } else {
             preyUpdate();
         }
@@ -154,12 +157,6 @@ public class ComputerPlayer extends Player {
             }
             if (isRun) {
                 if (Global.getProbability(50)) {
-                    translateInConnect(10, 10);
-                }
-                if (Global.getProbability(50)) {
-                    translateInConnect(-10, -10);
-                }
-                if (Global.getProbability(50)) {
                     iniMoveOnX = 1;
                 } else {
                     iniMoveOnX = -1;
@@ -169,6 +166,10 @@ public class ComputerPlayer extends Player {
                 } else {
                     iniMoveOnY = -1;
                 }
+                speed = 7;
+                cpMove();
+                speed = Global.COMPUTER_SPEED2;
+                return;
             }
         }
         cpMove();
@@ -275,6 +276,9 @@ public class ComputerPlayer extends Player {
             propsNearest = dc;
             chasedProps = props;
         }
+        if (chasedProps != null) {
+            return;
+        }
         if (propsNearest < propsChaseDistance) {
             if (!chasedProps.isGotByPlayer()) {
                 isChaseProps = true;
@@ -330,24 +334,27 @@ public class ComputerPlayer extends Player {
                 nearest = dc;
                 this.chasedPlayer = player;
             }
+            if (this.chasedPlayer == null) {
+                return;
+            }
             if (nearest < chaseDistance) { //一定距離內會偵測且有移動或屬性突兀
-                if (player.movingState == Player.MovingState.WALK) {
+                if (chasedPlayer.movingState == Player.MovingState.WALK) {
                     isChase = true;
                 }
             }
 
             if (nearest < Global.WINDOW_WIDTH / 2) { //玩家圖片屬性與當前地區物件屬性不同
-                if (this.chasedPlayer != null) {
-                    if (chasedPlayer.getPositionType() != chasedPlayer.getTransformationAnimationType()) {
-                        isChase = true;
-                    }
+                if (chasedPlayer.getPositionType() != chasedPlayer.getTransformationAnimationType()) {
+                    isChase = true;
                 }
+
             }
             if (chasedPlayer != null && isChase) {
                 float chaseDx = Math.abs(chasedPlayer.collider().centerX() - painter().centerX());
                 float chaseDy = Math.abs(chasedPlayer.collider().bottom() - painter().centerY() - 10);
                 float chaseDc = (float) Math.sqrt(chaseDx * chaseDx + chaseDy * chaseDy);//計算斜邊,怪物與人物的距離
                 if (chaseDc >= Global.COMPUTER_GIVE_UP_DISTANCE2) {
+                    System.out.println("不追囉");
                     isChase = false;
                     nearest = Global.NEAREST;
                 }
@@ -368,7 +375,16 @@ public class ComputerPlayer extends Player {
     @Override
     public void transform() {
         storedTransformAnimation = new Animation(AllImages.getRandomImgArrAndType());
-        super.transform();
+        if (!canTransform || roleState == RoleState.HUNTER) {
+            return;
+        }
+        currentAnimation = storedTransformAnimation;
+        transformCD.play();
+        if (!transformTime.count()) {
+            transformTime.stop();
+        }
+        transformTime.play();
+        canTransform = false;
     }
 
 
@@ -432,6 +448,15 @@ public class ComputerPlayer extends Player {
         chaseDistance = Global.COMPUTER_CHASE_DISTANCE3;
         propsChaseDistance = Global.COMPUTER_PROPS_CHASE_DISTANCE3;
         giveUpDistance = Global.COMPUTER_GIVE_UP_DISTANCE3;
+        notStopDelay.play();
+        notStopDelay.loop();
+    }
+
+    public void AILevel4() {
+        speed = Global.COMPUTER_SPEED4;
+        chaseDistance = Global.COMPUTER_CHASE_DISTANCE4;
+        propsChaseDistance = Global.COMPUTER_PROPS_CHASE_DISTANCE3;
+        giveUpDistance = Global.COMPUTER_GIVE_UP_DISTANCE4;
         notStopDelay.play();
         notStopDelay.loop();
     }

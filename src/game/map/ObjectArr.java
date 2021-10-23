@@ -108,4 +108,5 @@ public class ObjectArr {
     public ArrayList<ComputerPlayer> getComputerPlayersConnectPoint() {
         return computerPlayersConnectPoint;
     }
+
 }

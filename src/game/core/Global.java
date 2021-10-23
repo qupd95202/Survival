@@ -59,7 +59,7 @@ public class Global {
         NONE;
     }
 
-    public static final boolean IS_DEBUG = true;
+    public static final boolean IS_DEBUG = false;
 
     public static final int UPDATE_TIMES_PER_SEC = 60;
     public static final int NANOSECOUND_PER_UPDATE = 1000000000 / UPDATE_TIMES_PER_SEC;
@@ -94,19 +94,22 @@ public class Global {
 
     //角色移動速度
     public static final int NORMAL_SPEED = 2;
-    public static final int COMPUTER_SPEED1 = 1;
-    public static final int COMPUTER_SPEED2 = 3;
-    public static final int COMPUTER_SPEED3 = 7;
+    public static final int COMPUTER_SPEED1 = 3;
+    public static final int COMPUTER_SPEED2 = 5;
+    public static final int COMPUTER_SPEED3 = 8;
+    public static final int COMPUTER_SPEED4 = 11;
 
     //電腦追蹤移動獵物範圍
     public static final int COMPUTER_CHASE_DISTANCE1 = 300;
     public static final int COMPUTER_CHASE_DISTANCE2 = 700;
     public static final int COMPUTER_CHASE_DISTANCE3 = 1100;
+    public static final int COMPUTER_CHASE_DISTANCE4 = 1500;
 
     //電腦放棄追蹤範圍
     public static final int COMPUTER_GIVE_UP_DISTANCE1 = 500;
     public static final int COMPUTER_GIVE_UP_DISTANCE2 = 1000;
     public static final int COMPUTER_GIVE_UP_DISTANCE3 = 1500;
+    public static final int COMPUTER_GIVE_UP_DISTANCE4 = 2000;
 
     //電腦追蹤道具範圍
     public static final int COMPUTER_PROPS_CHASE_DISTANCE1 = 200;

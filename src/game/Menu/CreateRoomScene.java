@@ -1,5 +1,6 @@
 package game.Menu;
 
+import game.controllers.AudioResourceController;
 import game.controllers.SceneController;
 import game.core.Global;
 import game.scene.SinglePointGameScene;
@@ -35,6 +36,7 @@ public class CreateRoomScene extends Scene implements CommandSolver.MouseCommand
         //主選單背景圖
         img = SceneController.getInstance().imageController().tryGetImage(new Path().img().menu().Scene().scene1());
 
+
         //按鈕
         buttons=new ArrayList<Button>();
         buttons.add(new Button(Global.SCREEN_X / 3 - 50, Global.SCREEN_Y / 4 + 50, 360, 70));
@@ -60,7 +62,11 @@ public class CreateRoomScene extends Scene implements CommandSolver.MouseCommand
 
     @Override
     public void sceneEnd() {
-
+        this.labels=null;
+        this.buttons=null;
+        this.img=null;
+        this.mouse=null;
+        AudioResourceController.getInstance().stop(new Path().sound().background().lovelyflower());
     }
 
     @Override

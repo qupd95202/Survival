@@ -2,11 +2,13 @@ package game.scene;
 
 import game.Menu.Label;
 import game.Menu.Mouse;
+import game.controllers.AudioResourceController;
 import game.controllers.SceneController;
 import game.core.GameTime;
 import game.core.Global;
 import game.core.Point;
 import game.gameObj.GameObject;
+import game.gameObj.Pact;
 import game.gameObj.Props;
 import game.gameObj.mapObj.MapObject;
 import game.gameObj.obstacle.TransformObstacle;
@@ -80,6 +82,7 @@ public class ConnectPointGameScene extends Scene implements CommandSolver.MouseC
     private Image imgPoint;
 
     //連線
+    private Delay upDatedelay;
 
 
     public ConnectPointGameScene() {
@@ -92,6 +95,12 @@ public class ConnectPointGameScene extends Scene implements CommandSolver.MouseC
 
     @Override
     public void sceneBegin() {
+        AudioResourceController.getInstance().loop(new Path().sound().background().mainscene(), -1);
+        //連線，六十秒同步一次資料
+        upDatedelay = new Delay(600);
+        upDatedelay.play();
+        upDatedelay.loop();
+
         try {
             connectTool.connect("127.0.0.1", 5550);
         } catch (IOException e) {
@@ -216,7 +225,7 @@ public class ConnectPointGameScene extends Scene implements CommandSolver.MouseC
         //用forEach將ArrayList中每個gameObject去update()
         gameObjectList.forEach(gameObject -> gameObject.update());
         cPlayerCheckOthersUpdate();
-        cPlayerCheckPropsUpdate();
+//        cPlayerCheckPropsUpdate();  //連線不追蹤道具了
         playerCollisionCheckUpdate();
         propsCollisionCheckUpdate();
         imgWarning.update();
@@ -224,7 +233,7 @@ public class ConnectPointGameScene extends Scene implements CommandSolver.MouseC
         //cd時間顯示之資料
         transFormCDLabel.setWords(String.valueOf(mainPlayer.transformCDTime()));
         connectTool.consume();
-//        sentPositionUpdate();
+        positionUpdate();
     }
 
     @Override
@@ -248,41 +257,58 @@ public class ConnectPointGameScene extends Scene implements CommandSolver.MouseC
     public void cPlayerCheckOthersUpdate() {
         for (int i = 0; i < computerPlayers.size(); i++) {
             ComputerPlayer computerPlayer = (ComputerPlayer) computerPlayers.get(i);
-            computerPlayer.whoIsNear(mainPlayer);
+            if (ClientClass.getInstance().getID() == 100) {
+                ClientClass.getInstance().sent(COMPUTER_MAINPLAYER_WHOISNEAR, bale(Integer.toString(i)));
+            }
             for (int j = 0; j < computerPlayers.size(); j++) {
                 Player player = computerPlayers.get(j);
                 if (computerPlayer != player) {
-                    computerPlayer.whoIsNear(player);
+                    if (ClientClass.getInstance().getID() == 100) {
+                        ClientClass.getInstance().sent(COMPUTER_WHOISNEAR, bale(Integer.toString(i), Integer.toString(j)));
+                    }
                 }
             }
         }
     }
 
-    public void cPlayerCheckPropsUpdate() {
-        for (int i = 0; i < computerPlayers.size(); i++) {
-            ComputerPlayer computerPlayer = (ComputerPlayer) computerPlayers.get(i);
-            for (int j = 0; j < propsArrayList.size(); j++) {
-                computerPlayer.whichPropIsNear(propsArrayList.get(j));
-            }
-        }
-    }
+//    public void cPlayerCheckPropsUpdate() {
+//        for (int i = 0; i < computerPlayers.size(); i++) {
+//            ComputerPlayer computerPlayer = (ComputerPlayer) computerPlayers.get(i);
+//            for (int j = 0; j < propsArrayList.size(); j++) {
+//                if (ClientClass.getInstance().getID() == 100) {
+//                    ClientClass.getInstance().sent(COMPUTER_WHICHISNEAR, bale(Integer.toString(i), Integer.toString(j)));
+//                }
+//            }
+//        }
+//    }
 
     public void playerCollisionCheckUpdate() {
-        for (Player player : connectTool.getMainPlayers()) {
-            connectTool.getMainPlayers().forEach(player1 -> {
-                if (player != player1) {
-                    player.exchangeRole(player1);
+        for (int i = 0; i < connectTool.getMainPlayers().size(); i++) {
+            Player player1 = connectTool.getMainPlayers().get(i);
+            for (int j = 0; j < connectTool.getMainPlayers().size(); j++) {
+                Player player2 = connectTool.getMainPlayers().get(j);
+                if (player1 != player2) {
+                    if (ClientClass.getInstance().getID() == 100) {
+                        ClientClass.getInstance().sent(PLAYER_COLLISION_PLAYER, bale(Integer.toString(player1.ID()), Integer.toString(player2.ID())));
+                    }
                 }
-            });
+            }
         }
-        computerPlayers.forEach(player -> {
-            player.exchangeRole(mainPlayer);
-            computerPlayers.forEach(player1 -> {
-                if (player != player1) {
-                    player.exchangeRole(player1);
+//
+        for (int i = 0; i < computerPlayers.size(); i++) {
+            for (int j = 0; j < computerPlayers.size(); j++) {
+                if (computerPlayers.get(i) != computerPlayers.get(j)) {
+                    if (ClientClass.getInstance().getID() == 100) {
+                        ClientClass.getInstance().sent(COMPUTER_COLLISION_COMPUTER, bale(Integer.toString(i), Integer.toString(j)));
+                    }
                 }
-            });
-        });
+            }
+        }
+
+        for (int i = 0; i < computerPlayers.size(); i++) {
+            ClientClass.getInstance().sent(PLAYER_COLLISION_COMPUTER, bale(Integer.toString(i)));
+        }
+//
     }
 
     //積分顯示動畫
@@ -411,32 +437,36 @@ public class ConnectPointGameScene extends Scene implements CommandSolver.MouseC
         for (int i = 0; i < propsArrayList.size(); i++) {
             Props props = propsArrayList.get(i);
             if (mainPlayer.isCollision(props)) {
-                mainPlayer.collideProps(props);
-                props.setGotByPlayer(true);
-                propsArrayList.remove(i--);
+                ClientClass.getInstance().sent(PLAYER_COLLISION_PROPS, bale(Integer.toString(i)));
             }
         }
 
-        for (Player player : computerPlayers) {
-            for (int i = 0; i < propsArrayList.size(); i++) {
-                Props props = propsArrayList.get(i);
-                if (player.isCollision(props)) {
-                    player.collideProps(props);
-                    props.setGotByPlayer(true);
-                    propsArrayList.remove(i--);
-                }
-            }
-        }
+//        for (int i = 0; i < computerPlayers.size(); i++) {
+//            ComputerPlayer computerPlayer = computerPlayers.get(i);
+//            for (int j = 0; j < propsArrayList.size(); j++) {
+//                Props props = propsArrayList.get(i);
+//                if (computerPlayer.isCollision(props)) {
+//                    if (ClientClass.getInstance().getID() == 100) {
+//                        ClientClass.getInstance().sent(COMPUTER_COLLISION_PROPS, bale(Integer.toString(i),Integer.toString(j)));
+//                    }
+//                    computerPlayer.collideProps(props);
+//                    props.setGotByPlayer(true);
+//                    propsArrayList.remove(i--);
+
     }
 
     private void mapAreaClosing() {
-        if (gameTime > 100 && gameTime <= 180) {
+        if (gameTime > 90 && gameTime <= 180) {
+            AudioResourceController.getInstance().stop(new Path().sound().background().mainscene());
+            AudioResourceController.getInstance().play(new Path().sound().background().gameFirst());
             if (mainPlayer.getPositionType() == Global.MapAreaType.FOREST) {
                 mainPlayer.setInClosedArea(true);
             } else {
                 mainPlayer.setInClosedArea(false);
             }
         } else if (gameTime > 180 && gameTime <= 270) {
+            AudioResourceController.getInstance().stop(new Path().sound().background().gameFirst());
+            AudioResourceController.getInstance().play(new Path().sound().background().normalgamebehind30());
             if (mainPlayer.getPositionType() == Global.MapAreaType.FOREST ||
                     mainPlayer.getPositionType() == Global.MapAreaType.ICEFIELD) {
                 mainPlayer.setInClosedArea(true);
@@ -444,6 +474,8 @@ public class ConnectPointGameScene extends Scene implements CommandSolver.MouseC
                 mainPlayer.setInClosedArea(false);
             }
         } else if (gameTime > 270) {
+            AudioResourceController.getInstance().stop(new Path().sound().background().normalgamebehind30());
+            AudioResourceController.getInstance().play(new Path().sound().background().normalgamebehind30final());
             if (mainPlayer.getPositionType() != Global.MapAreaType.VILLAGE) {
                 mainPlayer.setInClosedArea(true);
             } else {
@@ -478,9 +510,27 @@ public class ConnectPointGameScene extends Scene implements CommandSolver.MouseC
             if (propsArrayList.size() >= Global.PROPS_AMOUNT_MAX) {
                 return;
             }
-            ClientClass.getInstance().sent(PROPS_GEN, bale(String.valueOf(Global.random(0, Global.MAP_PIXEL_WIDTH)), String.valueOf(Global.random(0, Global.MAP_PIXEL_HEIGHT)), Props.genRandomType().toString()));
+            if (ClientClass.getInstance().getID() == 100) {
+                ClientClass.getInstance().sent(PROPS_GEN, bale(String.valueOf(Global.random(0, Global.MAP_PIXEL_WIDTH)), String.valueOf(Global.random(0, Global.MAP_PIXEL_HEIGHT)), Props.genRandomType().toString()));
+            }
         }
     }
+
+    /**
+     * 畫面同步
+     */
+    public void positionUpdate() {
+        if (upDatedelay.count()) {
+            ClientClass.getInstance().sent(UPDATE_POSITION, bale(Integer.toString(mainPlayer.collider().getX()), Integer.toString(mainPlayer.collider().getY())));
+            if (ClientClass.getInstance().getID() == 100) {
+                for (int i = 0; i < computerPlayers.size(); i++) {
+                    ComputerPlayer computerPlayer = computerPlayers.get(i);
+                    ClientClass.getInstance().sent(COMPUTER_UPDATE_POSITION, bale(Integer.toString(i), Integer.toString(computerPlayer.collider().getX()), Integer.toString(computerPlayer.collider().getY())));
+                }
+            }
+        }
+    }
+
 
     /**
      * 道具畫面更新
@@ -540,6 +590,4 @@ public class ConnectPointGameScene extends Scene implements CommandSolver.MouseC
     public void mouseTrig(MouseEvent e, CommandSolver.MouseState state, long trigTime) {
         mainPlayer.mouseTrig(e, state, trigTime, unPassMapObjects, transformObstacles, camera, mouse);
     }
-
-
 }

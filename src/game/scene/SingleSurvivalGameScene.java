@@ -3,6 +3,7 @@ package game.scene;
 import game.Menu.Label;
 import game.Menu.MenuScene;
 import game.Menu.Mouse;
+import game.controllers.AudioResourceController;
 import game.controllers.SceneController;
 import game.core.GameTime;
 import game.core.Global;
@@ -28,9 +29,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-/**
- * 獵人吃到道具不會加速，道具多點，道具功能增加
- */
+
 public class SingleSurvivalGameScene extends Scene implements CommandSolver.MouseCommandListener, CommandSolver.KeyListener {
     private ArrayList<GameObject> gameObjectList; //將Game要畫的所有GameObject存起來
     //留意畫的順序
@@ -76,6 +75,7 @@ public class SingleSurvivalGameScene extends Scene implements CommandSolver.Mous
 
     @Override
     public void sceneBegin() {
+        AudioResourceController.getInstance().loop(new Path().sound().background().gamefirst2(), -1);
         //遊戲時間
         startTime = System.nanoTime();
         chooseTime = 300; //單位：秒
@@ -187,7 +187,7 @@ public class SingleSurvivalGameScene extends Scene implements CommandSolver.Mous
         gameMap.paint(g);
         smallMap.paint(g, mainPlayer, Color.red, 100, 100);//小地圖的需要另外再paint一次
         if (Global.IS_DEBUG || mainPlayer.isHunterWatcher) {
-            for (int i = 1; i < computerPlayers.size(); i++) {
+            for (int i = 0; i < computerPlayers.size(); i++) {
                 smallMap.paint(g, computerPlayers.get(i), Color.YELLOW, 100, 100);
             }
         }
@@ -250,7 +250,7 @@ public class SingleSurvivalGameScene extends Scene implements CommandSolver.Mous
      * 電腦玩家偵查道具
      */
     public void cPlayerCheckPropsUpdate() {
-        for (int i = 1; i < computerPlayers.size(); i++) {
+        for (int i = 0; i < computerPlayers.size(); i++) {
             ComputerPlayer computerPlayer = computerPlayers.get(i);
             for (int j = 0; j < propsArrayList.size(); j++) {
                 computerPlayer.whichPropIsNear(propsArrayList.get(j));
@@ -265,7 +265,7 @@ public class SingleSurvivalGameScene extends Scene implements CommandSolver.Mous
         computerPlayers.forEach(player -> {
             if (player.isCollision(mainPlayer)) {
                 if (!mainPlayer.isSuperStar) {
-                    sceneEnd();
+//                    sceneEnd();
                 }
             }
         });
@@ -353,9 +353,6 @@ public class SingleSurvivalGameScene extends Scene implements CommandSolver.Mous
             Props props = propsArrayList.get(i);
             if (mainPlayer.isCollision(props)) {
                 mainPlayer.collidePropsInSurvivalMode(props);
-
-                props.getPropsAnimation().setPlayPropsAnimation(true);
-
                 props.setGotByPlayer(true);
                 propsArrayList.remove(i--);
                 continue;
@@ -400,14 +397,25 @@ public class SingleSurvivalGameScene extends Scene implements CommandSolver.Mous
     }
 
     public void levelUpdate() {
-        if ((int) lastTime == 150) {
+        if ((int) lastTime == 250) {
+            AudioResourceController.getInstance().stop(new Path().sound().background().gamefirst2());
+            AudioResourceController.getInstance().play(new Path().sound().background().manyhuterscencefirst());
             for (ComputerPlayer computerPlayer : computerPlayers) {
                 computerPlayer.AILevel2();
             }
         }
-        if ((int) lastTime == 50) {
+        if ((int) lastTime == 180) {
+            AudioResourceController.getInstance().stop(new Path().sound().background().manyhuterscencefirst());
+            AudioResourceController.getInstance().play(new Path().sound().background().manyhunterscenemedium());
             for (ComputerPlayer computerPlayer : computerPlayers) {
                 computerPlayer.AILevel3();
+            }
+        }
+        if ((int) lastTime == 57) {
+            AudioResourceController.getInstance().stop(new Path().sound().background().manyhunterscenemedium());
+            AudioResourceController.getInstance().play(new Path().sound().background().gamebehindfinal());
+            for (ComputerPlayer computerPlayer : computerPlayers) {
+                computerPlayer.AILevel4();
             }
         }
     }

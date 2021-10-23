@@ -192,12 +192,91 @@ public class ConnectTool implements GameKernel.GameInterface {
                             if (serialNum == 100) {
                                 objectArr.getPropsArrConnectPoint().add(new Props(Integer.parseInt(strs.get(0)), Integer.parseInt(strs.get(1)), Props.propsTypeParse(strs.get(2))));
                             }
-//                        case PLAYER_POSITION:
-//                            for (Player player : mainPlayers) {
-//                                if (player.ID() == serialNum) {
-//                                    player.setXY(Integer.parseInt(strs.get(0)), Integer.parseInt(strs.get(1)));
-//                                }
-//                            }
+                            break;
+                        case COMPUTER_MAINPLAYER_WHOISNEAR:
+                            mainPlayers.forEach(player -> {
+                                if (player.ID() == serialNum) {
+                                    objectArr.getComputerPlayersConnectPoint().get(Integer.parseInt(strs.get(0))).whoIsNear(player);
+                                }
+                            });
+                            break;
+                        case COMPUTER_WHOISNEAR:
+                            objectArr.getComputerPlayersConnectPoint().get(Integer.parseInt(strs.get(0))).whoIsNear(objectArr.getComputerPlayersConnectPoint().get(Integer.parseInt(strs.get(1))));
+                            break;
+                        case PLAYER_COLLISION_PLAYER:
+                            Player player1 = null;
+                            Player player2 = null;
+                            for (Player player : mainPlayers) {
+                                if (player.ID() == Integer.parseInt(strs.get(0))) {
+                                    player1 = player;
+                                }
+                                if (player.ID() == Integer.parseInt(strs.get(1))) {
+                                    player2 = player;
+                                }
+                            }
+                            if (player1 != null && player2 != null) {
+                                player1.exchangeRole(player2);
+                            }
+                            break;
+                        case PLAYER_COLLISION_COMPUTER:
+                            mainPlayers.forEach(player -> {
+                                if (player.ID() == serialNum) {
+                                    player.exchangeRole(objectArr.getComputerPlayersConnectPoint().get(Integer.parseInt(strs.get(0))));
+                                }
+                            });
+                            break;
+                        case COMPUTER_COLLISION_COMPUTER:
+                            objectArr.getComputerPlayersConnectPoint().get(Integer.parseInt(strs.get(0))).exchangeRole(objectArr.getComputerPlayersConnectPoint().get(Integer.parseInt(strs.get(1))));
+                            break;
+                        case PLAYER_COLLISION_PROPS:
+                            mainPlayers.forEach(player -> {
+                                if (player.ID() == serialNum) {
+                                    for (int i = 0; i < objectArr.getPropsArrConnectPoint().size(); i++) {
+                                        if (i == Integer.parseInt(strs.get(0))) {
+                                            player.collideProps(objectArr.getPropsArrConnectPoint().get(i));
+                                            objectArr.getPropsArrConnectPoint().get(i).setGotByPlayer(true);
+                                            objectArr.getPropsArrConnectPoint().remove(i--);
+                                        }
+                                    }
+//                                    Props props = objectArr.getPropsArrConnectPoint().get(Integer.parseInt(strs.get(0)));
+//                                    player.collideProps(props);
+//                                    props.setGotByPlayer(true);
+//                                    objectArr.getPropsArrConnectPoint().remove(props);
+                                }
+                            });
+                            break;
+                        case COMPUTER_COLLISION_PROPS:
+                            Props props = objectArr.getPropsArrConnectPoint().get(Integer.parseInt(strs.get(1)));
+                            objectArr.getComputerPlayersConnectPoint().get(Integer.parseInt(strs.get(0))).collideProps(props);
+                            props.setGotByPlayer(true);
+                            objectArr.getPropsArrConnectPoint().remove(props);
+                            break;
+                        case PLAYER_CHOOSE_TRANSFORM:
+                            mainPlayers.forEach(player -> {
+                                if (player.ID() == serialNum) {
+                                    player.chooseTransformObject(ObjectArr.transformObstaclList1.get(Integer.parseInt(strs.get(0))));
+                                }
+                            });
+                            break;
+                        case PLAYER_USE_TELEPORTATION:
+                            mainPlayers.forEach(player -> {
+                                if (player.ID() == serialNum) {
+                                    player.useTeleportation(Integer.parseInt(strs.get(0)), Integer.parseInt(strs.get(1)));
+                                }
+                            });
+                            break;
+                        case UPDATE_POSITION:
+                            if (serialNum != ClientClass.getInstance().getID()) {
+                                mainPlayers.forEach(player -> {
+                                    if (player.ID() == serialNum) {
+                                        player.setXY(Integer.parseInt(strs.get(0)), Integer.parseInt(strs.get(1)));
+                                    }
+                                });
+                            }
+                            break;
+                        case COMPUTER_UPDATE_POSITION:
+                            objectArr.getComputerPlayersConnectPoint().get(Integer.parseInt(strs.get(0))).setXY(Integer.parseInt(strs.get(1)), Integer.parseInt(strs.get(2)));
+                            break;
                     }
                 }
             });

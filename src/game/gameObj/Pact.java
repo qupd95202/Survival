@@ -15,13 +15,24 @@ public class Pact {
     public static final int RELEASE_RIGHT = 15;
     public static final int TRANSFORM = 6;
     public static final int TELEPORTATION = 7;
-    public static final int MOUSE_CLICK = 8;
+    public static final int UPDATE_POSITION = 8;
     public static final int START_GAME = 9;
     public static final int COMPUTER_MOVE = 10;
-    public static final int CAN_USE_TELEPORTATION = 11;
+    public static final int COMPUTER_UPDATE_POSITION = 11;
     public static final int CHOOSE_STORED_ANIMATION = 16;
     public static final int COMPUTER_TRANSFORM = 17;
     public static final int PROPS_GEN = 18;
+    public static final int COMPUTER_WHOISNEAR = 20;
+    public static final int COMPUTER_MAINPLAYER_WHOISNEAR = 21;
+    public static final int COMPUTER_WHICHISNEAR = 22;
+    public static final int PLAYER_COLLISION_PLAYER = 23;
+    public static final int PLAYER_COLLISION_COMPUTER = 24;
+    public static final int COMPUTER_COLLISION_COMPUTER = 25;
+    public static final int PLAYER_COLLISION_PROPS = 26;
+    public static final int COMPUTER_COLLISION_PROPS = 27;
+    public static final int PLAYER_CHOOSE_TRANSFORM = 28;
+    public static final int PLAYER_USE_TELEPORTATION = 29;
+
 //    public static final int PLAYER_POSITION = 19;
     //public static final int COMPUTER_CHASE 不確定
 //    public static final int GET_PROPS=11;
