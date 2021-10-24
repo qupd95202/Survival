@@ -15,6 +15,7 @@ import game.gameObj.players.Player;
 import game.gameObj.players.ComputerPlayer;
 import game.graphic.AllImages;
 import game.graphic.Animation;
+import game.graphic.PropsAnimation;
 import game.map.GameMap;
 import game.map.ObjectArr;
 import game.scene_process.Camera;
@@ -27,6 +28,7 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 
 
@@ -76,6 +78,11 @@ public class SinglePointGameScene extends Scene implements CommandSolver.MouseCo
     private Point point;
     private Image imgPoint;
 
+    //道具吃到的動畫
+    private ObjectArr objectArr;
+    private HashMap<Props.Type, PropsAnimation> allPropsAnimation;
+    private Props mainPlayerCollisionProps;
+
     @Override
     public void sceneBegin() {
         AudioResourceController.getInstance().loop(new Path().sound().background().mainscene(), -1);
@@ -119,7 +126,7 @@ public class SinglePointGameScene extends Scene implements CommandSolver.MouseCo
         transformObstacles.forEach(transformObstacle -> gameObjectList.addAll(List.of(transformObstacle)));
 
         //地圖與鏡頭相關
-        gameMap = new GameMap(Global.MAP_WIDTH, Global.MAP_HEIGHT);
+        gameMap = new GameMap(Global.MAP_WIDTH, Global.MAP_HEIGHT, new Path().img().map().bmp(), new Path().img().map().txt());
         unPassMapObjects = gameMap.getMapObjects();
         unPassMapObjects.forEach(mapObject -> gameObjectList.addAll(List.of(mapObject)));
         camera = new Camera(gameMap.getWidth() + 5, gameMap.getHeight() + 5);
@@ -141,6 +148,9 @@ public class SinglePointGameScene extends Scene implements CommandSolver.MouseCo
         printGameTime = new GameTime();
         imgClock = SceneController.getInstance().imageController().tryGetImage(new Path().img().numbers().clock());
 
+        //吃到道具的動畫
+        objectArr = new ObjectArr();
+        allPropsAnimation = objectArr.genPropsAnimation();
     }
 
 
@@ -176,6 +186,10 @@ public class SinglePointGameScene extends Scene implements CommandSolver.MouseCo
         skillPaint(g);
         //畫滑鼠
         Global.mouse.paint(g);
+        //碰撞道具時播放動畫
+        if (mainPlayerCollisionProps != null) {
+            allPropsAnimation.get(mainPlayerCollisionProps.getPropsType()).paint(g);
+        }
 
 
         //要畫在小地圖的要加在下方
@@ -212,6 +226,10 @@ public class SinglePointGameScene extends Scene implements CommandSolver.MouseCo
         //cd時間顯示之資料
         transFormCDLabel.setWords(String.valueOf(mainPlayer.transformCDTime()));
         timeUP();
+        //碰撞道具時播放動畫的更新
+        if (mainPlayerCollisionProps != null) {
+            allPropsAnimation.get(mainPlayerCollisionProps.getPropsType()).update();
+        }
 
 
     }
@@ -382,6 +400,8 @@ public class SinglePointGameScene extends Scene implements CommandSolver.MouseCo
             for (int i = 0; i < propsArrayList.size(); i++) {
                 Props props = propsArrayList.get(i);
                 if (player.isCollision(props)) {
+                    mainPlayerCollisionProps = propsArrayList.get(i);
+                    allPropsAnimation.get(props.getPropsType()).setPlayPropsAnimation(true);//將此道具的動畫設為開啟
                     player.collideProps(props);
                     props.setGotByPlayer(true);
                     propsArrayList.remove(i--);

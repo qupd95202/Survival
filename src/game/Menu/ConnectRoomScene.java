@@ -60,7 +60,6 @@ public class ConnectRoomScene extends Scene implements CommandSolver.MouseComman
     @Override
     public void sceneEnd() {
         img = null;
-        buttons = null;
         labels = null;
         editTexts = null;
 //        mouse=null;

@@ -14,6 +14,7 @@ import game.gameObj.players.Player;
 import game.gameObj.players.ComputerPlayer;
 import game.graphic.AllImages;
 import game.graphic.Animation;
+import game.graphic.PropsAnimation;
 import game.map.GameMap;
 import game.map.ObjectArr;
 import game.scene_process.Camera;
@@ -26,6 +27,7 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 
 
@@ -68,6 +70,11 @@ public class SingleSurvivalGameScene extends Scene implements CommandSolver.Mous
     //提示訊息(畫面上所有的文字處理)
     private ArrayList<Label> labels;
     private Label transFormCDLabel;
+
+    //道具吃到的動畫
+    private ObjectArr objectArr;
+    private HashMap<Props.Type, PropsAnimation> allPropsAnimation;
+    private Props mainPlayerCollisionProps;
 
 
     @Override
@@ -121,7 +128,7 @@ public class SingleSurvivalGameScene extends Scene implements CommandSolver.Mous
         transformObstacles.forEach(transformObstacle -> gameObjectList.addAll(List.of(transformObstacle)));
 
         //地圖與鏡頭相關
-        gameMap = new GameMap(Global.MAP_WIDTH, Global.MAP_HEIGHT);
+        gameMap = new GameMap(Global.MAP_WIDTH, Global.MAP_HEIGHT, new Path().img().mapSurvival().bmp(), new Path().img().mapSurvival().txt());
         unPassMapObjects = gameMap.getMapObjects();
         unPassMapObjects.forEach(mapObject -> gameObjectList.addAll(List.of(mapObject)));
         camera = new Camera(gameMap.getWidth() + 5, gameMap.getHeight() + 5);
@@ -140,6 +147,9 @@ public class SingleSurvivalGameScene extends Scene implements CommandSolver.Mous
         printGameTime = new GameTime();
         imgClock = SceneController.getInstance().imageController().tryGetImage(new Path().img().numbers().clock());
 
+        //吃到道具的動畫
+        objectArr = new ObjectArr();
+        allPropsAnimation = objectArr.genPropsAnimation();
     }
 
 
@@ -175,17 +185,11 @@ public class SingleSurvivalGameScene extends Scene implements CommandSolver.Mous
         paintTime(g);
         //顯示技能
         skillPaint(g);
+        //碰撞道具時播放動畫
+        if (mainPlayerCollisionProps != null) {
+            allPropsAnimation.get(mainPlayerCollisionProps.getPropsType()).paint(g);
+        }
 
-
-//        //碰撞道具時播放動畫
-//        for (int i = 0; i < propsArrayList.size(); i++) {
-//            Props prop = propsArrayList.get(i);
-//            if (prop.getPropsAnimation().isPlayPropsAnimation()) {
-//                System.out.println("吃到");
-//                prop.getPropsAnimation().paint(g);
-//                propsArrayList.remove(i--);
-//            }
-//        }
 
         Global.mouse.paint(g);
         //要畫在小地圖的要加在下方
@@ -223,6 +227,10 @@ public class SingleSurvivalGameScene extends Scene implements CommandSolver.Mous
         camera.update();
         //cd時間顯示之資料
         transFormCDLabel.setWords(String.valueOf(mainPlayer.transformCDTime()));
+        //碰撞道具時播放動畫的更新
+        if (mainPlayerCollisionProps != null) {
+            allPropsAnimation.get(mainPlayerCollisionProps.getPropsType()).update();
+        }
     }
 
     @Override
@@ -358,6 +366,8 @@ public class SingleSurvivalGameScene extends Scene implements CommandSolver.Mous
         for (int i = 0; i < propsArrayList.size(); i++) {
             Props props = propsArrayList.get(i);
             if (mainPlayer.isCollision(props)) {
+                mainPlayerCollisionProps = propsArrayList.get(i);
+                allPropsAnimation.get(props.getPropsType()).setPlayPropsAnimation(true);//將此道具的動畫設為開啟
                 mainPlayer.collidePropsInSurvivalMode(props);
                 props.setGotByPlayer(true);
                 propsArrayList.remove(i--);

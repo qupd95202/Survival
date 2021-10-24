@@ -50,11 +50,6 @@ public class MapLoader {
      * @param mapInfos 地圖資訊
      * @return 地圖資料（自定義類Tile）的物件陣列
      */
-    /**
-     * 透過地圖資訊 轉換為 自定義的地圖物件
-     * @param mapInfos 地圖資訊
-     * @return 地圖資料（自定義類Tile）的物件陣列
-     */
     public ArrayList<MapObject> createObjectArray(ArrayList<MapInfo> mapInfos) {
         // 創建陣列儲存地圖物件
         ArrayList<MapObject> mapMapObjects = new ArrayList<>();
@@ -69,7 +64,64 @@ public class MapLoader {
                         150,
                         mapInfo.getName()));
             }
+            if (mapInfo.getName().equals("tree2")) {
+                mapMapObjects.add(new MapObject(
+                        mapInfo.getX() * Global.UNIT_WIDTH,
+                        mapInfo.getY() * Global.UNIT_HEIGHT,
+                        100,
+                        150,
+                        mapInfo.getName()));
+            }
             if (mapInfo.getName().equals("winterTree1")) {
+                mapMapObjects.add(new MapObject(
+                        mapInfo.getX() * Global.UNIT_WIDTH,
+                        mapInfo.getY() * Global.UNIT_HEIGHT,
+                        100,
+                        130,
+                        mapInfo.getName()));
+            }
+            if (mapInfo.getName().equals("winterTree2")) {
+                mapMapObjects.add(new MapObject(
+                        mapInfo.getX() * Global.UNIT_WIDTH,
+                        mapInfo.getY() * Global.UNIT_HEIGHT,
+                        100,
+                        200,
+                        mapInfo.getName()));
+            }
+
+            if (mapInfo.getName().equals("rock")) {
+                mapMapObjects.add(new MapObject(
+                        mapInfo.getX() * Global.UNIT_WIDTH,
+                        mapInfo.getY() * Global.UNIT_HEIGHT,
+                        60,
+                        60,
+                        mapInfo.getName()));
+            }
+            if (mapInfo.getName().equals("volcanoTree")) {
+                mapMapObjects.add(new MapObject(
+                        mapInfo.getX() * Global.UNIT_WIDTH,
+                        mapInfo.getY() * Global.UNIT_HEIGHT,
+                        70,
+                        100,
+                        mapInfo.getName()));
+            }
+            if (mapInfo.getName().equals("castleWall")) {
+                mapMapObjects.add(new MapObject(
+                        mapInfo.getX() * Global.UNIT_WIDTH,
+                        mapInfo.getY() * Global.UNIT_HEIGHT,
+                        50,
+                        50,
+                        mapInfo.getName()));
+            }
+            if (mapInfo.getName().equals("tower")) {
+                mapMapObjects.add(new MapObject(
+                        mapInfo.getX() * Global.UNIT_WIDTH - 7,
+                        mapInfo.getY() * Global.UNIT_HEIGHT,
+                        50,
+                        100,
+                        mapInfo.getName()));
+            }
+            if (mapInfo.getName().equals("house1")) {
                 mapMapObjects.add(new MapObject(
                         mapInfo.getX() * Global.UNIT_WIDTH,
                         mapInfo.getY() * Global.UNIT_HEIGHT,
@@ -78,31 +130,8 @@ public class MapLoader {
                         mapInfo.getName()));
             }
 
-            if (mapInfo.getName().equals("rock")) {
-                mapMapObjects.add(new MapObject(
-                        mapInfo.getX() * Global.UNIT_WIDTH,
-                        mapInfo.getY() * Global.UNIT_HEIGHT,
-                        70,
-                        70,
-                        mapInfo.getName()));
-            }
-            if (mapInfo.getName().equals("house1")) {
-                mapMapObjects.add(new MapObject(
-                        mapInfo.getX() * Global.UNIT_WIDTH,
-                        mapInfo.getY() * Global.UNIT_HEIGHT,
-                        550,
-                        350,
-                        mapInfo.getName()));
-            }
-            if (mapInfo.getName().equals("house2")) {
-                mapMapObjects.add(new MapObject(
-                        mapInfo.getX() * Global.UNIT_WIDTH,
-                        mapInfo.getY() * Global.UNIT_HEIGHT,
-                        600,
-                        400,
-                        mapInfo.getName()));
-            }
         }
         return mapMapObjects;
     }
+
 }

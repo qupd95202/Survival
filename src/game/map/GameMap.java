@@ -17,16 +17,16 @@ public class GameMap {
     private static ArrayList<MapInfo> mapInfos;
     private static ArrayList<MapObject> mapObjects;
 
-    public GameMap(int width, int height) {
+    public GameMap(int width, int height, String MapPath, String txtPath) {
         mapMapObjects = new MapObject[width][height];
-        initialzeMapTiles();
+        initialzeMapTiles(MapPath, txtPath);
     }
 
-    private void initialzeMapTiles() {
+    private void initialzeMapTiles(String MapPath, String txtPath) {
         try {
             mapLoader = new MapLoader(
-                    new Path().img().map().bmp(),
-                    new Path().img().map().txt());
+                    MapPath,
+                    txtPath);
         } catch (IOException e) {
             e.printStackTrace();
         }

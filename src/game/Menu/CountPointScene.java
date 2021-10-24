@@ -24,7 +24,7 @@ public class CountPointScene extends Scene implements CommandSolver.MouseCommand
 
     @Override
     public void sceneBegin() {
-        AudioResourceController.getInstance().play(new Path().sound().background().countScene());
+        AudioResourceController.getInstance().loop(new Path().sound().background().countScene(), -1);
         labels = new ArrayList<>();
         animations = new ArrayList<>();
         title = new Label(Global.SCREEN_X / 3 - 80, Global.SCREEN_Y / 4 - 20, "S C O R E", FontLoader.Blocks(100));
@@ -48,7 +48,6 @@ public class CountPointScene extends Scene implements CommandSolver.MouseCommand
         g.setColor(new Color(169, 209, 142));
         g.fillRect(0, 0, Global.SCREEN_X, Global.SCREEN_Y);
         g.setFont(FontLoader.Blocks(18));
-        g.drawString("hahaha", 100, 100);
         title.paint(g);
         for (int i = 0; i < animations.size(); i++) {
             animations.get(i).paint(Global.SCREEN_X / 3, Global.SCREEN_Y / 3 + i * 100 - 30, Global.UNIT_WIDTH, Global.UNIT_HEIGHT, g);

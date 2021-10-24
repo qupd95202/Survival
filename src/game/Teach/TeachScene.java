@@ -94,7 +94,7 @@ public class TeachScene extends Scene implements CommandSolver.MouseCommandListe
         players.forEach(player -> gameObjectList.addAll(List.of(player)));
 
 
-        gameMap = new GameMap(Global.MAP_WIDTH, Global.MAP_HEIGHT);
+        gameMap = new GameMap(Global.MAP_WIDTH, Global.MAP_HEIGHT, new Path().img().map().bmp(), new Path().img().map().txt());
         unPassMapObjects = gameMap.getMapObjects();
         unPassMapObjects.forEach(mapObject -> gameObjectList.addAll(List.of(mapObject)));
         camera = new Camera(gameMap.getWidth() + 5, gameMap.getHeight() + 5);

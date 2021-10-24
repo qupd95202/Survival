@@ -69,7 +69,7 @@ public class Player extends GameObject implements CommandSolver.KeyListener {
 
     //動畫處理部分拉出
     protected Animation originalAnimation;
-    protected Animation currentAnimation;
+    public Animation currentAnimation;
 
     //道具相關
     private boolean isUseTeleportation;//判斷是否按F(瞬間移動鍵)
@@ -173,6 +173,9 @@ public class Player extends GameObject implements CommandSolver.KeyListener {
             canMove = true;
         }
         addPoint();
+        if (id != 0) {
+            exchangeUpdateInConnect();
+        }
     }
 
     @Override
@@ -294,9 +297,28 @@ public class Player extends GameObject implements CommandSolver.KeyListener {
                     bumpPlayer = player;
                     bump(bumpPlayer);
                     pointExchange(bumpPlayer);
+                    AudioResourceController.getInstance().play(new Path().sound().background().exchange());
                 }
             }
         }
+        if (collisionDelay.count()) {
+            animationExchange(bumpPlayer);
+        }
+        if (canMoveDelay.count()) {
+            roleStateExchange(bumpPlayer);
+            canMove = true;
+            bumpPlayer.canMove = true;
+        }
+    }
+
+    public void exchangeRoleInConnect(Player player) {
+        bumpPlayer = player;
+        bump(bumpPlayer);
+        pointExchange(bumpPlayer);
+        AudioResourceController.getInstance().play(new Path().sound().background().exchange());
+    }
+
+    public void exchangeUpdateInConnect() {
         if (collisionDelay.count()) {
             animationExchange(bumpPlayer);
         }
@@ -452,7 +474,6 @@ public class Player extends GameObject implements CommandSolver.KeyListener {
                 AudioResourceController.getInstance().play(new Path().sound().background().addSpeed());
                 canUseTeleportation = true;
                 break;
-
             case trap:
                 if (Global.IS_DEBUG) {
                     System.out.println("不能動");
@@ -475,6 +496,9 @@ public class Player extends GameObject implements CommandSolver.KeyListener {
             case addSpeed:
                 if (Global.IS_DEBUG)
                     System.out.println("加速");
+                if (isSuperStar) {
+                    currentSpeed++;
+                }
                 if (movement.getSpeed() < Global.SPEED_MAX) {
                     movement.addSpeed(1);
                 }
@@ -629,5 +653,9 @@ public class Player extends GameObject implements CommandSolver.KeyListener {
 
     public Animation getCurrentAnimation() {
         return currentAnimation;
+    }
+
+    public Movement getMovement() {
+        return movement;
     }
 }

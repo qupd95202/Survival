@@ -66,7 +66,6 @@ public class MenuScene extends Scene implements CommandSolver.MouseCommandListen
     @Override
     public void sceneEnd() {
         this.labels = null;
-        this.buttons = null;
         this.img = null;
     }
 

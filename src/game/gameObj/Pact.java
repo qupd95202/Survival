@@ -32,6 +32,7 @@ public class Pact {
     public static final int COMPUTER_COLLISION_PROPS = 27;
     public static final int PLAYER_CHOOSE_TRANSFORM = 28;
     public static final int PLAYER_USE_TELEPORTATION = 29;
+    public static final int POINT_UPDATE = 30;
 
 //    public static final int PLAYER_POSITION = 19;
     //public static final int COMPUTER_CHASE 不確定

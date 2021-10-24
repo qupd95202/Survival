@@ -67,7 +67,6 @@ public class ChooseRoleScene extends Scene implements CommandSolver.MouseCommand
     public void sceneEnd() {
         img = null;
         currentAnimation = null;
-        buttons = null;
         title = null;
         create = null;
     }

@@ -212,46 +212,56 @@ public class Path {
             private Background(Flow flow) {
                 super(flow, "/backgrounds");
             }
-
             public String forest() {
-                return this + "/forest.jpeg";
+                return this + "/forest.png";
             }
 
             public String winter() {
-                return this + "/winter.jpeg";
+                return this + "/winter.png";
             }
 
             public String volcano() {
-                return this + "/volcano.jpg";
+                return this + "/volcano.png";
             }
 
             public String village() {
                 return this + "/village.png";
             }
-
             //森林地圖物件
             public String tree1() {
                 return this + "/tree1.png";
+            }
+            public String tree2() {
+                return this + "/tree2.png";
             }
 
             //冰原地圖物件
             public String winterTree1() {
                 return this + "/winterTree1.png";
             }
+            public String winterTree2() {
+                return this + "/winterTree2.png";
+            }
 
             //火山地圖物件
             public String rock() {
                 return this + "/rock.png";
             }
+            public String volcanoTree() {
+                return this + "/volcanoTree.png";
+            }
 
             //村莊地圖物件
+            public String castleWall() {
+                return this + "/castleWall.png";
+            }
+            public String tower() {
+                return this + "/tower.png";
+            }
             public String house1() {
                 return this + "/house1.png";
             }
 
-            public String house2() {
-                return this + "/house2.png";
-            }
 
         }
 
@@ -259,6 +269,21 @@ public class Path {
         public static class Map extends Flow {
             private Map(Flow flow) {
                 super(flow, "/map");
+            }
+
+            public String bmp() {
+                return this + "/genMap.bmp";
+            }
+
+            public String txt() {
+                return this + "/genMap.txt";
+            }
+
+        }
+
+        public static class MapSurvival extends Flow {
+            private MapSurvival(Flow flow) {
+                super(flow, "/map2");
             }
 
             public String bmp() {
@@ -573,84 +598,6 @@ public class Path {
 
             }
 
-            public static class Lightning extends Flow {
-                private Lightning(Flow flow) {
-                    super(flow, "/lightning");
-                }
-
-                public String lightning0() {
-                    return this + "/lightning0.png";
-                }
-
-                public String lightning1() {
-                    return this + "/lightning1.png";
-                }
-
-                public String lightning2() {
-                    return this + "/lightning2.png";
-                }
-
-                public String lightning3() {
-                    return this + "/lightning3.png";
-                }
-
-                public String lightning4() {
-                    return this + "/lightning4.png";
-                }
-
-                public String lightning5() {
-                    return this + "/lightning5.png";
-                }
-
-                public String lightning6() {
-                    return this + "/lightning6.png";
-                }
-
-                public String lightning7() {
-                    return this + "/lightning7.png";
-                }
-
-                public String lightning8() {
-                    return this + "/lightning8.png";
-                }
-
-                public String lightning9() {
-                    return this + "/lightning9.png";
-                }
-
-                public String lightning10() {
-                    return this + "/lightning10.png";
-                }
-
-                public String lightning11() {
-                    return this + "/lightning11.png";
-                }
-
-                public String lightning12() {
-                    return this + "/lightning12.png";
-                }
-
-                public String lightning13() {
-                    return this + "/lightning13.png";
-                }
-
-                public String lightning14() {
-                    return this + "/lightning14.png";
-                }
-
-                public String lightning15() {
-                    return this + "/lightning15.png";
-                }
-
-                public String lightning16() {
-                    return this + "/lightning16.png";
-                }
-
-                public String lightning17() {
-                    return this + "/lightning17.png";
-                }
-
-            }
 
             public String no() {
                 return this + "/no.png";
@@ -672,8 +619,78 @@ public class Path {
                 return new DontMove(this);
             }
 
-            public Lightning lightning() {
-                return new Lightning(this);
+            public static class Numbers extends Flow {
+                private Numbers(Flow flow) {
+                    super(flow, "/numbers");
+                }
+                public String number0() {
+                    return this + "/number0.png";
+                }
+                public String number1() {
+                    return this + "/number1.png";
+                }
+                public String number2() {
+                    return this + "/number2.png";
+                }
+                public String number3() {
+                    return this + "/number3.png";
+                }
+                public String number4() {
+                    return this + "/number4.png";
+                }
+                public String number5() {
+                    return this + "/number5.png";
+                }
+                public String number6() {
+                    return this + "/number6.png";
+                }
+                public String number7() {
+                    return this + "/number7.png";
+                }
+                public String number8() {
+                    return this + "/number8.png";
+                }
+                public String number9() {
+                    return this + "/number9.png";
+                }
+                public String coin() {
+                    return this + "/coin.png";
+                }
+
+                public String numberTile0() {
+                    return this + "/numberTile0.png";
+                }
+                public String numberTile1() {
+                    return this + "/numberTile1.png";
+                }
+                public String numberTile2() {
+                    return this + "/numberTile2.png";
+                }
+                public String numberTile3() {
+                    return this + "/numberTile3.png";
+                }
+                public String numberTile4() {
+                    return this + "/numberTile4.png";
+                }
+                public String numberTile5() {
+                    return this + "/numberTile5.png";
+                }
+                public String numberTile6() {
+                    return this + "/numberTile6.png";
+                }
+                public String numberTile7() {
+                    return this + "/numberTile7.png";
+                }
+                public String numberTile8() {
+                    return this + "/numberTile8.png";
+                }
+                public String numberTile9() {
+                    return this + "/numberTile9.png";
+                }
+                public String clock() {
+                    return this + "/clock.png";
+                }
+
             }
 
 
@@ -714,6 +731,235 @@ public class Path {
 
             public String nothing() {
                 return this + "/nothing.png";
+            }
+
+        }
+
+        public static class PropsAnimation extends Flow {
+            private PropsAnimation(Flow flow) {
+                super(flow, "/propsAnimation");
+            }
+
+            //道具動畫（thunder）
+            public String lightning0() {
+                return this + "/lightning0.png";
+            }
+            public String lightning1() {
+                return this + "/lightning1.png";
+            }
+            public String lightning2() {
+                return this + "/lightning2.png";
+            }
+            public String lightning3() {
+                return this + "/lightning3.png";
+            }
+            public String lightning4() {
+                return this + "/lightning4.png";
+            }
+            public String lightning5() {
+                return this + "/lightning5.png";
+            }
+            public String lightning6() {
+                return this + "/lightning6.png";
+            }
+            public String lightning7() {
+                return this + "/lightning7.png";
+            }
+            public String lightning8() {
+                return this + "/lightning8.png";
+            }
+            public String lightning9() {
+                return this + "/lightning9.png";
+            }
+            public String lightning10() {
+                return this + "/lightning10.png";
+            }
+            public String lightning11() {
+                return this + "/lightning11.png";
+            }
+            public String lightning12() {
+                return this + "/lightning12.png";
+            }
+            public String lightning13() {
+                return this + "/lightning13.png";
+            }
+            public String lightning14() {
+                return this + "/lightning14.png";
+            }
+            public String lightning15() {
+                return this + "/lightning15.png";
+            }
+            public String lightning16() {
+                return this + "/lightning16.png";
+            }
+            public String lightning17() {
+                return this + "/lightning17.png";
+            }
+
+            //道具動畫（superStar）
+            public String star1() {
+                return this + "/star1.png";
+            }
+            public String star2() {
+                return this + "/star2.png";
+            }
+            public String star3() {
+                return this + "/star3.png";
+            }
+            public String star4() {
+                return this + "/star4.png";
+            }
+            public String star5() {
+                return this + "/star5.png";
+            }
+            public String star6() {
+                return this + "/star6.png";
+            }
+            public String star7() {
+                return this + "/star7.png";
+            }
+            public String star8() {
+                return this + "/star8.png";
+            }
+            public String star9() {
+                return this + "/star9.png";
+            }
+            public String star10() {
+                return this + "/star10.png";
+            }
+            public String star11() {
+                return this + "/star11.png";
+            }
+            public String star12() {
+                return this + "/star12.png";
+            }
+
+            //道具動畫（gameTimeDecrease）
+            public String gameTimeDecrease1() {
+                return this + "/gameTimeDecrease1.png";
+            }
+            public String gameTimeDecrease2() {
+                return this + "/gameTimeDecrease2.png";
+            }
+            public String gameTimeDecrease3() {
+                return this + "/gameTimeDecrease3.png";
+            }
+            public String gameTimeDecrease4() {
+                return this + "/gameTimeDecrease4.png";
+            }
+            public String gameTimeDecrease5() {
+                return this + "/gameTimeDecrease5.png";
+            }
+            public String gameTimeDecrease6() {
+                return this + "/gameTimeDecrease6.png";
+            }
+            public String gameTimeDecrease7() {
+                return this + "/gameTimeDecrease7.png";
+            }
+            public String gameTimeDecrease8() {
+                return this + "/gameTimeDecrease8.png";
+            }
+            public String gameTimeDecrease9() {
+                return this + "/gameTimeDecrease9.png";
+            }
+
+            //道具動畫（hunterWatcher）
+            public String hunterWatcher1() {
+                return this + "/hunterWatcher1.png";
+            }
+            public String hunterWatcher2() {
+                return this + "/hunterWatcher2.png";
+            }
+            public String hunterWatcher3() {
+                return this + "/hunterWatcher3.png";
+            }
+            public String hunterWatcher4() {
+                return this + "/hunterWatcher4.png";
+            }
+            public String hunterWatcher5() {
+                return this + "/hunterWatcher5.png";
+            }
+            public String hunterWatcher6() {
+                return this + "/hunterWatcher6.png";
+            }
+            public String hunterWatcher7() {
+                return this + "/hunterWatcher7.png";
+            }
+            public String hunterWatcher8() {
+                return this + "/hunterWatcher8.png";
+            }
+            public String hunterWatcher9() {
+                return this + "/hunterWatcher9.png";
+            }
+            public String hunterWatcher10() {
+                return this + "/hunterWatcher10.png";
+            }
+
+            //道具動畫（teleportation）
+            public String teleportation() {
+                return this + "/teleportation.png";
+            }
+
+            //道具動畫（addSpeed）
+            public String addSpeed1() {
+                return this + "/addSpeed1.png";
+            }
+            public String addSpeed2() {
+                return this + "/addSpeed2.png";
+            }
+            public String addSpeed3() {
+                return this + "/addSpeed3.png";
+            }
+            public String addSpeed4() {
+                return this + "/addSpeed4.png";
+            }
+            public String addSpeed5() {
+                return this + "/addSpeed5.png";
+            }
+            public String addSpeed6() {
+                return this + "/addSpeed6.png";
+            }
+            public String addSpeed7() {
+                return this + "/addSpeed7.png";
+            }
+            public String addSpeed8() {
+                return this + "/addSpeed8.png";
+            }
+            public String addSpeed9() {
+                return this + "/addSpeed9.png";
+            }
+            public String addSpeed10() {
+                return this + "/addSpeed10.png";
+            }
+            public String addSpeed11() {
+                return this + "/addSpeed11.png";
+            }
+            public String addSpeed12() {
+                return this + "/addSpeed12.png";
+            }
+            public String addSpeed13() {
+                return this + "/addSpeed13.png";
+            }
+            public String addSpeed14() {
+                return this + "/addSpeed14.png";
+            }
+            public String addSpeed15() {
+                return this + "/addSpeed15.png";
+            }
+
+            //道具動畫（timeStop）
+            public String timeStop() {
+                return this + "/timeStop.png";
+            }
+
+            //道具動畫（trap）
+            public String spiderWeb() {
+                return this + "/spiderWeb.png";
+            }
+
+            //道具動畫（addPoint）
+            public String addPoint() {
+                return this + "/addPoint.png";
             }
 
         }
@@ -813,62 +1059,6 @@ public class Path {
 
         }
 
-
-        public static class Props extends Flow {
-            private Props(Flow flow) {
-                super(flow, "/props");
-            }
-
-            public String star1() {
-                return this + "/star1.png";
-            }
-
-            public String star2() {
-                return this + "/star2.png";
-            }
-
-            public String star3() {
-                return this + "/star3.png";
-            }
-
-            public String star4() {
-                return this + "/star4.png";
-            }
-
-            public String star5() {
-                return this + "/star5.png";
-            }
-
-            public String star6() {
-                return this + "/star6.png";
-            }
-
-            public String star7() {
-                return this + "/star7.png";
-            }
-
-            public String star8() {
-                return this + "/star8.png";
-            }
-
-            public String star9() {
-                return this + "/star9.png";
-            }
-
-            public String star10() {
-                return this + "/star10.png";
-            }
-
-            public String star11() {
-                return this + "/star11.png";
-            }
-
-            public String star12() {
-                return this + "/star12.png";
-            }
-
-        }
-
         public Actors actors() {
             return new Actors(this);
         }
@@ -885,6 +1075,10 @@ public class Path {
             return new Map(this);
         }
 
+        public MapSurvival mapSurvival() {
+            return new MapSurvival(this);
+        }
+
         public Menu menu() {
             return new Menu(this);
         }
@@ -897,8 +1091,8 @@ public class Path {
             return new Numbers(this);
         }
 
-        public Props props() {
-            return new Props(this);
+        public PropsAnimation propsAnimation() {
+            return new PropsAnimation(this);
         }
 
     }
@@ -991,6 +1185,10 @@ public class Path {
 
             public String openScene() {
                 return this + "/openScene.wav";
+            }
+
+            public String exchange() {
+                return this + "/exchange.wav";
             }
 
         }

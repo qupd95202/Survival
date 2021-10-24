@@ -107,6 +107,7 @@ public class CreateRoomScene extends Scene implements CommandSolver.MouseCommand
                     return;
                 }
                 SceneController.getInstance().change(new ChooseRoleScene("127.0.0.1", getPlayerName(), Integer.parseInt(getPort())));
+                ConnectTool.instance().setServer(true);
                 ConnectTool.instance().createRoom(Integer.parseInt(getPort()));
             }
             if (Global.mouse.isCollision(buttons.get(2))) {

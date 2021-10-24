@@ -1,0 +1,10 @@
+tree1,-10557038,/Users/mickytsai/Downloads/background/tree1.png,1,1
+winterTree1,-1,/Users/mickytsai/Downloads/background/winterTree1.png,1,1
+rock,-7958498,/Users/mickytsai/Downloads/background/Rock.png,1,1
+house1,-11259599,/Users/mickytsai/Downloads/background/house1.png,1,1
+house2,-7833801,/Users/mickytsai/Downloads/background/house2.png,1,1
+castleWall,-13128041,/Users/mickytsai/Downloads/background/castleWall.png,1,1
+tower,-13452603,/Users/mickytsai/Downloads/background/tower.png,1,1
+tree2,-4547524,/Users/mickytsai/Downloads/background/tree2.png,1,1
+winterTree2,-990237,/Users/mickytsai/Downloads/background/winterTree2.png,1,1
+volcanoTree,-7759552,/Users/mickytsai/Downloads/background/volcanoTree.png,1,1

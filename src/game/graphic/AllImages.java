@@ -145,10 +145,6 @@ public class AllImages {
             SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().move().spider1()),
             SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().move().spider2()))), Global.MapAreaType.VILLAGE);
 
-    //addSpeed
-    public static ImgArrAndType addSpeed = new ImgArrAndType(new ArrayList<Image>(java.util.List.of(
-            SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().addSpeed()))), Global.MapAreaType.NONE);
-
     //questionBox
     public static ImgArrAndType questionBox = new ImgArrAndType(new ArrayList<Image>(java.util.List.of(
             SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().dontMove().question1()),
@@ -202,41 +198,6 @@ public class AllImages {
     public static ImgArrAndType no=new ImgArrAndType(new ArrayList<Image>(java.util.List.of(
             SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().no()))),Global.MapAreaType.NONE);
 
-    //lightning
-    public static ImgArrAndType lightning = new ImgArrAndType(new ArrayList<>(List.of(
-            SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().lightning().lightning0()),
-            SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().lightning().lightning1()),
-            SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().lightning().lightning2()),
-            SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().lightning().lightning3()),
-            SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().lightning().lightning4()),
-            SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().lightning().lightning5()),
-            SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().lightning().lightning6()),
-            SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().lightning().lightning7()),
-            SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().lightning().lightning8()),
-            SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().lightning().lightning9()),
-            SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().lightning().lightning10()),
-            SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().lightning().lightning11()),
-            SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().lightning().lightning12()),
-            SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().lightning().lightning13()),
-            SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().lightning().lightning14()),
-            SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().lightning().lightning15()),
-            SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().lightning().lightning16()),
-            SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().lightning().lightning17()))),Global.MapAreaType.NONE);
-
-    public static ImgArrAndType star = new ImgArrAndType(new ArrayList<>(java.util.List.of(
-            SceneController.getInstance().imageController().tryGetImage(new Path().img().props().star1()),
-            SceneController.getInstance().imageController().tryGetImage(new Path().img().props().star2()),
-            SceneController.getInstance().imageController().tryGetImage(new Path().img().props().star3()),
-            SceneController.getInstance().imageController().tryGetImage(new Path().img().props().star4()),
-            SceneController.getInstance().imageController().tryGetImage(new Path().img().props().star5()),
-            SceneController.getInstance().imageController().tryGetImage(new Path().img().props().star6()),
-            SceneController.getInstance().imageController().tryGetImage(new Path().img().props().star7()),
-            SceneController.getInstance().imageController().tryGetImage(new Path().img().props().star8()),
-            SceneController.getInstance().imageController().tryGetImage(new Path().img().props().star9()),
-            SceneController.getInstance().imageController().tryGetImage(new Path().img().props().star10()),
-            SceneController.getInstance().imageController().tryGetImage(new Path().img().props().star11()),
-            SceneController.getInstance().imageController().tryGetImage(new Path().img().props().star12())
-            )),Global.MapAreaType.NONE);
 
     //cross
     public static ImgArrAndType cross=new ImgArrAndType(new ArrayList<Image>(java.util.List.of(
@@ -249,5 +210,100 @@ public class AllImages {
     //GameOver
     public static ImgArrAndType gameOver=new ImgArrAndType(new ArrayList<Image>(java.util.List.of(
             SceneController.getInstance().imageController().tryGetImage(new Path().img().menu().Button().GameOver()))),Global.MapAreaType.NONE);
+
+    //lightning
+    public static ImgArrAndType lightning = new ImgArrAndType(new ArrayList<>(List.of(
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().propsAnimation().lightning0()),
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().propsAnimation().lightning1()),
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().propsAnimation().lightning2()),
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().propsAnimation().lightning3()),
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().propsAnimation().lightning4()),
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().propsAnimation().lightning5()),
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().propsAnimation().lightning6()),
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().propsAnimation().lightning7()),
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().propsAnimation().lightning8()),
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().propsAnimation().lightning9()),
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().propsAnimation().lightning10()),
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().propsAnimation().lightning11()),
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().propsAnimation().lightning12()),
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().propsAnimation().lightning13()),
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().propsAnimation().lightning14()),
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().propsAnimation().lightning15()),
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().propsAnimation().lightning16()),
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().propsAnimation().lightning17()))),Global.MapAreaType.NONE);
+
+    //道具動畫（superStar）
+    public static ImgArrAndType star = new ImgArrAndType(new ArrayList<>(java.util.List.of(
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().propsAnimation().star1()),
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().propsAnimation().star2()),
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().propsAnimation().star3()),
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().propsAnimation().star4()),
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().propsAnimation().star5()),
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().propsAnimation().star6()),
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().propsAnimation().star7()),
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().propsAnimation().star8()),
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().propsAnimation().star9()),
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().propsAnimation().star10()),
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().propsAnimation().star11()),
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().propsAnimation().star12()))),Global.MapAreaType.NONE);
+
+    //道具動畫（gameTimeDecrease）
+    public static ImgArrAndType gameTimeDecrease = new ImgArrAndType(new ArrayList<>(java.util.List.of(
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().propsAnimation().gameTimeDecrease1()),
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().propsAnimation().gameTimeDecrease2()),
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().propsAnimation().gameTimeDecrease3()),
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().propsAnimation().gameTimeDecrease4()),
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().propsAnimation().gameTimeDecrease5()),
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().propsAnimation().gameTimeDecrease6()),
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().propsAnimation().gameTimeDecrease7()),
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().propsAnimation().gameTimeDecrease8()),
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().propsAnimation().gameTimeDecrease9()))),Global.MapAreaType.NONE);
+
+    //道具動畫（hunterWatcher）
+    public static ImgArrAndType hunterWatcher = new ImgArrAndType(new ArrayList<>(java.util.List.of(
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().propsAnimation().hunterWatcher1()),
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().propsAnimation().hunterWatcher2()),
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().propsAnimation().hunterWatcher3()),
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().propsAnimation().hunterWatcher4()),
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().propsAnimation().hunterWatcher5()),
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().propsAnimation().hunterWatcher6()),
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().propsAnimation().hunterWatcher7()),
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().propsAnimation().hunterWatcher8()),
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().propsAnimation().hunterWatcher9()),
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().propsAnimation().hunterWatcher10()))),Global.MapAreaType.NONE);
+
+    //道具動畫（teleportation）
+    public static ImgArrAndType teleportation = new ImgArrAndType(new ArrayList<>(java.util.List.of(
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().propsAnimation().teleportation()))),Global.MapAreaType.NONE);
+
+    //道具動畫（addSpeed）
+    public static ImgArrAndType addSpeed = new ImgArrAndType(new ArrayList<>(java.util.List.of(
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().propsAnimation().addSpeed1()),
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().propsAnimation().addSpeed2()),
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().propsAnimation().addSpeed3()),
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().propsAnimation().addSpeed4()),
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().propsAnimation().addSpeed5()),
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().propsAnimation().addSpeed6()),
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().propsAnimation().addSpeed7()),
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().propsAnimation().addSpeed8()),
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().propsAnimation().addSpeed9()),
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().propsAnimation().addSpeed10()),
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().propsAnimation().addSpeed11()),
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().propsAnimation().addSpeed12()),
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().propsAnimation().addSpeed13()),
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().propsAnimation().addSpeed14()),
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().propsAnimation().addSpeed15()))),Global.MapAreaType.NONE);
+
+    //道具動畫（teleportation）
+    public static ImgArrAndType timeStop = new ImgArrAndType(new ArrayList<>(java.util.List.of(
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().propsAnimation().timeStop()))),Global.MapAreaType.NONE);
+
+    //道具動畫（trap）
+    public static ImgArrAndType trap = new ImgArrAndType(new ArrayList<>(java.util.List.of(
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().propsAnimation().spiderWeb()))),Global.MapAreaType.NONE);
+
+    //道具動畫（addPoint）
+    public static ImgArrAndType addPoint = new ImgArrAndType(new ArrayList<>(java.util.List.of(
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().propsAnimation().addPoint()))),Global.MapAreaType.NONE);
 
 }

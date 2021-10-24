@@ -23,6 +23,7 @@ public class PropsAnimation extends Animation {
         this.width = width;
         this.height = height;
         animationSpeedDelay = new Delay(animationSpeed);
+        animationSpeedDelay.loop();
         count = 0;
         AnimationTime = new Delay(animationTime);
         playPropsAnimation = false;
