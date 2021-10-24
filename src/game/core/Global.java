@@ -1,5 +1,6 @@
 package game.core;
 
+import game.Menu.Mouse;
 import game.controllers.SceneController;
 import game.utils.Path;
 
@@ -148,6 +149,7 @@ public class Global {
                     new Path().img().actors().bump().Bump4()),
             SceneController.getInstance().imageController().tryGetImage(
                     new Path().img().actors().bump().Bump5())));
+    public static Mouse mouse = new Mouse(0, 0, 50, 50);
 
 
     /**

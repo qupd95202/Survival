@@ -238,5 +238,16 @@ public class AllImages {
             SceneController.getInstance().imageController().tryGetImage(new Path().img().props().star12())
             )),Global.MapAreaType.NONE);
 
+    //cross
+    public static ImgArrAndType cross=new ImgArrAndType(new ArrayList<Image>(java.util.List.of(
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().menu().Button().cross()))),Global.MapAreaType.NONE);
+
+    //button1
+    public static ImgArrAndType button1=new ImgArrAndType(new ArrayList<Image>(java.util.List.of(
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().menu().Button().button1()))),Global.MapAreaType.NONE);
+
+    //GameOver
+    public static ImgArrAndType gameOver=new ImgArrAndType(new ArrayList<Image>(java.util.List.of(
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().menu().Button().GameOver()))),Global.MapAreaType.NONE);
 
 }

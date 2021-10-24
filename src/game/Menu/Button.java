@@ -3,25 +3,52 @@ package game.Menu;
 import game.controllers.SceneController;
 import game.core.Global;
 import game.gameObj.GameObject;
+import game.graphic.Animation;
 import game.utils.Path;
 
 import java.awt.*;
 
 /**製造menu裡的Button*/
 public class Button extends GameObject {
-    private Image img;
+    private Animation animation;
+    private Label label;
 
     public Button(int x,int y,int width,int height){
         super(x,y,width,height);
-        img= SceneController.getInstance().imageController().tryGetImage(new Path().img().menu().Button().button());
+
+    }
+    public Button(int x, int y, int width, int height, Animation animation){
+        super(x,y,width,height);
+        this.animation=animation;
+
+    }
+    public Button(int x, int y, int width, int height, Label label){
+        super(x,y,width,height);
+        this.label=label;
+
     }
     @Override
     public void paintComponent(Graphics g) {
-        g.drawImage(img,painter().left(),painter().top(),painter().width(), painter().height(),null);
+        if(animation !=null){
+            animation.paint(painter().left(),painter().top(),painter().width(), painter().height(),g);
+        }
+        if(label !=null){
+            label.paint(g);
+        }
+
     }
 
     @Override
     public void update() {
+        if(animation !=null) {
+            animation.update();
+        }
+    }
 
+    public Animation getAnimation() {
+        return animation;
+    }
+    public void setAnimation(Animation animation) {
+        this.animation=animation;
     }
 }

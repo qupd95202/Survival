@@ -1,32 +1,37 @@
 package game.Menu;
 
 import game.gameObj.GameObject;
+import game.gameObj.Rect;
 
 import java.awt.*;
 
 public class Label extends GameObject {
     private String words;
-    private int size;
-    private String typeName;
-    public Label(int x,int y,String inputWords,int size,String typeName){
+    private Font font;
+    private Color color;
+    public Label(int x,int y,String inputWords,Font font){
         super(x,y,0,0);
         this.words=inputWords;
-        this.size=size;
-        this.typeName=typeName;
+        this.font=font;
+        this.color=Color.WHITE;
     }
-    public Label(int x,int y,String inputWords,int size){
+    public Label(int x,int y,String inputWords){
         super(x,y,0,0);
         this.words=inputWords;
-        this.size=size;
-        this.typeName="";
+        this.font=FontLoader.High(20);
+        this.color=Color.WHITE;
     }
-
+    public Label(int x,int y,String inputWords,Font font,Color color){
+        super(x,y,0,0);
+        this.words=inputWords;
+        this.font=font;
+        this.color=color;
+    }
 
     @Override
     public void paintComponent(Graphics g) {
-        Font font=new Font(typeName, Font.BOLD, size);
         g.setFont(font);
-        g.setColor(Color.white);
+        g.setColor(color);
         g.drawString(words,painter().left(),painter().top());
     }
 

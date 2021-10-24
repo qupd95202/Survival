@@ -285,9 +285,6 @@ public class Path {
                     return this + "/buttonword.png";
                 }
 
-                public String button1() {
-                    return this + "/buttonword1.png";
-                }
 
                 public String button2() {
                     return this + "/buttonword2.png";
@@ -297,8 +294,8 @@ public class Path {
                     return this + "/buttonword3.png";
                 }
 
-                public String button4() {
-                    return this + "/buttonword4.png";
+                public String GameOver() {
+                    return this + "/GameOver.png";
                 }
 
                 public String mouse() {
@@ -307,6 +304,14 @@ public class Path {
 
                 public String magicWand() {
                     return this + "/magicWand.png";
+                }
+
+                public String cross() {
+                    return this + "/cross.png";
+                }
+
+                public String button1() {
+                    return this + "/button1.png";
                 }
             }
 
@@ -982,6 +987,10 @@ public class Path {
 
             public String trap() {
                 return this + "/trap.wav";
+            }
+
+            public String openScene() {
+                return this + "/openScene.wav";
             }
 
         }

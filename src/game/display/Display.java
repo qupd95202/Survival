@@ -40,6 +40,7 @@ public class Display extends JFrame {
                 .enableKeyboardTrack(gi)
                 .keyCleanMode()
                 .enableMouseTrack(gi)
+                .trackChar()
                 .gen();
 
         add(kernel);

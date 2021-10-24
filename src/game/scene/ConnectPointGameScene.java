@@ -1,14 +1,14 @@
 package game.scene;
 
+import game.Menu.CountPointScene;
+import game.Menu.FontLoader;
 import game.Menu.Label;
-import game.Menu.Mouse;
 import game.controllers.AudioResourceController;
 import game.controllers.SceneController;
 import game.core.GameTime;
 import game.core.Global;
 import game.core.Point;
 import game.gameObj.GameObject;
-import game.gameObj.Pact;
 import game.gameObj.Props;
 import game.gameObj.mapObj.MapObject;
 import game.gameObj.obstacle.TransformObstacle;
@@ -27,8 +27,6 @@ import game.utils.Path;
 
 import java.awt.*;
 import java.awt.event.MouseEvent;
-import java.io.IOException;
-import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -72,7 +70,7 @@ public class ConnectPointGameScene extends Scene implements CommandSolver.MouseC
     Animation imgWarning;
     Animation no;//當玩家為獵人時變身格會放
     //滑鼠
-    private Mouse mouse;
+//    private Mouse mouse;
 
     //提示訊息(畫面上所有的文字處理)
     private ArrayList<game.Menu.Label> labels;
@@ -87,12 +85,10 @@ public class ConnectPointGameScene extends Scene implements CommandSolver.MouseC
 
 
     public ConnectPointGameScene() {
-        connectTool = new ConnectTool();
+        connectTool = ConnectTool.instance();
         computerPlayers = connectTool.getObjectArr().getComputerPlayersConnectPoint();
         propsArrayList = connectTool.getObjectArr().getPropsArrConnectPoint();
-        connectTool.setMainPlayer(new Player(Global.SCREEN_X / 2, Global.SCREEN_Y / 2, AllImages.blue, Player.RoleState.PREY));
-        connectTool.createRoom(5550);
-        System.out.println("build");
+
     }
 
     @Override
@@ -103,15 +99,6 @@ public class ConnectPointGameScene extends Scene implements CommandSolver.MouseC
         upDatedelay.play();
         upDatedelay.loop();
 
-        try {
-
-            connectTool.connect("127.0.0.1", 5550);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        ClientClass.getInstance().sent(CONNECT, bale(""));
-        connectTool.consume();
         //遊戲時間
         startTime = System.nanoTime();
         chooseTime = 300; //單位：秒
@@ -135,9 +122,9 @@ public class ConnectPointGameScene extends Scene implements CommandSolver.MouseC
         changeBody = new Animation(AllImages.changeBody);
         imgWarning = new Animation(AllImages.WARNING);
         no = new Animation(AllImages.no);
-        transFormCDLabel = new game.Menu.Label(Global.RUNNER_X + Global.GAME_SCENE_BOX_SIZE + 5 + 15, Global.RUNNER_Y + 30, String.valueOf(mainPlayer.transformCDTime()), 20);
-        labels.add(new game.Menu.Label(Global.RUNNER_X + 75, Global.RUNNER_Y + 85, "F", 20));
-        labels.add(new Label(Global.RUNNER_X + Global.GAME_SCENE_BOX_SIZE + 5 + 75, Global.RUNNER_Y + 85, "R", 20));
+        transFormCDLabel = new game.Menu.Label(Global.RUNNER_X + Global.GAME_SCENE_BOX_SIZE + 5 + 15, Global.RUNNER_Y + 30, String.valueOf(mainPlayer.transformCDTime()), FontLoader.Future(20));
+        labels.add(new game.Menu.Label(Global.RUNNER_X + 75, Global.RUNNER_Y + 85, "F", FontLoader.Future(20)));
+        labels.add(new Label(Global.RUNNER_X + Global.GAME_SCENE_BOX_SIZE + 5 + 75, Global.RUNNER_Y + 85, "R", FontLoader.Future(20)));
         labels.add(transFormCDLabel);
 
         //將要畫的物件存進ArrayList 為了要能在ArrayList取比較 重疊時畫的先後順序（y軸）
@@ -159,8 +146,8 @@ public class ConnectPointGameScene extends Scene implements CommandSolver.MouseC
         imgVolcano = SceneController.getInstance().imageController().tryGetImage(new Path().img().background().volcano());
         imgVillage = SceneController.getInstance().imageController().tryGetImage(new Path().img().background().village());
 
-        //滑鼠
-        mouse = new Mouse(0, 0, 50, 50);
+//        //滑鼠
+//        mouse = new Mouse(0, 0, 50, 50);
 
         point = new Point();
         imgPoint = SceneController.getInstance().imageController().tryGetImage(new Path().img().numbers().coin());
@@ -172,7 +159,11 @@ public class ConnectPointGameScene extends Scene implements CommandSolver.MouseC
 
     @Override
     public void sceneEnd() {
-
+        AudioResourceController.getInstance().stop(new Path().sound().background().normalgamebehind30final());
+        CountPointScene countPointScene = new CountPointScene();
+        countPointScene.setPlayerPoint(connectTool.getMainPlayers());
+        SceneController.getInstance().change(countPointScene);
+        ConnectTool.reset();
     }
 
     @Override
@@ -200,7 +191,7 @@ public class ConnectPointGameScene extends Scene implements CommandSolver.MouseC
         //顯示技能
         skillPaint(g);
         //畫滑鼠
-        mouse.paint(g);
+        Global.mouse.paint(g);
 
         //要畫在小地圖的要加在下方
         smallMap.start(g);
@@ -238,6 +229,7 @@ public class ConnectPointGameScene extends Scene implements CommandSolver.MouseC
         transFormCDLabel.setWords(String.valueOf(mainPlayer.transformCDTime()));
         connectTool.consume();
         positionUpdate();
+        timeUP();
     }
 
     @Override
@@ -547,6 +539,15 @@ public class ConnectPointGameScene extends Scene implements CommandSolver.MouseC
         }
     }
 
+    /**
+     * 時間到
+     */
+    public void timeUP() {
+        if (chooseTime == gameTime) {
+            sceneEnd();
+        }
+    }
+
     @Override
     public void keyPressed(int commandCode, long trigTime) {
         if (commandCode == Global.KeyCommand.UP.getValue()) {
@@ -592,6 +593,8 @@ public class ConnectPointGameScene extends Scene implements CommandSolver.MouseC
 
     @Override
     public void mouseTrig(MouseEvent e, CommandSolver.MouseState state, long trigTime) {
-        mainPlayer.mouseTrig(e, state, trigTime, unPassMapObjects, transformObstacles, camera, mouse);
+        mainPlayer.mouseTrig(e, state, trigTime, unPassMapObjects, transformObstacles, camera, Global.mouse);
     }
+
+
 }

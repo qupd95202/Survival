@@ -7,19 +7,16 @@ import game.gameObj.obstacle.TransformObstacle;
 import game.gameObj.players.ComputerPlayer;
 import game.gameObj.players.Player;
 import game.graphic.AllImages;
-import game.graphic.PropsAnimation;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class ObjectArr {
     public static ArrayList<Props> propsArr = new ArrayList<Props>(List.of(new Props(), new Props(), new Props(), new Props(), new Props()));
     private ArrayList<Props> propsArrConnectPoint = new ArrayList<Props>(List.of(new Props(100, 500, Props.Type.addPoint), new Props(500, 500, Props.Type.addSpeed), new Props(2000, 500, Props.Type.teleportation), new Props(2500, 3000, Props.Type.trap)));
-    private ArrayList<ComputerPlayer> computerPlayersConnectPoint = new ArrayList<>(List.of(new ComputerPlayer(100, 100, AllImages.beige, Player.RoleState.HUNTER,0),
-            new ComputerPlayer(3000, 100, AllImages.blue, Player.RoleState.PREY,1),
-            new ComputerPlayer(100, 3000, AllImages.blue, Player.RoleState.PREY,2)));
+    private ArrayList<ComputerPlayer> computerPlayersConnectPoint = new ArrayList<>(List.of(new ComputerPlayer(100, 100, AllImages.beige, Player.RoleState.HUNTER,0,"3"),
+            new ComputerPlayer(3000, 100, AllImages.blue, Player.RoleState.PREY,1,"1"),
+            new ComputerPlayer(100, 3000, AllImages.blue, Player.RoleState.PREY,2,"2")));
     public static ArrayList<Props> propsArrSurvivalGame = new ArrayList<Props>(List.of(new Props(1), new Props(1), new Props(1), new Props(1), new Props(1)));
 
     //0-1920, 0-1920        森林有：bee bunny1 bunny2 frog snail snack
@@ -107,7 +104,6 @@ public class ObjectArr {
     public ArrayList<Props> getPropsArrConnectPoint() {
         return propsArrConnectPoint;
     }
-
 
     public ArrayList<ComputerPlayer> getComputerPlayersConnectPoint() {
         return computerPlayersConnectPoint;

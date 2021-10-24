@@ -2,6 +2,8 @@ package game.scene;
 
 ;
 
+import game.Menu.ChooseRoleScene;
+import game.controllers.SceneController;
 import game.core.Global;
 import game.gameObj.Pact;
 import game.gameObj.Props;
@@ -26,11 +28,19 @@ public class ConnectTool implements GameKernel.GameInterface {
 //    private ArrayList<MapObject> unPassMapObjects;      連接Scene時，建構子時{set自己角色(new 角色)，加進players}，Scenebegin()，再sent自己創角的訊息出去，server在等人連接的畫面只要一直consume即可。
 //    private ArrayList<TransformObstacle> transformObstacles;
 
+    private static ConnectTool ct;
 
     public ConnectTool() {
         objectArr = new ObjectArr();
         isConnect = false;
         this.mainPlayers = new ArrayList<>();
+    }
+
+    public static ConnectTool instance() {
+        if (ct == null) {
+            ct = new ConnectTool();
+        }
+        return ct;
     }
 
     public void setIsConnect(boolean isConnect) {
@@ -47,13 +57,10 @@ public class ConnectTool implements GameKernel.GameInterface {
     }
 
     public void connect(String host, int port) throws IOException {
-        System.out.println("use connect");
         game.network.Client.ClientClass.getInstance().connect(host, port);
         if (mainPlayer != null) {
-            System.out.println("mainPlayer");
             mainPlayer.setID(game.network.Client.ClientClass.getInstance().getID());
             mainPlayers.add(mainPlayer);
-            System.out.println("connect Add");
         }
         isConnect = true;
     }
@@ -103,10 +110,10 @@ public class ConnectTool implements GameKernel.GameInterface {
                                 }
                             }
                             if (!isburn) {
-                                Player newPlayer = new Player(Global.SCREEN_X / 2, Global.SCREEN_Y / 2, AllImages.blue, Player.RoleState.PREY);
+                                Player newPlayer = new Player(Global.SCREEN_X / 2, Global.SCREEN_Y / 2, ChooseRoleScene.imgArrAndTypeParseInt(Integer.parseInt(strs.get(0))), Player.RoleState.PREY, strs.get(1));
                                 newPlayer.setID(serialNum);
                                 mainPlayers.add(newPlayer);
-                                ClientClass.getInstance().sent(Pact.CONNECT, bale());
+                                ClientClass.getInstance().sent(CONNECT, bale(strs.get(0), strs.get(1)));
                             }
                             break;
                         case COMPUTER_MOVE:
@@ -280,6 +287,9 @@ public class ConnectTool implements GameKernel.GameInterface {
                         case COMPUTER_UPDATE_POSITION:
                             objectArr.getComputerPlayersConnectPoint().get(Integer.parseInt(strs.get(0))).setXY(Integer.parseInt(strs.get(1)), Integer.parseInt(strs.get(2)));
                             break;
+                        case START_GAME:
+                            SceneController.getInstance().change(new ConnectPointGameScene());
+                            break;
                     }
                 }
             });
@@ -299,4 +309,9 @@ public class ConnectTool implements GameKernel.GameInterface {
             mainPlayers.get(i).update();
         }
     }
+
+    public static void reset() {
+        ct = null;
+    }
+
 }

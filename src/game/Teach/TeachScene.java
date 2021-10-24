@@ -1,9 +1,9 @@
 package game.Teach;
 
 
+import game.Menu.*;
 import game.Menu.Label;
-import game.Menu.MenuScene;
-import game.Menu.Mouse;
+import game.controllers.AudioResourceController;
 import game.controllers.SceneController;
 import game.core.Global;
 import game.gameObj.GameObject;
@@ -47,11 +47,6 @@ public class TeachScene extends Scene implements CommandSolver.MouseCommandListe
     private Delay propsRemove;
     private Delay labelTime;
 
-    //時間計算
-    private long startTime;
-    private long gameTime;
-    private long chooseTime; //選擇的遊戲時間
-    private long lastTime;
 
     //關閉的區域（在裡面扣分）
     private boolean inclosedArea;
@@ -64,8 +59,8 @@ public class TeachScene extends Scene implements CommandSolver.MouseCommandListe
     Animation changeBody;
     Animation imgWarning;
     Animation no;//當玩家為獵人時變身格會放
-    //滑鼠
-    private Mouse mouse;
+//    //滑鼠
+//    private Mouse mouse;
 
     //提示訊息(畫面上所有的文字處理)
     private ArrayList<Label> labels;
@@ -78,22 +73,18 @@ public class TeachScene extends Scene implements CommandSolver.MouseCommandListe
     private Boolean firstCongratulations;
 
     private Image img;
+    private Animation button;
 
     @Override
     public void sceneBegin() {
-        //遊戲時間
-        startTime = System.nanoTime();
-        chooseTime = 300; //單位：秒
-        inclosedArea = false;
-
+        AudioResourceController.getInstance().play(new Path().sound().background().gameFirst());
         gameObjectList = new ArrayList<>();//初始ArrayList
         transformObstacles = new ArrayList<>();
         players = new ArrayList<>();
         labels = new ArrayList<Label>();
-
-        teachStrings = new ArrayList<>();
+        teachStrings=new ArrayList<>();
         propsArrayList = new ArrayList<Props>();
-        labelTime = new Delay(120);
+        labelTime=new Delay(120);
 
 
         //先將要畫的物件初始
@@ -111,53 +102,47 @@ public class TeachScene extends Scene implements CommandSolver.MouseCommandListe
         imgForest = SceneController.getInstance().imageController().tryGetImage(new Path().img().background().forest());
         setLabels();
         setAnimation();
+        teachCount=0;
 
-        teachCount = 0;
-
-        mouse = new Mouse(0, 0, 50, 50);
-        firstBee = true;
-        firstProps = true;
-        firstCongratulations = true;
-
+//        mouse = new Mouse(0, 0, 50, 50);
+        firstBee=true;
+        firstProps=true;
+        firstCongratulations=true;
+        button=new Animation(AllImages.button1);
     }
 
 
     @Override
     public void sceneEnd() {
-
-        this.gameObjectList = null; //將Game要畫的所有GameObject存起來
-        this.propsArrayList = null;
-        this.mainPlayer = null;
-        this.players = null;
-        this.transformObstacles = null;
-        this.unPassMapObjects = null;
-        this.camera = null;
-        this.gameMap = null;
-        this.imgForest = null;
-        this.propsReProduce = null;
-        this.propsRemove = null;
-        this.labelTime = null;
-        this.runnerLight = null;
-        this.runnerDark = null;
-        this.runnerNormal = null;
-        this.changeBody = null;
-        this.imgWarning = null;
-        this.no = null;
-        this.mouse = null;
-        this.labels = null;
-        this.teachLabel = null;
-        this.teachStrings = null;
-        this.firstBee = null;
-        this.firstProps = null;
-        this.firstCongratulations = null;
-
-
+        this.gameObjectList=null; //將Game要畫的所有GameObject存起來
+        this.propsArrayList=null;
+        this.mainPlayer=null;
+        this.players=null;
+        this.transformObstacles=null;
+        this.unPassMapObjects=null;
+        this.camera=null;
+        this.gameMap=null;
+        this.imgForest=null;
+        this.propsReProduce=null;
+        this.propsRemove=null;
+        this.labelTime=null;
+        this.runnerLight=null;
+        this.runnerDark=null;
+        this.runnerNormal=null;
+        this.changeBody=null;
+        this.imgWarning=null;
+        this.no=null;
+        this.labels=null;
+        this.teachLabel=null;
+        this.teachStrings=null;
+        this.firstBee=null;
+        this.firstProps=null;
+        this.firstCongratulations=null;
+        AudioResourceController.getInstance().stop(new Path().sound().background().gameFirst());
     }
 
     @Override
     public void paint(Graphics g) {//留意畫的順序
-
-
         g.drawImage(imgForest, 0, 0, 1920, 1920, null);
 
         gameMap.paint(g);
@@ -165,23 +150,23 @@ public class TeachScene extends Scene implements CommandSolver.MouseCommandListe
         gameObjectList.forEach(gameObject -> gameObject.paint(g));
         propsPaint(g);
 
-
+        button.paint(0,Global.SCREEN_Y-100,Global.SCREEN_X,100,g);
         //判斷有沒有道具
         if (!mainPlayer.isCanUseTeleportation() && !mainPlayer.isUseTeleportation()) {
-            runnerDark.paint(Global.RUNNER_X, Global.RUNNER_Y, Global.GAME_SCENE_BOX_SIZE, Global.GAME_SCENE_BOX_SIZE, g);
+            runnerDark.paint(Global.RUNNER_X, Global.RUNNER_Y-100, Global.GAME_SCENE_BOX_SIZE, Global.GAME_SCENE_BOX_SIZE, g);
         } else if (mainPlayer.isCanUseTeleportation() && !mainPlayer.isUseTeleportation()) {
-            runnerNormal.paint(Global.RUNNER_X, Global.RUNNER_Y, Global.GAME_SCENE_BOX_SIZE, Global.GAME_SCENE_BOX_SIZE, g);
+            runnerNormal.paint(Global.RUNNER_X, Global.RUNNER_Y-100, Global.GAME_SCENE_BOX_SIZE, Global.GAME_SCENE_BOX_SIZE, g);
         } else {
-            runnerLight.paint(Global.RUNNER_X, Global.RUNNER_Y, Global.GAME_SCENE_BOX_SIZE, Global.GAME_SCENE_BOX_SIZE, g);
+            runnerLight.paint(Global.RUNNER_X, Global.RUNNER_Y-100, Global.GAME_SCENE_BOX_SIZE, Global.GAME_SCENE_BOX_SIZE, g);
         }
 
         //變身格
-        changeBody.paint(105, Global.SCREEN_Y - 100, 100, 100, g);
+        changeBody.paint(105, Global.SCREEN_Y - 200, 100, 100, g);
         if (mainPlayer.getStoredTransformAnimation() != null) {
-            mainPlayer.getStoredTransformAnimation().paint(125, Global.SCREEN_Y - 80, 60, 60, g);
+            mainPlayer.getStoredTransformAnimation().paint(125, Global.SCREEN_Y - 180, 60, 60, g);
         }
         if (mainPlayer.roleState == Player.RoleState.HUNTER) {
-            no.paint(105, Global.SCREEN_Y - 100, 100, 100, g);
+            no.paint(105, Global.SCREEN_Y - 200, 100, 100, g);
         }
 
         for (int i = 0; i < labels.size(); i++) {
@@ -189,13 +174,13 @@ public class TeachScene extends Scene implements CommandSolver.MouseCommandListe
         }
 
         teachLabel.paint(g);
-        mouse.paint(g);
+        Global.mouse.paint(g);
 
     }
 
     @Override
     public void update() {
-        mapAreaClosing();
+
 
         //為了解決player與npc重疊時 畫面物件顯示先後順序問題
 
@@ -211,38 +196,32 @@ public class TeachScene extends Scene implements CommandSolver.MouseCommandListe
         propsCollisionCheckUpdate();
         camera.update();
         labels.get(2).setWords(String.valueOf(mainPlayer.transformCDTime()));
-        labels.get(3).setWords(("你的積分:" + mainPlayer.getPoint()));
 
-        if (teachLabel != null) {
-            if (labelTime.count() && teachCount < teachStrings.size() - 1) {
-
+        if(teachLabel!=null){
+            if(labelTime.count() && teachCount<teachStrings.size()-1){
                 teachCount++;
                 teachLabel.setWords(teachStrings.get(teachCount));
             }
         }
 
 
-
-        if (mainPlayer.roleState == Player.RoleState.PREY && firstBee) {
-            if (labelTime.count()) {
+        if(mainPlayer.roleState== Player.RoleState.PREY && firstBee){
+            if(labelTime.count()){
                 produceBee();
-                firstBee = false;
+                firstBee=false;
             }
         }
-        if (mainPlayer.getCurrentAnimation().getImg() == AllImages.bee && firstProps) {
-            if (labelTime.count()) {
-
+        if(mainPlayer.getCurrentAnimation().getImg()==AllImages.bee && firstProps){
+            if(labelTime.count()) {
                 firstProps = false;
                 produceProps();
             }
         }
-
-        if (mainPlayer.isCanUseTeleportation() && mainPlayer.isUseTeleportation() && firstCongratulations) {
-            firstCongratulations = false;
+        if(mainPlayer.isCanUseTeleportation() && mainPlayer.isUseTeleportation() && firstCongratulations){
+            firstCongratulations=false;
             produceCongratulations();
         }
-        if (firstCongratulations == false && teachCount == teachStrings.size() - 1) {
-
+        if(firstCongratulations==false && teachCount==teachStrings.size()-1){
             SceneController.getInstance().change(new MenuScene());
         }
 
@@ -288,14 +267,17 @@ public class TeachScene extends Scene implements CommandSolver.MouseCommandListe
         });
     }
 
+
+
+
     /**
      * 讓角色無法穿過該物件
      */
     public void keepNotPass(ArrayList<? extends GameObject> gameObjects) {
         for (Player player : players) {
+//            player.setNothingBlock(true);
             for (GameObject gameObject : gameObjects) {
                 player.isCollisionForMovement(gameObject);
-
             }
         }
     }
@@ -325,42 +307,10 @@ public class TeachScene extends Scene implements CommandSolver.MouseCommandListe
         }
     }
 
-    private void mapAreaClosing() {
-        if (gameTime > 30 && gameTime <= 60) {
-            if (mainPlayer.getPositionType() == Global.MapAreaType.FOREST) {
-                inclosedArea = true;
-            } else {
-                inclosedArea = false;
-            }
-        } else if (gameTime > 60 && gameTime <= 120) {
-            if (mainPlayer.getPositionType() == Global.MapAreaType.FOREST ||
-                    mainPlayer.getPositionType() == Global.MapAreaType.ICEFIELD) {
-                inclosedArea = true;
-            } else {
-                inclosedArea = false;
-            }
-        } else if (gameTime > 120) {
-            if (mainPlayer.getPositionType() != Global.MapAreaType.VILLAGE) {
-                inclosedArea = true;
-            } else {
-                inclosedArea = false;
-            }
-        }
-    }
 
 
-    private void paintWarning(Graphics g) {
-        if (inclosedArea) {
-            g.setColor(Color.RED);
-            imgWarning.paint(
-                    Global.SCREEN_X / 2 - 50,
-                    100,
-                    120,
-                    50,
-                    g);
-            g.setColor(Color.BLACK);
-        }
-    }
+
+
 
 
     /**
@@ -408,20 +358,17 @@ public class TeachScene extends Scene implements CommandSolver.MouseCommandListe
             }
             mainPlayer.useTeleportation(mouseX, mouseY);
         }
-        mouse.mouseTrig(e, state, trigTime);
+        Global.mouse.mouseTrig(e, state, trigTime);
     }
 
     public void setLabels() {
-        labels.add(new Label(Global.RUNNER_X + 75, Global.RUNNER_Y + 85, "F", 20));
-        labels.add(new Label(Global.RUNNER_X + Global.GAME_SCENE_BOX_SIZE + 5 + 75, Global.RUNNER_Y + 85, "R", 20));
-        labels.add(new Label(Global.RUNNER_X + Global.GAME_SCENE_BOX_SIZE + 5 + 15, Global.RUNNER_Y + 30, String.valueOf(mainPlayer.transformCDTime()), 20));
-
-        labels.add(new Label(900, 30, "你的積分:" + mainPlayer.getPoint(), 20, "微軟正黑體"));
+        labels.add(new Label(Global.RUNNER_X + 75, Global.RUNNER_Y + 85-100, "F", FontLoader.Future(20)));
+        labels.add(new Label(Global.RUNNER_X + Global.GAME_SCENE_BOX_SIZE + 5 + 75, Global.RUNNER_Y + 85-100, "R", FontLoader.Future(20)));
+        labels.add(new Label(Global.RUNNER_X + Global.GAME_SCENE_BOX_SIZE + 5 + 15, Global.RUNNER_Y + 30-100, String.valueOf(mainPlayer.transformCDTime()), FontLoader.Future(20)));
 
     }
 
-    public void setAnimation() {
-
+    public void setAnimation(){
         runnerDark = new Animation(AllImages.runnerDark);
         runnerLight = new Animation(AllImages.runnerLight);
         runnerNormal = new Animation(AllImages.runnerNormal);
@@ -433,47 +380,45 @@ public class TeachScene extends Scene implements CommandSolver.MouseCommandListe
 
     /**
      * 先有玩家
-     */
-    private void producePlayer() {
-        mainPlayer = new TeachPlayer(Global.SCREEN_X / 2, Global.SCREEN_Y / 2, AllImages.beige, Player.RoleState.HUNTER, Global.SCREEN_X, Global.SCREEN_Y);
+     * */
+    private void producePlayer(){
+        mainPlayer = new TeachPlayer(Global.SCREEN_X / 2, Global.SCREEN_Y / 2, AllImages.beige, Player.RoleState.HUNTER, Global.SCREEN_X, Global.SCREEN_Y-100);
         players.add(mainPlayer);
         players.add(new TeachComputerPlayer(500, 500, AllImages.blue, Player.RoleState.PREY, Global.SCREEN_X, Global.SCREEN_Y));
         teachStrings.add("");
         teachStrings.add("      使用鍵盤WASD上下移動       ");
-        teachStrings.add("當身分為獵人時左下角變身格會呈現叉叉");
-        teachStrings.add("     追捕獵物獲取積分並交換身分        ");
-        teachStrings.add("");
+        teachStrings.add("當身分為HUNTER時左下角格子出現叉叉");
+        teachStrings.add("     請試著追捕其他角色獲取積分並交換身分        ");
+
 
         labelTime.play();
         labelTime.loop();
-
-        teachLabel = new Label(Global.SCREEN_X / 3 - 150, Global.SCREEN_Y / 5, teachStrings.get(0), 40, "微軟正黑體");
+        teachLabel=new Label(Global.SCREEN_X/4-100,Global.SCREEN_Y-40,teachStrings.get(0),FontLoader.dotChinese(40));
     }
-
-    private void produceBee() {
-        teachStrings.add("             當身分變為普通玩家        ");
-        teachStrings.add("     即可使用魔法棒點擊地圖物件        ");
-        teachStrings.add("     並按R變身為該物件隱身在地圖中        ");
+    private void produceBee(){
         teachStrings.add("");
+        teachStrings.add("             身分為普通玩家        ");
+        teachStrings.add("     即可使用魔法棒click物件        ");
+        teachStrings.add("     並按R成為該物件hide在map中        ");
+
         transformObstacles.add(new MovingObstacle(800, 300, AllImages.bee));
         transformObstacles.forEach(transformObstacle -> gameObjectList.addAll(List.of(transformObstacle)));
 
     }
-
-    private void produceProps() {
-        teachStrings.add("          地圖會隨機產生出道具        ");
-        teachStrings.add("           請撿取道具        ");
-        teachStrings.add("        當道具為瞬間移動時        ");
-        teachStrings.add("          左下方格則會亮起        ");
-        teachStrings.add("     按F並點擊地圖上任一點即可順移        ");
+    private void produceProps(){
         teachStrings.add("");
+        teachStrings.add("          map出現random道具        ");
+        teachStrings.add("           請touch道具        ");
+        teachStrings.add("        當道具為瞬間移動時        ");
+        teachStrings.add("          左下方格則亮起        ");
+        teachStrings.add("     按F並click地上任一點即可順移        ");
 
-        propsArrayList.add(new Props(Global.SCREEN_X / 2, Global.SCREEN_Y / 2 - 100, Props.Type.teleportation));
-        propsArrayList.add(new Props(Global.SCREEN_X / 3 - 100, Global.SCREEN_Y / 3 - 100, Props.Type.teleportation));
+        propsArrayList.add(new Props(Global.SCREEN_X / 2, Global.SCREEN_Y / 2 - 100,Props.Type.teleportation));
+        propsArrayList.add(new Props( Global.SCREEN_X / 3 - 100, Global.SCREEN_Y / 3 - 100,Props.Type.teleportation));
     }
-
-    private void produceCongratulations() {
-        teachStrings.add("            恭喜你已具備基本技能        ");
+    private void produceCongratulations(){
+        teachStrings.add("");
+        teachStrings.add("            恭喜~已具備基本技能        ");
         teachStrings.add("            可以到遊戲模式遊玩囉        ");
         teachStrings.add("");
     }

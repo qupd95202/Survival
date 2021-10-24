@@ -4,7 +4,7 @@ import game.utils.Delay;
 
 import java.awt.*;
 
-//道具觸發時動畫
+//道具觸發時動畫 只會放一次動畫
 public class PropsAnimation extends Animation {
     private Delay animationSpeedDelay;//動畫播放速度
     private Delay AnimationTime;//動畫播放多久
@@ -24,7 +24,6 @@ public class PropsAnimation extends Animation {
         this.height = height;
         animationSpeedDelay = new Delay(animationSpeed);
         count = 0;
-        animationSpeedDelay.loop();
         AnimationTime = new Delay(animationTime);
         playPropsAnimation = false;
     }
@@ -48,7 +47,6 @@ public class PropsAnimation extends Animation {
                 count = ++count % img.getImageArrayList().size();
             }
         }
-
     }
 
     public boolean isPlayPropsAnimation() {

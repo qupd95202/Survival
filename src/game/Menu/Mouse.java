@@ -15,7 +15,7 @@ public class Mouse extends GameObject implements CommandSolver.MouseCommandListe
     private Image img;
 
 
-    public Mouse(int x,int y,int width,int height){
+    public  Mouse(int x,int y,int width,int height){
         super(x,y,width,height);
         img= SceneController.getInstance().imageController().tryGetImage(new Path().img().menu().Button().magicWand());
 

@@ -18,8 +18,8 @@ public class EditText extends Label implements CommandSolver.KeyListener {
     private int size;
 
 
-    public EditText(int x, int y,int size,String hintString) {
-        super(x, y,"",size);
+    public EditText(int x, int y,String hintString) {
+        super(x, y,"");
         this.hintString = hintString;
         isEditable =false;
         delay =new Delay(Global.UPDATE_TIMES_PER_SEC / 2);;
@@ -58,14 +58,14 @@ public class EditText extends Label implements CommandSolver.KeyListener {
     @Override
     public void paintComponent(Graphics g) {
         if(isEditable && editText==""){
-            g.setColor(Color.gray);
+            g.setColor(Color.black);
             g.drawString(hintString,painter().left(),painter().top());
             if(!delay.count()) {
                 g.drawString("|", painter().left() - 5, painter().top() - 2);
             }
         }else {
-            g.setColor(Color.gray);
-            Font font=new Font("", Font.BOLD,size);
+            g.setColor(Color.black);
+            Font font=new Font("", Font.BOLD,20);
             g.setFont(font);
             g.drawString(editText,painter().left(),painter().top());
         }
@@ -108,6 +108,12 @@ public class EditText extends Label implements CommandSolver.KeyListener {
 
     public void setIsEditable(Boolean inputIsEdited){
         isEditable =inputIsEdited;
+    }
+    public Boolean getIsEditable(){
+        return isEditable;
+    }
+    public String getEditText(){
+        return editText;
     }
 
 }

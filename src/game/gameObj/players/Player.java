@@ -1,7 +1,6 @@
 package game.gameObj.players;
 
 import game.Menu.Mouse;
-import game.controllers.AudioResourceController;
 import game.core.Global;
 import game.core.Movement;
 import game.core.Position;
@@ -19,6 +18,7 @@ import game.scene_process.Camera;
 import game.utils.CommandSolver;
 import game.utils.Delay;
 import game.utils.Path;
+import game.controllers.AudioResourceController;
 
 import java.awt.*;
 import java.awt.event.MouseEvent;
@@ -90,6 +90,10 @@ public class Player extends GameObject implements CommandSolver.KeyListener {
     //連線相關
     private int id = 0;
 
+    //名字
+    private String name;
+
+
     //for連線用的Player 需要 set當前動畫 和 set是什麼身分
 //    public Player(int x, int y, ImgArrAndType imageArrayList, RoleState roleState) {
 //        super(x, y, Global.PLAYER_WIDTH, Global.PLAYER_HEIGHT);
@@ -123,12 +127,13 @@ public class Player extends GameObject implements CommandSolver.KeyListener {
 //    }
 
 
-    public Player(int x, int y, ImgArrAndType imageArrayList, RoleState roleState) {
+    public Player(int x, int y, ImgArrAndType imageArrayList, RoleState roleState, String name) {
         super(x, y, Global.PLAYER_WIDTH, Global.PLAYER_HEIGHT);
         movement = new Movement(Global.NORMAL_SPEED);//一般角色移動
         collider().scale(painter().width() - 10, painter().height() - 10);
         painter().setCenter(collider().centerX(), collider().centerY());
         point = 0;
+        this.name = name;
 
         canMove = true;
         canPass = true;
@@ -386,6 +391,7 @@ public class Player extends GameObject implements CommandSolver.KeyListener {
                 }
             } else if (movingState == MovingState.WALK) {
                 point++;
+
             }
         }
     }
@@ -459,6 +465,7 @@ public class Player extends GameObject implements CommandSolver.KeyListener {
                 if (Global.IS_DEBUG) {
                     System.out.println("加分");
                 }
+                AudioResourceController.getInstance().play(new Path().sound().background().addSpeed());
                 point += 10;
         }
     }
@@ -614,5 +621,13 @@ public class Player extends GameObject implements CommandSolver.KeyListener {
 
     public int ID() {
         return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public Animation getCurrentAnimation() {
+        return currentAnimation;
     }
 }

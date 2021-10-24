@@ -1,6 +1,5 @@
 package game.gameObj.players;
 
-import game.controllers.AudioResourceController;
 import game.core.Global;
 
 import game.gameObj.GameObject;
@@ -12,7 +11,6 @@ import game.graphic.Animation;
 import game.graphic.ImgArrAndType;
 import game.network.Client.ClientClass;
 import game.utils.Delay;
-import game.utils.Path;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -58,8 +56,8 @@ public class ComputerPlayer extends Player {
     private int id;
     private boolean isConnect;
 
-    public ComputerPlayer(int x, int y, ImgArrAndType imageArrayList, RoleState roleState) {
-        super(x, y, imageArrayList, roleState);
+    public ComputerPlayer(int x, int y, ImgArrAndType imageArrayList, RoleState roleState,String num) {
+        super(x, y, imageArrayList, roleState,"AI"+" "+num);
         this.mode = mode;
         speed = Global.COMPUTER_SPEED1;
         chaseDistance = Global.COMPUTER_CHASE_DISTANCE2;
@@ -85,8 +83,8 @@ public class ComputerPlayer extends Player {
         iniMoveOnY = Global.random(-2, 1);
     }
 
-    public ComputerPlayer(int x, int y, ImgArrAndType imageArrayList, RoleState roleState, int id) {
-        super(x, y, imageArrayList, roleState);
+    public ComputerPlayer(int x, int y, ImgArrAndType imageArrayList, RoleState roleState, int id,String num) {
+        super(x, y, imageArrayList, roleState,"AI"+" "+num);
         isConnect = true;
         speed = Global.COMPUTER_SPEED2;
         chaseDistance = Global.COMPUTER_CHASE_DISTANCE2;
@@ -122,7 +120,6 @@ public class ComputerPlayer extends Player {
     public void update() {
         if (roleState == RoleState.HUNTER) {
             hunterUpdate();
-            ;
         } else {
             preyUpdate();
         }
@@ -276,7 +273,7 @@ public class ComputerPlayer extends Player {
             propsNearest = dc;
             chasedProps = props;
         }
-        if (chasedProps != null) {
+        if (chasedProps == null) {
             return;
         }
         if (propsNearest < propsChaseDistance) {
@@ -354,7 +351,6 @@ public class ComputerPlayer extends Player {
                 float chaseDy = Math.abs(chasedPlayer.collider().bottom() - painter().centerY() - 10);
                 float chaseDc = (float) Math.sqrt(chaseDx * chaseDx + chaseDy * chaseDy);//計算斜邊,怪物與人物的距離
                 if (chaseDc >= Global.COMPUTER_GIVE_UP_DISTANCE2) {
-                    System.out.println("不追囉");
                     isChase = false;
                     nearest = Global.NEAREST;
                 }

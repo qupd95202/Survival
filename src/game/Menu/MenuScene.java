@@ -4,9 +4,9 @@ import game.Teach.TeachScene;
 import game.controllers.AudioResourceController;
 import game.controllers.SceneController;
 import game.core.Global;
-import game.scene.SinglePointGameScene;
+import game.graphic.AllImages;
+import game.graphic.Animation;
 import game.scene.Scene;
-import game.scene.SingleSurvivalGameScene;
 import game.utils.CommandSolver;
 import game.utils.Path;
 
@@ -24,65 +24,77 @@ public class MenuScene extends Scene implements CommandSolver.MouseCommandListen
     //文字
     private ArrayList<Label> labels;
 
+//    //滑鼠
+//    private Mouse mouse;
 
-    //滑鼠
-    private Mouse mouse;
-
+    //動畫
+    ArrayList<Animation> animations;
 
     @Override
     public void sceneBegin() {
         //主選單背景圖
-        img = SceneController.getInstance().imageController().tryGetImage(new Path().img().menu().Scene().scene5());
-        AudioResourceController.getInstance().loop(new Path().sound().background().lovelyflower(), -1);
-        //按鈕
-        buttons = new ArrayList<Button>();
-        buttons.add(new Button(Global.SCREEN_X / 3 - 50, Global.SCREEN_Y / 4 + 50, 360, 70));
-        buttons.add(new Button(Global.SCREEN_X / 3 - 50, Global.SCREEN_Y / 4 + 130, 360, 70));
-        buttons.add(new Button(Global.SCREEN_X / 3 - 50, Global.SCREEN_Y / 4 + 210, 360, 70));
-        buttons.add(new Button(Global.SCREEN_X / 3 - 50, Global.SCREEN_Y / 4 + 290, 360, 70));
+        img = SceneController.getInstance().imageController().tryGetImage(new Path().img().menu().Scene().scene9());
+        AudioResourceController.getInstance().play(new Path().sound().background().lovelyflower());
 
         //文字
         labels = new ArrayList<Label>();
-        labels.add(new Label(Global.SCREEN_X / 3 - 70, Global.SCREEN_Y / 4, "Survival", 100));
-        labels.add(new Label(buttons.get(0).collider().left() + 15, buttons.get(0).collider().top() + 50, "  SINGLE GAME ", 40));
-        labels.add(new Label(buttons.get(1).collider().left() + 15, buttons.get(1).collider().top() + 50, " CREATE ROOM ", 40));
-        labels.add(new Label(buttons.get(2).collider().left() + 15, buttons.get(2).collider().top() + 50, "CONNECT ROOM", 40));
-        labels.add(new Label(buttons.get(3).collider().left() + 15, buttons.get(3).collider().top() + 50, "   TEACH  GAME ", 40));
+        labels.add(new Label(Global.SCREEN_X / 3 + 30, Global.SCREEN_Y / 4 - 30, "MENU", FontLoader.Blocks(100)));
+        labels.add(new Label(Global.SCREEN_X / 3 + 30, labels.get(0).painter().bottom() + 100, "  SINGLE GAME ", FontLoader.Blocks(40)));
+        labels.add(new Label(Global.SCREEN_X / 3 + 30, labels.get(1).painter().bottom() + 100, "  CREATE ROOM ", FontLoader.Blocks(40)));
+        labels.add(new Label(Global.SCREEN_X / 3 + 30, labels.get(2).painter().bottom() + 100, "CONNECT ROOM", FontLoader.Blocks(40)));
+        labels.add(new Label(Global.SCREEN_X / 3 + 30, labels.get(3).painter().bottom() + 100, "   TEACH  GAME ", FontLoader.Blocks(40)));
 
-        mouse = new Mouse(0, 0, 50, 50);
+        //按鈕
+        buttons = new ArrayList<Button>();
+        buttons.add(new Button(labels.get(1).painter().left(), labels.get(1).painter().top() - 40, 360, 40));
+        buttons.add(new Button(labels.get(2).painter().left(), labels.get(2).painter().top() - 40, 360, 40));
+        buttons.add(new Button(labels.get(3).painter().left(), labels.get(3).painter().top() - 40, 360, 40));
+        buttons.add(new Button(labels.get(4).painter().left(), labels.get(4).painter().top() - 40, 360, 40));
+
+//        mouse=new Mouse(0,0,50,50);
+
+        //動畫
+        animations = new ArrayList<>();
+        animations.add(new Animation(AllImages.beige));
+        animations.add(new Animation(AllImages.blue));
+        animations.add(new Animation(AllImages.pink));
+        animations.add(new Animation(AllImages.yellow));
+
+
     }
 
     @Override
     public void sceneEnd() {
-        this.labels=null;
-        this.buttons=null;
-        this.img=null;
-        this.mouse=null;
+        this.labels = null;
+        this.buttons = null;
+        this.img = null;
     }
 
     @Override
     public void paint(Graphics g) {
         g.drawImage(img, 0, 0, Global.SCREEN_X, Global.SCREEN_Y, null);
-
+        for (int i = 0; i < animations.size(); i++) {
+            animations.get(i).paint(Global.SCREEN_X / 4, Global.SCREEN_Y / 4 + i * 100, Global.UNIT_WIDTH * 2, Global.UNIT_HEIGHT * 2, g);
+        }
+        for (int i = 0; i < labels.size(); i++) {
+            labels.get(i).paint(g);
+        }
         for (int i = 0; i < buttons.size(); i++) {
             buttons.get(i).paint(g);
         }
-        for (int i = 0; i < labels.size(); i++) {
-            labels.get(i).paint(g);
-        }
 
 
-        for (int i = 0; i < labels.size(); i++) {
-            labels.get(i).paint(g);
-        }
-
-        mouse.paint(g);
+        Global.mouse.paint(g);
 
     }
 
     @Override
     public void update() {
-        mouse.update();
+        Global.mouse.update();
+        for (int i = 0; i < animations.size(); i++) {
+            animations.get(i).update();
+        }
+
     }
 
     @Override
@@ -90,30 +102,29 @@ public class MenuScene extends Scene implements CommandSolver.MouseCommandListen
         return this;
     }
 
-
     @Override
     public CommandSolver.KeyListener keyListener() {
         return null;
     }
 
-
     @Override
     public void mouseTrig(MouseEvent e, CommandSolver.MouseState state, long trigTime) {
         if (state == CommandSolver.MouseState.CLICKED) {
-            if (mouse.isCollision(buttons.get(0))) {
+            if (Global.mouse.isCollision(buttons.get(0))) {
                 SceneController.getInstance().change(new SingleChooseScene());
             }
-            if (mouse.isCollision(buttons.get(1))) {
-                SceneController.getInstance().change(new SingleSurvivalGameScene());
+            if (Global.mouse.isCollision(buttons.get(1))) {
+                SceneController.getInstance().change(new CreateRoomScene());
             }
-            if (mouse.isCollision(buttons.get(2))) {
-                SceneController.getInstance().change(new ConnectScene());
+            if (Global.mouse.isCollision(buttons.get(2))) {
+                SceneController.getInstance().change(new ConnectRoomScene());
             }
-            if (mouse.isCollision(buttons.get(3))) {
+            if (Global.mouse.isCollision(buttons.get(3))) {
+                sceneEnd();
+                AudioResourceController.getInstance().stop(new Path().sound().background().lovelyflower());
                 SceneController.getInstance().change(new TeachScene());
             }
         }
-        mouse.mouseTrig(e, state, trigTime);
-
+        Global.mouse.mouseTrig(e, state, trigTime);
     }
 }

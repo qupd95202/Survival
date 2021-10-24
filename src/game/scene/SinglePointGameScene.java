@@ -1,7 +1,7 @@
 package game.scene;
 
+import game.Menu.*;
 import game.Menu.Label;
-import game.Menu.Mouse;
 import game.controllers.AudioResourceController;
 import game.controllers.SceneController;
 import game.core.GameTime;
@@ -65,8 +65,8 @@ public class SinglePointGameScene extends Scene implements CommandSolver.MouseCo
     Animation changeBody;
     Animation imgWarning;
     Animation no;//當玩家為獵人時變身格會放
-    //滑鼠
-    private Mouse mouse;
+//    //滑鼠
+//    private Mouse mouse;
 
     //提示訊息(畫面上所有的文字處理)
     private ArrayList<Label> labels;
@@ -96,22 +96,22 @@ public class SinglePointGameScene extends Scene implements CommandSolver.MouseCo
         propsReProduce.loop();
 
         //主角
-        mainPlayer = new Player(Global.SCREEN_X / 2, Global.SCREEN_Y / 2, AllImages.beige, Player.RoleState.HUNTER);
+        mainPlayer = new Player(Global.SCREEN_X / 2, Global.SCREEN_Y / 2, AllImages.beige, Player.RoleState.HUNTER, "Player 1");
         //新增玩家
         players.add(mainPlayer);
         //電腦
-        players.add(new ComputerPlayer(100, 100, AllImages.blue, Player.RoleState.PREY));
-        players.add(new ComputerPlayer(3000, 100, AllImages.blue, Player.RoleState.PREY));
-        players.add(new ComputerPlayer(100, 3000, AllImages.blue, Player.RoleState.PREY));
+        players.add(new ComputerPlayer(100, 100, AllImages.blue, Player.RoleState.PREY, "1"));
+        players.add(new ComputerPlayer(3000, 100, AllImages.blue, Player.RoleState.PREY, "2"));
+        players.add(new ComputerPlayer(100, 3000, AllImages.blue, Player.RoleState.PREY, "3"));
 
         //畫面上相關
         runner = new Animation(AllImages.runnerDark);
         changeBody = new Animation(AllImages.changeBody);
         imgWarning = new Animation(AllImages.WARNING);
         no = new Animation(AllImages.no);
-        transFormCDLabel = new Label(Global.RUNNER_X + Global.GAME_SCENE_BOX_SIZE + 5 + 15, Global.RUNNER_Y + 30, String.valueOf(mainPlayer.transformCDTime()), 20);
-        labels.add(new Label(Global.RUNNER_X + 75, Global.RUNNER_Y + 85, "F", 20));
-        labels.add(new Label(Global.RUNNER_X + Global.GAME_SCENE_BOX_SIZE + 5 + 75, Global.RUNNER_Y + 85, "R", 20));
+        transFormCDLabel = new Label(Global.RUNNER_X + Global.GAME_SCENE_BOX_SIZE + 5 + 15, Global.RUNNER_Y + 30, String.valueOf(mainPlayer.transformCDTime()), FontLoader.Future(20));
+        labels.add(new Label(Global.RUNNER_X + 75, Global.RUNNER_Y + 85, "F", FontLoader.Future(20)));
+        labels.add(new Label(Global.RUNNER_X + Global.GAME_SCENE_BOX_SIZE + 5 + 75, Global.RUNNER_Y + 85, "R", FontLoader.Future(20)));
         labels.add(transFormCDLabel);
 
         //將要畫的物件存進ArrayList 為了要能在ArrayList取比較 重疊時畫的先後順序（y軸）
@@ -132,8 +132,8 @@ public class SinglePointGameScene extends Scene implements CommandSolver.MouseCo
         imgVolcano = SceneController.getInstance().imageController().tryGetImage(new Path().img().background().volcano());
         imgVillage = SceneController.getInstance().imageController().tryGetImage(new Path().img().background().village());
 
-        //滑鼠
-        mouse = new Mouse(0, 0, 50, 50);
+//        //滑鼠
+//        mouse = new Mouse(0, 0, 50, 50);
 
         point = new Point();
         imgPoint = SceneController.getInstance().imageController().tryGetImage(new Path().img().numbers().coin());
@@ -146,7 +146,10 @@ public class SinglePointGameScene extends Scene implements CommandSolver.MouseCo
 
     @Override
     public void sceneEnd() {
-
+        CountPointScene countPointScene = new CountPointScene();
+        countPointScene.setPlayerPoint(players);
+        AudioResourceController.getInstance().stop(new Path().sound().background().normalgamebehind30final());
+        SceneController.getInstance().change(countPointScene);
     }
 
     @Override
@@ -172,7 +175,7 @@ public class SinglePointGameScene extends Scene implements CommandSolver.MouseCo
         //顯示技能
         skillPaint(g);
         //畫滑鼠
-        mouse.paint(g);
+        Global.mouse.paint(g);
 
 
         //要畫在小地圖的要加在下方
@@ -208,6 +211,7 @@ public class SinglePointGameScene extends Scene implements CommandSolver.MouseCo
         camera.update();
         //cd時間顯示之資料
         transFormCDLabel.setWords(String.valueOf(mainPlayer.transformCDTime()));
+        timeUP();
 
 
     }
@@ -456,6 +460,15 @@ public class SinglePointGameScene extends Scene implements CommandSolver.MouseCo
         }
     }
 
+    /**
+     * 時間到
+     */
+    public void timeUP() {
+        if (chooseTime == gameTime) {
+            sceneEnd();
+        }
+    }
+
     @Override
     public void keyPressed(int commandCode, long trigTime) {
         mainPlayer.keyPressed(commandCode, trigTime);
@@ -473,6 +486,6 @@ public class SinglePointGameScene extends Scene implements CommandSolver.MouseCo
 
     @Override
     public void mouseTrig(MouseEvent e, CommandSolver.MouseState state, long trigTime) {
-        mainPlayer.mouseTrig(e, state, trigTime, unPassMapObjects, transformObstacles, camera, mouse);
+        mainPlayer.mouseTrig(e, state, trigTime, unPassMapObjects, transformObstacles, camera, Global.mouse);
     }
 }

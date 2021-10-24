@@ -8,7 +8,7 @@ public class TeachComputerPlayer extends ComputerPlayer {
     private int height;
 
     public TeachComputerPlayer(int x, int y, ImgArrAndType imgArrAndType, RoleState roleState, int width, int height) {
-        super(x, y, imgArrAndType, roleState);
+        super(x, y, imgArrAndType, roleState,0,"");
         this.width=width;
         this.height=height;
     }
