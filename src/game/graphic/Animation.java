@@ -17,7 +17,12 @@ public class Animation {
         delay.loop();
         count = 0;
     }
-
+    public Animation(ImgArrAndType imgArrAndType,int inputDelay) {
+        img = imgArrAndType;
+        this.delay = new Delay(inputDelay);
+        delay.loop();
+        count = 0;
+    }
 
     public void paint(int x, int y, int width, int height, Graphics g) {
         g.drawImage(img.getImageArrayList().get(count), x, y, width, height, null);

@@ -9,6 +9,8 @@ public class Movement implements CommandSolver.KeyListener {
     private Vector2D vector2D;
     private int speed;
     private int count;
+    int deltaX = 0;
+    int deltaY = 0;
 
     public Movement(int speed) {
         this.vector2D = new Vector2D(0, 0); //移動向量一開始是0
@@ -36,32 +38,21 @@ public class Movement implements CommandSolver.KeyListener {
 
     @Override
     public void keyPressed(int commandCode, long trigTime) {
-        count++;
-        int deltaX = 0;
-        int deltaY = 0;
         if (commandCode == Global.KeyCommand.UP.getValue()) {
-            deltaY--;
+            deltaY = -1;
         }
         if (commandCode == KeyCommand.DOWN.getValue()) {
-            deltaY++;
+            deltaY = 1;
         }
         if (commandCode == Global.KeyCommand.LEFT.getValue()) {
-            deltaX--;
+            deltaX = -1;
         }
         if (commandCode == Global.KeyCommand.RIGHT.getValue()) {
-            deltaX++;
+            deltaX = 1;
         }
-        if (deltaX != 0 && deltaY != 0) {
-            return;
-        }
-//        System.out.println(deltaX);
-//        System.out.println(deltaY);
         vector2D = new Vector2D(deltaX, deltaY);
         //方向 * 速度
-        if (count == 1) {
-            vector2D.multply(speed);
-            count = 0;
-        }
+        vector2D.multply(speed);
     }
 
     @Override
@@ -94,5 +85,13 @@ public class Movement implements CommandSolver.KeyListener {
 
     public void addSpeed(int addSpeed) {
         this.speed += addSpeed;
+    }
+
+    public void setDeltaX(int deltaX) {
+        this.deltaX = deltaX;
+    }
+
+    public void setDeltaY(int deltaY) {
+        this.deltaY = deltaY;
     }
 }

@@ -92,4 +92,20 @@ public class FontLoader {
         Font font = loadFont(root + "/src/resources/Fonts/dotchinese.ttf", size);
         return font;
     }
+
+    public static Font cuteChinese(float size) {
+        String root = System.getProperty("user.dir");
+        Font font = loadFont(root + "/src/resources/Fonts/cutechinese.ttf", size);
+        return font;
+    }
+    public static Font englishWeird(float size) {
+        String root = System.getProperty("user.dir");
+        Font font = loadFont(root + "/src/resources/Fonts/IrishGrover-Regular.ttf", size);
+        return font;
+    }
+    public static Font englishNormal(float size) {
+        String root = System.getProperty("user.dir");
+        Font font = loadFont(root + "/src/resources/Fonts/JosefinSans-Regular.ttf", size);
+        return font;
+    }
 }

@@ -30,8 +30,6 @@ public class TransformObstacle extends GameObject implements Transformation {
         return false;
     }
 
-
-
     @Override
     public void paintComponent(Graphics g) {
         animation.paint(

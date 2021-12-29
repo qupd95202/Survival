@@ -6,6 +6,9 @@ import game.core.Global;
 import game.gameObj.players.Player;
 import game.graphic.AllImages;
 import game.graphic.Animation;
+import game.network.Client.ClientClass;
+import game.network.Server.Server;
+import game.scene.ConnectTool;
 import game.scene.Scene;
 import game.utils.CommandSolver;
 import game.utils.Path;
@@ -20,16 +23,18 @@ public class CountPointScene extends Scene implements CommandSolver.MouseCommand
     private ArrayList<Animation> animations;
     private Button button;
     private Label title;
+    private Button buttonTouch;
 
 
     @Override
     public void sceneBegin() {
-        AudioResourceController.getInstance().loop(new Path().sound().background().countScene(), -1);
+        AudioResourceController.getInstance().play(new Path().sound().background().countScene());
         labels = new ArrayList<>();
         animations = new ArrayList<>();
         title = new Label(Global.SCREEN_X / 3 - 80, Global.SCREEN_Y / 4 - 20, "S C O R E", FontLoader.Blocks(100));
         setLabels();
         button = new Button(Global.SCREEN_X - 100, 20, Global.UNIT_WIDTH, Global.UNIT_HEIGHT, new Animation(AllImages.cross));
+        buttonTouch = new Button(Global.SCREEN_X - 100, 20, Global.UNIT_WIDTH, Global.UNIT_HEIGHT, new Animation(AllImages.inputButton));
 
     }
 
@@ -39,8 +44,10 @@ public class CountPointScene extends Scene implements CommandSolver.MouseCommand
         labels = null;
         animations = null;
         title = null;
+        ConnectTool.instance().disconnect();
+        Server.instance().close();
+        ConnectTool.reset();
         AudioResourceController.getInstance().stop(new Path().sound().background().countScene());
-        SceneController.getInstance().change(new MenuScene());
     }
 
     @Override
@@ -49,11 +56,28 @@ public class CountPointScene extends Scene implements CommandSolver.MouseCommand
         g.fillRect(0, 0, Global.SCREEN_X, Global.SCREEN_Y);
         g.setFont(FontLoader.Blocks(18));
         title.paint(g);
-        for (int i = 0; i < animations.size(); i++) {
-            animations.get(i).paint(Global.SCREEN_X / 3, Global.SCREEN_Y / 3 + i * 100 - 30, Global.UNIT_WIDTH, Global.UNIT_HEIGHT, g);
+        if (players.size() <= 4) {
+            for (int i = 0; i < players.size(); i++) {
+                animations.get(i).paint(Global.SCREEN_X / 3, Global.SCREEN_Y / 3 + i * 100 - 30, Global.UNIT_WIDTH, Global.UNIT_HEIGHT, g);
+            }
+        } else {
+            for (int i = 0; i < players.size(); i++) {
+                if (i <= 3) {
+                    animations.get(i).paint(Global.SCREEN_X / 5 - 100, Global.SCREEN_Y / 3 + i * 100 - 30, Global.UNIT_WIDTH, Global.UNIT_HEIGHT, g);
+                } else {
+                    int interX = 400;
+                    animations.get(i).paint(Global.SCREEN_X / 5 - 100 + interX, Global.SCREEN_Y / 3 + (i - 4) * 100 - 30, Global.UNIT_WIDTH, Global.UNIT_HEIGHT, g);
+
+                }
+            }
         }
+
         for (int i = 0; i < labels.size(); i++) {
             labels.get(i).paint(g);
+        }
+
+        if (Global.mouse.isCollision(buttonTouch)) {
+            buttonTouch.paint(g);
         }
         button.paint(g);
         Global.mouse.paint(g);
@@ -95,12 +119,26 @@ public class CountPointScene extends Scene implements CommandSolver.MouseCommand
     public void setLabels() {
         sort();
         for (int i = 0; i < players.size(); i++) {
-            animations.add(players.get(i).getCurrentAnimation());
+            animations.add(players.get(i).getOriginalAnimation());
         }
-        for (int i = 0; i < players.size(); i++) {
-            labels.add(new Label(Global.SCREEN_X / 3 + 80, Global.SCREEN_Y / 3 + i * 100, String.valueOf(players.get(i).getName()), FontLoader.Future(20)));
-            labels.add(new Label(Global.SCREEN_X / 3 + 80 + 200, Global.SCREEN_Y / 3 + i * 100, String.valueOf(players.get(i).getPoint()), FontLoader.Future(20)));
+        if (players.size() <= 4) {
+            for (int i = 0; i < players.size(); i++) {
+                labels.add(new Label(Global.SCREEN_X / 3 + 80, Global.SCREEN_Y / 3 + i * 100, String.valueOf(players.get(i).getName()), FontLoader.Future(20)));
+                labels.add(new Label(Global.SCREEN_X / 3 + 80 + 200, Global.SCREEN_Y / 3 + i * 100, String.valueOf(players.get(i).getPoint()), FontLoader.Future(20)));
+            }
+        } else {
+            for (int i = 0; i < players.size(); i++) {
+                if (i <= 3) {
+                    labels.add(new Label(Global.SCREEN_X / 5, Global.SCREEN_Y / 3 + i * 100, String.valueOf(players.get(i).getName()), FontLoader.Future(20)));
+                    labels.add(new Label(Global.SCREEN_X / 5 + 200, Global.SCREEN_Y / 3 + i * 100, String.valueOf(players.get(i).getPoint()), FontLoader.Future(20)));
+                } else {
+                    int interX = 400;
+                    labels.add(new Label(Global.SCREEN_X / 5 + interX, Global.SCREEN_Y / 3 + (i - 4) * 100, String.valueOf(players.get(i).getName()), FontLoader.Future(20)));
+                    labels.add(new Label(Global.SCREEN_X / 5 + 200 + interX, Global.SCREEN_Y / 3 + (i - 4) * 100, String.valueOf(players.get(i).getPoint()), FontLoader.Future(20)));
+                }
+            }
         }
+
     }
 
 
@@ -109,12 +147,10 @@ public class CountPointScene extends Scene implements CommandSolver.MouseCommand
         if (state == CommandSolver.MouseState.MOVED) {
             Global.mouse.mouseTrig(e, state, trigTime);
         }
-        if (state == CommandSolver.MouseState.CLICKED) {
+        if (state == CommandSolver.MouseState.PRESSED) {
             if (Global.mouse.isCollision(button)) {
-                sceneEnd();
+                SceneController.getInstance().change(new MenuScene());
             }
-
         }
     }
-
 }

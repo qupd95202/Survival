@@ -17,6 +17,7 @@ public class GameOverScene extends Scene implements CommandSolver.MouseCommandLi
     private Image img;
     private Button button;
     private Animation animation;
+    private Button touchButton;
 
     @Override
     public void sceneBegin() {
@@ -24,23 +25,26 @@ public class GameOverScene extends Scene implements CommandSolver.MouseCommandLi
         img = SceneController.getInstance().imageController().tryGetImage(new Path().img().menu().Scene().scene9());
 
         button = new Button(Global.SCREEN_X - 100, 20, Global.UNIT_WIDTH, Global.UNIT_HEIGHT, new Animation(AllImages.cross));
+        touchButton=new Button(Global.SCREEN_X - 100, 20, Global.UNIT_WIDTH, Global.UNIT_HEIGHT, new Animation(AllImages.inputButton));
         animation = new Animation(AllImages.gameOver);
     }
 
     @Override
     public void sceneEnd() {
-        this.button = null;
         this.animation = null;
         this.img = null;
         AudioResourceController.getInstance().stop(new Path().sound().background().gameover());
-        SceneController.getInstance().change(new MenuScene());
     }
 
     @Override
     public void paint(Graphics g) {
         g.drawImage(img, 0, 0, Global.SCREEN_X, Global.SCREEN_Y, null);
-        button.paint(g);
+
         animation.paint(Global.SCREEN_X / 3, Global.SCREEN_Y / 2 - 50, 350, 150, g);
+        if(Global.mouse.isCollision(button)){
+            touchButton.paint(g);
+        }
+        button.paint(g);
         Global.mouse.paint(g);
     }
 
@@ -64,9 +68,9 @@ public class GameOverScene extends Scene implements CommandSolver.MouseCommandLi
         if (state == CommandSolver.MouseState.MOVED) {
             Global.mouse.mouseTrig(e, state, trigTime);
         }
-        if (state == CommandSolver.MouseState.CLICKED) {
+        if (state == CommandSolver.MouseState.PRESSED) {
             if (Global.mouse.isCollision(button)) {
-                sceneEnd();
+                SceneController.getInstance().change(new MenuScene());
             }
         }
     }

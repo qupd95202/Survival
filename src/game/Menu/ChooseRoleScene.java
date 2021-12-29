@@ -60,7 +60,7 @@ public class ChooseRoleScene extends Scene implements CommandSolver.MouseCommand
         //文字
         title = new Label(Global.SCREEN_X / 2 - 325, 150, "CHOOSE YOUR ROLE", FontLoader.Blocks(60));
         create = new Label(buttons.get(3).collider().right() + inter + 20, buttons.get(3).collider().bottom() + 40, "CREATE", FontLoader.Blocks(40));
-        buttons.add(new Button(buttons.get(3).collider().right() + inter + 20, buttons.get(3).collider().bottom(), Global.UNIT_WIDTH * 2 + 30, Global.UNIT_HEIGHT, create));
+        buttons.add(new Button(buttons.get(3).collider().right() + inter + 20, buttons.get(3).collider().bottom(), Global.UNIT_WIDTH * 2 + 90, Global.UNIT_HEIGHT, create));
     }
 
     @Override
@@ -79,7 +79,6 @@ public class ChooseRoleScene extends Scene implements CommandSolver.MouseCommand
         for (int i = 0; i < buttons.size(); i++) {
             buttons.get(i).paint(g);
         }
-
         Global.mouse.paint(g);
     }
 
@@ -106,11 +105,10 @@ public class ChooseRoleScene extends Scene implements CommandSolver.MouseCommand
         if (state == CommandSolver.MouseState.MOVED) {
             Global.mouse.mouseTrig(e, state, trigTime);
         }
-        if (state == CommandSolver.MouseState.CLICKED) {
+        if (state == CommandSolver.MouseState.PRESSED) {
             if (Global.mouse.isCollision(buttons.get(0))) {
                 currentAnimation = buttons.get(0).getAnimation();
                 buttons.get(4).setAnimation(currentAnimation);
-
             }
             if (Global.mouse.isCollision(buttons.get(1))) {
                 currentAnimation = buttons.get(1).getAnimation();
@@ -125,7 +123,7 @@ public class ChooseRoleScene extends Scene implements CommandSolver.MouseCommand
                 buttons.get(4).setAnimation(currentAnimation);
             }
             if (Global.mouse.isCollision(buttons.get(5))) {
-                SceneController.getInstance().change(new WaitingScene(IP, mainPlayerName, getCurrentImgArrAndType(),port));
+                SceneController.getInstance().change(new WaitingScene(IP, mainPlayerName, getCurrentImgArrAndType(), port));
             }
 
         }

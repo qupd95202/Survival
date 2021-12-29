@@ -42,66 +42,66 @@ public class MapObject extends GameObject {
     }
 
 
-
     //要能帶入資源 以利格子上決定哪個圖
 
     public Image getImg() {
         return img;
     }
+
     public MapObject(int x, int y, int width, int height, String MapObjectName) {
         super(x, y, width, height);
 
         switch (MapObjectName) {
-            case "tree1" :
+            case "tree1":
                 this.type = Type.tree1;
                 collider().scale(painter().width() - 50, painter().height() - 80);
-                painter().setCenter(collider().centerX() , collider().centerY() - 40);
+                painter().setCenter(collider().centerX(), collider().centerY() - 40);
                 break;
-            case "tree2" :
+            case "tree2":
                 this.type = Type.tree2;
                 collider().scale(painter().width() - 50, painter().height() - 80);
-                painter().setCenter(collider().centerX() , collider().centerY() - 40);
+                painter().setCenter(collider().centerX(), collider().centerY() - 40);
                 break;
 
-            case "winterTree1" :
+            case "winterTree1":
                 this.type = Type.winterTree1;
                 collider().scale(painter().width() - 50, painter().height() - 65);
-                painter().setCenter(collider().centerX() , collider().centerY() - 30);
+                painter().setCenter(collider().centerX(), collider().centerY() - 30);
                 break;
-            case "winterTree2" :
+            case "winterTree2":
                 this.type = Type.winterTree2;
                 collider().scale(painter().width() - 50, painter().height() - 65);
-                painter().setCenter(collider().centerX() , collider().centerY() - 30);
+                painter().setCenter(collider().centerX(), collider().centerY() - 30);
                 break;
-            case "rock" :
+            case "rock":
                 this.type = Type.rock;
                 collider().scale(painter().width() - 20, painter().height() - 20);
-                painter().setCenter(collider().centerX() , collider().centerY() - 20);
+                painter().setCenter(collider().centerX(), collider().centerY() - 20);
                 break;
-            case "volcanoTree" :
+            case "volcanoTree":
                 this.type = Type.volcanoTree;
                 collider().scale(painter().width() - 40, painter().height() - 60);
-                painter().setCenter(collider().centerX() , collider().centerY() - 20);
+                painter().setCenter(collider().centerX(), collider().centerY() - 20);
                 break;
-            case "castleWall" :
+            case "castleWall":
                 this.type = Type.castleWall;
                 collider().scale(painter().width() - 10, painter().height() - 10);
                 painter().setCenter(collider().centerX(), collider().centerY());
                 break;
 
-            case "tower" :
+            case "tower":
                 this.type = Type.tower;
                 collider().scale(painter().width(), painter().height() - 50);
                 painter().setCenter(collider().centerX(), collider().centerY() - 25);
                 break;
-            case "house1" :
+            case "house1":
                 this.type = Type.house1;
                 collider().scale(painter().width(), painter().height() - 50);
                 painter().setCenter(collider().centerX(), collider().centerY() - 25);
                 break;
 
 
-            default :
+            default:
                 this.type = Type.tree1;
                 break;
         }
@@ -119,8 +119,16 @@ public class MapObject extends GameObject {
                 null);
     }
 
-    public boolean isXYin(int x, int y) {
-        if (x <= painter().right() && x >= painter().left() && y <= painter().bottom() && y >= painter().top()) {
+    public boolean isXYNotIn(int x, int y) {
+        if (x <= collider().right() && x >= collider().left() - 51 && y <= collider().bottom() && y >= collider().top() - 51
+        ) {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean isXYNotInMap(int x, int y) {
+        if (x >= Global.MAP_PIXEL_WIDTH - 51 || x <= 10 || y >= Global.MAP_PIXEL_HEIGHT - 51 || y <= 40) {
             return true;
         }
         return false;

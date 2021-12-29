@@ -8,5 +8,5 @@ import game.graphic.ImgArrAndType;
 
 public interface Transformation {
     //public boolean canTransform();
-    public ImgArrAndType getImgArrAndType();
+    ImgArrAndType getImgArrAndType();
 }

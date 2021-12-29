@@ -1,5 +1,7 @@
 package game.controllers;
 
+import game.Menu.Mouse;
+import game.core.Global;
 import game.scene.Scene;
 import game.utils.CommandSolver;
 
@@ -36,6 +38,7 @@ public class SceneController {
         mouseListener = scene.mouseListener();
         keyListener = scene.keyListener();
         currentScene = scene;
+        Global.mouse.setImg(Mouse.magicWand);
 
         ImageResourceController temp = currentImageController;
         currentImageController = lastImageController;

@@ -16,9 +16,10 @@ import java.util.List;
 public class ObjectArr {
     public static ArrayList<Props> propsArr = new ArrayList<Props>(List.of(new Props(), new Props(), new Props(), new Props(), new Props()));
     private ArrayList<Props> propsArrConnectPoint = new ArrayList<Props>(List.of(new Props(100, 500, Props.Type.addPoint), new Props(500, 500, Props.Type.addSpeed), new Props(2000, 500, Props.Type.teleportation), new Props(2500, 3000, Props.Type.trap)));
-    private ArrayList<ComputerPlayer> computerPlayersConnectPoint = new ArrayList<>(List.of(new ComputerPlayer(100, 100, AllImages.beige, Player.RoleState.HUNTER,0,"3"),
-            new ComputerPlayer(3000, 100, AllImages.blue, Player.RoleState.PREY,1,"1"),
-            new ComputerPlayer(100, 3000, AllImages.blue, Player.RoleState.PREY,2,"2")));
+
+    private ArrayList<ComputerPlayer> computerPlayersConnectPoint = new ArrayList<>(List.of(new ComputerPlayer(100, 100, AllImages.blue, Player.RoleState.PREY, 0, "3"),
+            new ComputerPlayer(3000, 100, AllImages.blue, Player.RoleState.PREY, 0, "1"),
+            new ComputerPlayer(100, 3000, AllImages.blue, Player.RoleState.PREY, 0, "2")));
     public static ArrayList<Props> propsArrSurvivalGame = new ArrayList<Props>(List.of(new Props(1), new Props(1), new Props(1), new Props(1), new Props(1)));
 
     //0-1920, 0-1920        森林有：bee bunny1 bunny2 frog snail snack
@@ -115,23 +116,23 @@ public class ObjectArr {
 
     public static HashMap<Props.Type, PropsAnimation> genPropsAnimation() {
         allPropsAnimation.put(
-                Props.Type.thunder, new PropsAnimation(0,0, 1100, 700, AllImages.lightning, 2, 30));
+                Props.Type.thunder, new PropsAnimation(0, 0, 1100, 700, AllImages.lightning, 2, 30));
         allPropsAnimation.put(
-                Props.Type.superStar, new PropsAnimation(Global.SCREEN_X / 2 - 160,Global.SCREEN_Y / 2 - 120, 320, 240, AllImages.star, 8, 600));
+                Props.Type.superStar, new PropsAnimation(Global.SCREEN_X / 2 - 160, Global.SCREEN_Y / 2 - 120, 320, 240, AllImages.star, 8, 600));
         allPropsAnimation.put(
                 Props.Type.hunterWatcher, new PropsAnimation(100, 0, 240, 180, AllImages.hunterWatcher, 10, 120));
         allPropsAnimation.put(
-                Props.Type.gameTimeDecrease, new PropsAnimation(Global.SCREEN_X / 2 - 120,Global.SCREEN_Y / 2 - 90, 240, 180, AllImages.gameTimeDecrease, 8, 80));
+                Props.Type.gameTimeDecrease, new PropsAnimation(Global.SCREEN_X / 2 - 120, Global.SCREEN_Y / 2 - 90, 240, 180, AllImages.gameTimeDecrease, 8, 80));
         allPropsAnimation.put(
-                Props.Type.trap, new PropsAnimation(Global.SCREEN_X / 2 - 300,Global.SCREEN_Y / 2 - 300, 600, 600, AllImages.trap, 120, 120));
+                Props.Type.trap, new PropsAnimation(Global.SCREEN_X / 2 - 300, Global.SCREEN_Y / 2 - 300, 600, 600, AllImages.trap, 120, 120));
         allPropsAnimation.put(
-                Props.Type.addSpeed, new PropsAnimation(Global.SCREEN_X / 2 - 120,Global.SCREEN_Y / 2 - 90, 240, 180, AllImages.addSpeed, 5, 60));
+                Props.Type.addSpeed, new PropsAnimation(Global.SCREEN_X / 2 - 120, Global.SCREEN_Y / 2 - 90, 240, 180, AllImages.addSpeed, 5, 60));
         allPropsAnimation.put(
-                Props.Type.teleportation, new PropsAnimation(Global.SCREEN_X / 2 - 150,Global.SCREEN_Y / 2 - 150, 300, 300, AllImages.teleportation, 60, 60));
+                Props.Type.teleportation, new PropsAnimation(Global.SCREEN_X / 2 - 150, Global.SCREEN_Y / 2 - 150, 300, 300, AllImages.teleportation, 60, 60));
         allPropsAnimation.put(
-                Props.Type.addPoint, new PropsAnimation(Global.SCREEN_X / 2 - 50,Global.SCREEN_Y / 2 - 150, 100, 100, AllImages.addPoint, 60, 60));
+                Props.Type.addPoint, new PropsAnimation(Global.SCREEN_X / 2 - 50, Global.SCREEN_Y / 2 - 150, 100, 100, AllImages.addPoint, 60, 60));
         allPropsAnimation.put(
-                Props.Type.timeStop, new PropsAnimation(Global.SCREEN_X / 2 - 30 ,Global.SCREEN_Y / 2 - 150, 60, 90, AllImages.timeStop, 300, 300));
+                Props.Type.timeStop, new PropsAnimation(Global.SCREEN_X / 2 - 30, Global.SCREEN_Y / 2 - 150, 60, 90, AllImages.timeStop, 300, 300));
 
         return allPropsAnimation;
     }

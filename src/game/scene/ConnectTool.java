@@ -3,6 +3,7 @@ package game.scene;
 ;
 
 import game.Menu.ChooseRoleScene;
+import game.controllers.AudioResourceController;
 import game.controllers.SceneController;
 import game.core.Global;
 import game.gameObj.Pact;
@@ -12,6 +13,7 @@ import game.graphic.AllImages;
 import game.map.ObjectArr;
 import game.network.Client.ClientClass;
 import game.utils.GameKernel;
+import game.utils.Path;
 import network.Client.CommandReceiver;
 
 import java.awt.*;
@@ -26,8 +28,6 @@ public class ConnectTool implements GameKernel.GameInterface {
     private ArrayList<Player> mainPlayers;
     private ObjectArr objectArr;
     private boolean isServer;
-//    private ArrayList<MapObject> unPassMapObjects;      連接Scene時，建構子時{set自己角色(new 角色)，加進players}，Scenebegin()，再sent自己創角的訊息出去，server在等人連接的畫面只要一直consume即可。
-//    private ArrayList<TransformObstacle> transformObstacles;
 
     private static ConnectTool ct;
 
@@ -52,6 +52,7 @@ public class ConnectTool implements GameKernel.GameInterface {
     public void createRoom(int port) {
         game.network.Server.Server.instance().create(port);
         game.network.Server.Server.instance().start();
+        isServer = true;
     }
 
     public String[] serverInformation() { //伺服器的資訊
@@ -88,6 +89,13 @@ public class ConnectTool implements GameKernel.GameInterface {
         mainPlayers = null;
     }
 
+    public void disconnect() {
+        if (isConnect) {
+            ClientClass.getInstance().disConnect();
+            isConnect = false;
+        }
+    }
+
     public void consume() {
         if (isConnect) {
             game.network.Client.ClientClass.getInstance().consume(new CommandReceiver() {
@@ -113,11 +121,7 @@ public class ConnectTool implements GameKernel.GameInterface {
                             }
                             if (!isburn) {
                                 Player newPlayer;
-                                if (serialNum == 100) {
-                                    newPlayer = new Player(Integer.parseInt(strs.get(0)), Integer.parseInt(strs.get(1)), ChooseRoleScene.imgArrAndTypeParseInt(Integer.parseInt(strs.get(2))), Player.RoleState.HUNTER, strs.get(3));
-                                } else {
-                                    newPlayer = new Player(Integer.parseInt(strs.get(0)), Integer.parseInt(strs.get(1)), ChooseRoleScene.imgArrAndTypeParseInt(Integer.parseInt(strs.get(2))), Player.RoleState.PREY, strs.get(3));
-                                }
+                                newPlayer = new Player(Integer.parseInt(strs.get(0)), Integer.parseInt(strs.get(1)), ChooseRoleScene.imgArrAndTypeParseInt(Integer.parseInt(strs.get(2))), Player.RoleState.PREY, strs.get(3));
                                 newPlayer.setID(serialNum);
                                 mainPlayers.add(newPlayer);
                                 ClientClass.getInstance().sent(CONNECT, bale(strs.get(0), strs.get(1)));
@@ -194,21 +198,19 @@ public class ConnectTool implements GameKernel.GameInterface {
                         case TRANSFORM:
                             mainPlayers.forEach(player -> {
                                 if (serialNum == player.ID()) {
-                                    player.keyPressed(Global.KeyCommand.TRANSFORM.getValue(), Long.parseLong(strs.get(0)));
+                                    player.keyReleased(Global.KeyCommand.TRANSFORM.getValue(), Long.parseLong(strs.get(0)));
                                 }
                             });
                             break;
                         case TELEPORTATION:
                             mainPlayers.forEach(player -> {
                                 if (serialNum == player.ID()) {
-                                    player.keyPressed(Global.KeyCommand.TELEPORTATION.getValue(), Long.parseLong(strs.get(0)));
+                                    player.keyReleased(Global.KeyCommand.TELEPORTATION.getValue(), Long.parseLong(strs.get(0)));
                                 }
                             });
                             break;
                         case PROPS_GEN:
-                            if (serialNum == 100) {
-                                objectArr.getPropsArrConnectPoint().add(new Props(Integer.parseInt(strs.get(0)), Integer.parseInt(strs.get(1)), Props.propsTypeParse(strs.get(2))));
-                            }
+                            objectArr.getPropsArrConnectPoint().add(new Props(Integer.parseInt(strs.get(0)), Integer.parseInt(strs.get(1)), Props.propsTypeParse(strs.get(2))));
                             break;
                         case COMPUTER_MAINPLAYER_WHOISNEAR:
                             mainPlayers.forEach(player -> {
@@ -226,6 +228,7 @@ public class ConnectTool implements GameKernel.GameInterface {
                             for (Player player : mainPlayers) {
                                 if (player.ID() == Integer.parseInt(strs.get(0))) {
                                     player1 = player;
+                                    continue;
                                 }
                                 if (player.ID() == Integer.parseInt(strs.get(1))) {
                                     player2 = player;
@@ -253,6 +256,7 @@ public class ConnectTool implements GameKernel.GameInterface {
                                             player.collideProps(objectArr.getPropsArrConnectPoint().get(i));
                                             objectArr.getPropsArrConnectPoint().get(i).setGotByPlayer(true);
                                             objectArr.getPropsArrConnectPoint().remove(i--);
+                                            break;
                                         }
                                     }
 //                                    Props props = objectArr.getPropsArrConnectPoint().get(Integer.parseInt(strs.get(0)));
@@ -295,12 +299,47 @@ public class ConnectTool implements GameKernel.GameInterface {
                             objectArr.getComputerPlayersConnectPoint().get(Integer.parseInt(strs.get(0))).setXY(Integer.parseInt(strs.get(1)), Integer.parseInt(strs.get(2)));
                             break;
                         case START_GAME:
+                            AudioResourceController.getInstance().stop(new Path().sound().background().lovelyflower());
                             SceneController.getInstance().change(new ConnectPointGameScene());
                             break;
                         case POINT_UPDATE:
                             mainPlayers.forEach(player -> {
+                                if (ClientClass.getInstance().getID() != serialNum) {
+                                    if (player.ID() == serialNum) {
+                                        player.setPoint(Integer.parseInt(strs.get(0)));
+                                    }
+                                }
+                            });
+                            break;
+                        case NOT_MOVE:
+                            mainPlayers.forEach(player -> {
                                 if (player.ID() == Integer.parseInt(strs.get(0))) {
-                                    player.setPoint(Integer.parseInt(strs.get(1)));
+                                    player.translate(Integer.parseInt(strs.get(1)), Integer.parseInt(strs.get(2)));
+                                }
+                            });
+                            break;
+//                        case OUTRAGE:
+//                            mainPlayers.forEach(player -> {
+//                                if (player.ID() == serialNum) {
+//                                    player.outrage();
+//                                }
+//                            });
+//                            break;
+                        case DECREASE_SPEED:
+                            mainPlayers.forEach(player -> {
+                                if (player.ID() != serialNum) {
+                                    if (player.getMovement().getSpeed() > Global.SPEED_MIN) {
+                                        player.getMovement().addSpeed(-1);
+                                    }
+                                }
+                            });
+                            break;
+                        case RANDOM_HUNTER:
+                            mainPlayers.forEach(player -> {
+                                if (player.ID() == Integer.parseInt(strs.get(0))) {
+                                    player.roleState = Player.RoleState.HUNTER;
+                                    player.setRoleStateBeforeBump(Player.RoleState.HUNTER);
+                                    player.animationUpdate();
                                 }
                             });
                             break;
@@ -334,5 +373,9 @@ public class ConnectTool implements GameKernel.GameInterface {
 
     public boolean isServer() {
         return isServer;
+    }
+
+    public boolean isConnect() {
+        return isConnect;
     }
 }

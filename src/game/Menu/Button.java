@@ -27,6 +27,14 @@ public class Button extends GameObject {
         this.label=label;
 
     }
+    public Button(Label label,int width,int height){
+        super(label.collider().left(),label.collider().top()-height,width,height);
+        this.label=label;
+    }
+    public Button(Label label,Animation animation,int width,int height){
+        super(label.collider().left(),label.collider().top()-height,width,height);
+        this.label=label;
+    }
     @Override
     public void paintComponent(Graphics g) {
         if(animation !=null){

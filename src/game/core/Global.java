@@ -16,7 +16,9 @@ public class Global {
         LEFT(4),
         RIGHT(5),
         TRANSFORM(6),
-        TELEPORTATION(7);
+        TELEPORTATION(7),
+        ESCAPE(8),
+        ENTER(9);
 
 
         private int value;
@@ -61,6 +63,7 @@ public class Global {
     }
 
     public static final boolean IS_DEBUG = false;
+    public static boolean IS_NIGHTMARE = false;
 
     public static final int UPDATE_TIMES_PER_SEC = 60;
     public static final int NANOSECOUND_PER_UPDATE = 1000000000 / UPDATE_TIMES_PER_SEC;
@@ -94,11 +97,11 @@ public class Global {
     public static final int MAP_PIXEL_HEIGHT = MAP_HEIGHT * UNIT_HEIGHT;
 
     //角色移動速度
-    public static final int NORMAL_SPEED = 2;
-    public static final int COMPUTER_SPEED1 = 3;
-    public static final int COMPUTER_SPEED2 = 5;
-    public static final int COMPUTER_SPEED3 = 8;
-    public static final int COMPUTER_SPEED4 = 11;
+    public static final int NORMAL_SPEED = 3;
+    public static final int COMPUTER_SPEED1 = 2;
+    public static final int COMPUTER_SPEED2 = 3;
+    public static final int COMPUTER_SPEED3 = 4;
+    public static final int COMPUTER_SPEED4 = 5;
 
     //電腦追蹤移動獵物範圍
     public static final int COMPUTER_CHASE_DISTANCE1 = 300;
@@ -113,9 +116,9 @@ public class Global {
     public static final int COMPUTER_GIVE_UP_DISTANCE4 = 2000;
 
     //電腦追蹤道具範圍
-    public static final int COMPUTER_PROPS_CHASE_DISTANCE1 = 200;
-    public static final int COMPUTER_PROPS_CHASE_DISTANCE2 = 400;
-    public static final int COMPUTER_PROPS_CHASE_DISTANCE3 = 600;
+    public static final int COMPUTER_PROPS_CHASE_DISTANCE1 = 100;
+    public static final int COMPUTER_PROPS_CHASE_DISTANCE2 = 200;
+    public static final int COMPUTER_PROPS_CHASE_DISTANCE3 = 300;
 
 
     //預設AI感知之最近距離
@@ -125,13 +128,15 @@ public class Global {
     public static final int ADD_SPEED = 2;
     //速度上限
     public static final int SPEED_MAX = 10;
+    //速度下限
+    public static final int SPEED_MIN = 3;
     //地圖上道具數量上限
-    public static final int PROPS_AMOUNT_MAX = 6;
+    public static final int PROPS_AMOUNT_MAX = 10;
 
     //選擇遊戲時間
     public static final int CHOOSE_GAMETIME = 300;
 
-    public static final int PROPS_AMOUNT_MAX_SURVIVAL_GAME = 10;
+    public static final int PROPS_AMOUNT_MAX_SURVIVAL_GAME = 20;
 
 
     //瞬間移動格的位子
@@ -149,6 +154,7 @@ public class Global {
                     new Path().img().actors().bump().Bump4()),
             SceneController.getInstance().imageController().tryGetImage(
                     new Path().img().actors().bump().Bump5())));
+
     public static Mouse mouse = new Mouse(0, 0, 50, 50);
 
 

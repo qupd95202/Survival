@@ -31,6 +31,12 @@ public class AllImages {
             SceneController.getInstance().imageController().tryGetImage(new Path().img().actors().walk().Yellow_walk1()),
             SceneController.getInstance().imageController().tryGetImage(new Path().img().actors().walk().Yellow_walk2()))), Global.MapAreaType.NONE);
 
+    public static ImgArrAndType HUNTER = new ImgArrAndType(new ArrayList<Image>(java.util.List.of(
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().actors().walk().Hunter_walk1()),
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().actors().walk().Hunter_walk2()),
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().actors().walk().Hunter_walk3()),
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().actors().walk().Hunter_walk4()))), Global.MapAreaType.NONE);
+
     //爆炸狀態
     public static ImgArrAndType bump = new ImgArrAndType(new ArrayList<Image>(List.of(
             SceneController.getInstance().imageController().tryGetImage(new Path().img().actors().bump().Bump1()),
@@ -191,25 +197,32 @@ public class AllImages {
     }
 
     //WARNING
-    public static ImgArrAndType WARNING=new ImgArrAndType(new ArrayList<Image>(java.util.List.of(
-            SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().warningLabel()),
-            SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().dontMove().nothing()))),Global.MapAreaType.NONE);
+    public static ImgArrAndType WARNING = new ImgArrAndType(new ArrayList<Image>(java.util.List.of(
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().lostCoin()),
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().dontMove().nothing()))), Global.MapAreaType.NONE);
     //no
-    public static ImgArrAndType no=new ImgArrAndType(new ArrayList<Image>(java.util.List.of(
-            SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().no()))),Global.MapAreaType.NONE);
+    public static ImgArrAndType no = new ImgArrAndType(new ArrayList<Image>(java.util.List.of(
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().no()))), Global.MapAreaType.NONE);
 
 
     //cross
-    public static ImgArrAndType cross=new ImgArrAndType(new ArrayList<Image>(java.util.List.of(
-            SceneController.getInstance().imageController().tryGetImage(new Path().img().menu().Button().cross()))),Global.MapAreaType.NONE);
+    public static ImgArrAndType cross = new ImgArrAndType(new ArrayList<Image>(java.util.List.of(
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().menu().Button().cross()))), Global.MapAreaType.NONE);
 
     //button1
-    public static ImgArrAndType button1=new ImgArrAndType(new ArrayList<Image>(java.util.List.of(
-            SceneController.getInstance().imageController().tryGetImage(new Path().img().menu().Button().button1()))),Global.MapAreaType.NONE);
+    public static ImgArrAndType button1 = new ImgArrAndType(new ArrayList<Image>(java.util.List.of(
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().menu().Button().button1()))), Global.MapAreaType.NONE);
 
     //GameOver
-    public static ImgArrAndType gameOver=new ImgArrAndType(new ArrayList<Image>(java.util.List.of(
-            SceneController.getInstance().imageController().tryGetImage(new Path().img().menu().Button().GameOver()))),Global.MapAreaType.NONE);
+    public static ImgArrAndType gameOver = new ImgArrAndType(new ArrayList<Image>(java.util.List.of(
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().menu().Button().GameOver()))), Global.MapAreaType.NONE);
+
+    //Pause
+    public static ImgArrAndType pause = new ImgArrAndType(new ArrayList<Image>(java.util.List.of(
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().menu().Button().button2()))), Global.MapAreaType.NONE);
+    //Pause label
+    public static ImgArrAndType pauseLabel = new ImgArrAndType(new ArrayList<Image>(java.util.List.of(
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().menu().Button().button3()))), Global.MapAreaType.NONE);
 
     //lightning
     public static ImgArrAndType lightning = new ImgArrAndType(new ArrayList<>(List.of(
@@ -230,7 +243,7 @@ public class AllImages {
             SceneController.getInstance().imageController().tryGetImage(new Path().img().propsAnimation().lightning14()),
             SceneController.getInstance().imageController().tryGetImage(new Path().img().propsAnimation().lightning15()),
             SceneController.getInstance().imageController().tryGetImage(new Path().img().propsAnimation().lightning16()),
-            SceneController.getInstance().imageController().tryGetImage(new Path().img().propsAnimation().lightning17()))),Global.MapAreaType.NONE);
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().propsAnimation().lightning17()))), Global.MapAreaType.NONE);
 
     //道具動畫（superStar）
     public static ImgArrAndType star = new ImgArrAndType(new ArrayList<>(java.util.List.of(
@@ -245,7 +258,7 @@ public class AllImages {
             SceneController.getInstance().imageController().tryGetImage(new Path().img().propsAnimation().star9()),
             SceneController.getInstance().imageController().tryGetImage(new Path().img().propsAnimation().star10()),
             SceneController.getInstance().imageController().tryGetImage(new Path().img().propsAnimation().star11()),
-            SceneController.getInstance().imageController().tryGetImage(new Path().img().propsAnimation().star12()))),Global.MapAreaType.NONE);
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().propsAnimation().star12()))), Global.MapAreaType.NONE);
 
     //道具動畫（gameTimeDecrease）
     public static ImgArrAndType gameTimeDecrease = new ImgArrAndType(new ArrayList<>(java.util.List.of(
@@ -257,7 +270,7 @@ public class AllImages {
             SceneController.getInstance().imageController().tryGetImage(new Path().img().propsAnimation().gameTimeDecrease6()),
             SceneController.getInstance().imageController().tryGetImage(new Path().img().propsAnimation().gameTimeDecrease7()),
             SceneController.getInstance().imageController().tryGetImage(new Path().img().propsAnimation().gameTimeDecrease8()),
-            SceneController.getInstance().imageController().tryGetImage(new Path().img().propsAnimation().gameTimeDecrease9()))),Global.MapAreaType.NONE);
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().propsAnimation().gameTimeDecrease9()))), Global.MapAreaType.NONE);
 
     //道具動畫（hunterWatcher）
     public static ImgArrAndType hunterWatcher = new ImgArrAndType(new ArrayList<>(java.util.List.of(
@@ -270,11 +283,11 @@ public class AllImages {
             SceneController.getInstance().imageController().tryGetImage(new Path().img().propsAnimation().hunterWatcher7()),
             SceneController.getInstance().imageController().tryGetImage(new Path().img().propsAnimation().hunterWatcher8()),
             SceneController.getInstance().imageController().tryGetImage(new Path().img().propsAnimation().hunterWatcher9()),
-            SceneController.getInstance().imageController().tryGetImage(new Path().img().propsAnimation().hunterWatcher10()))),Global.MapAreaType.NONE);
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().propsAnimation().hunterWatcher10()))), Global.MapAreaType.NONE);
 
     //道具動畫（teleportation）
     public static ImgArrAndType teleportation = new ImgArrAndType(new ArrayList<>(java.util.List.of(
-            SceneController.getInstance().imageController().tryGetImage(new Path().img().propsAnimation().teleportation()))),Global.MapAreaType.NONE);
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().propsAnimation().teleportation()))), Global.MapAreaType.NONE);
 
     //道具動畫（addSpeed）
     public static ImgArrAndType addSpeed = new ImgArrAndType(new ArrayList<>(java.util.List.of(
@@ -292,18 +305,47 @@ public class AllImages {
             SceneController.getInstance().imageController().tryGetImage(new Path().img().propsAnimation().addSpeed12()),
             SceneController.getInstance().imageController().tryGetImage(new Path().img().propsAnimation().addSpeed13()),
             SceneController.getInstance().imageController().tryGetImage(new Path().img().propsAnimation().addSpeed14()),
-            SceneController.getInstance().imageController().tryGetImage(new Path().img().propsAnimation().addSpeed15()))),Global.MapAreaType.NONE);
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().propsAnimation().addSpeed15()))), Global.MapAreaType.NONE);
 
     //道具動畫（teleportation）
     public static ImgArrAndType timeStop = new ImgArrAndType(new ArrayList<>(java.util.List.of(
-            SceneController.getInstance().imageController().tryGetImage(new Path().img().propsAnimation().timeStop()))),Global.MapAreaType.NONE);
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().propsAnimation().timeStop()))), Global.MapAreaType.NONE);
 
     //道具動畫（trap）
     public static ImgArrAndType trap = new ImgArrAndType(new ArrayList<>(java.util.List.of(
-            SceneController.getInstance().imageController().tryGetImage(new Path().img().propsAnimation().spiderWeb()))),Global.MapAreaType.NONE);
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().propsAnimation().spiderWeb()))), Global.MapAreaType.NONE);
 
     //道具動畫（addPoint）
     public static ImgArrAndType addPoint = new ImgArrAndType(new ArrayList<>(java.util.List.of(
-            SceneController.getInstance().imageController().tryGetImage(new Path().img().propsAnimation().addPoint()))),Global.MapAreaType.NONE);
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().propsAnimation().addPoint()))), Global.MapAreaType.NONE);
 
+    //輸入方格
+    public static ImgArrAndType inputButton = new ImgArrAndType(new ArrayList<>(java.util.List.of(
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().menu().Button().button()))), Global.MapAreaType.NONE);
+
+    //teach1
+    public static ImgArrAndType teach1 = new ImgArrAndType(new ArrayList<>(java.util.List.of(
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().menu().Scene().Elements().element1()))), Global.MapAreaType.NONE);
+
+    //teach2
+    public static ImgArrAndType teach2 = new ImgArrAndType(new ArrayList<>(java.util.List.of(
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().menu().Scene().Elements().element2()))), Global.MapAreaType.NONE);
+
+    //teach3
+    public static ImgArrAndType teach3 = new ImgArrAndType(new ArrayList<>(java.util.List.of(
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().menu().Scene().Elements().element3()))), Global.MapAreaType.NONE);
+
+    //傳送動畫
+    public static ImgArrAndType teleAnimation = new ImgArrAndType(new ArrayList<>(java.util.List.of(
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().move().tele_1()),
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().move().tele_2()),
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().move().tele_3()),
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().move().tele_4()))), Global.MapAreaType.NONE);
+
+    //狂暴動畫
+    public static ImgArrAndType outrage = new ImgArrAndType(new ArrayList<>(java.util.List.of(
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().move().outrage_1()),
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().move().outrage_2()),
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().move().outrage_3()),
+            SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().move().outrage_4()))), Global.MapAreaType.NONE);
 }

@@ -1,7 +1,10 @@
 package game.Menu;
 
+import game.controllers.AudioResourceController;
 import game.controllers.SceneController;
 import game.core.Global;
+import game.graphic.AllImages;
+import game.graphic.Animation;
 import game.scene.ConnectTool;
 import game.scene.Scene;
 import game.utils.CommandSolver;
@@ -24,9 +27,6 @@ public class CreateRoomScene extends Scene implements CommandSolver.MouseCommand
     //輸入文字
     private ArrayList<EditText> editTexts;
 
-//    //滑鼠
-//    private Mouse mouse;
-
 
     @Override
     public void sceneBegin() {
@@ -35,24 +35,24 @@ public class CreateRoomScene extends Scene implements CommandSolver.MouseCommand
 
         //按鈕
         buttons = new ArrayList<Button>();
-        buttons.add(new Button(Global.SCREEN_X / 3 - 50, Global.SCREEN_Y / 4 + 50, 360, 70));
-        buttons.add(new Button(buttons.get(0).painter().left(), buttons.get(0).painter().bottom() + 40, 360, 70));
-        buttons.add(new Button(buttons.get(0).painter().left() - 30, buttons.get(1).painter().bottom() + 50, buttons.get(0).painter().width() / 2, buttons.get(0).painter().height() / 2));
-        buttons.add(new Button(buttons.get(2).painter().right() + 50, buttons.get(2).painter().top(), buttons.get(0).painter().width() / 2, buttons.get(0).painter().height() / 2));
+        buttons.add(new Button(Global.SCREEN_X / 3 - 50, Global.SCREEN_Y / 4 + 50, 360, 70, new Animation(AllImages.inputButton)));
+        buttons.add(new Button(buttons.get(0).painter().left(), buttons.get(0).painter().bottom() + 40, 360, 70, new Animation(AllImages.inputButton)));
+        buttons.add(new Button(buttons.get(0).painter().left() - 30, buttons.get(1).painter().bottom() + 50, buttons.get(0).painter().width() / 2, buttons.get(0).painter().height() / 2, new Animation(AllImages.inputButton)));
+        buttons.add(new Button(buttons.get(2).painter().right() + 50, buttons.get(2).painter().top(), buttons.get(0).painter().width() / 2, buttons.get(0).painter().height() / 2, new Animation(AllImages.inputButton)));
 
         //文字
         labels = new ArrayList<Label>();
-        labels.add(new Label(buttons.get(0).painter().left(), buttons.get(0).painter().top() - 10, "Please Enter Your Name:", FontLoader.Future(20)));
-        labels.add(new Label(buttons.get(1).painter().left(), buttons.get(1).painter().top() - 10, "Please Enter Your Port:", FontLoader.Future(20)));
-        labels.add(new Label(buttons.get(2).collider().left() + 40, buttons.get(2).collider().top() + 25, "  BACK ", FontLoader.Future(20)));
-        labels.add(new Label(buttons.get(3).collider().left() + 40, buttons.get(3).collider().top() + 25, " CREATE ", FontLoader.Future(20)));
+        labels.add(new Label(buttons.get(0).painter().left(), buttons.get(0).painter().top() - 10, "Please Enter Your Name:", FontLoader.cuteChinese(20)));
+        labels.add(new Label(buttons.get(1).painter().left(), buttons.get(1).painter().top() - 10, "Please Enter Your Port:", FontLoader.cuteChinese(20)));
+        labels.add(new Label(buttons.get(2).collider().left() + 40, buttons.get(2).collider().top() + 25, "  BACK ", FontLoader.cuteChinese(20)));
+        labels.add(new Label(buttons.get(3).collider().left() + 40, buttons.get(3).collider().top() + 25, " CREATE ", FontLoader.cuteChinese(20)));
+        labels.add(new Label(Global.SCREEN_X - 300, 50, " Max People:8 ", FontLoader.cuteChinese(20)));
 
         //輸入文字
         editTexts = new ArrayList<EditText>();
-        editTexts.add(new EditText(buttons.get(0).collider().left() + 10, buttons.get(0).collider().top() + 45, "NAME"));
+        editTexts.add(new EditText(buttons.get(0).collider().left() + 10, buttons.get(0).collider().top() + 45, "NAME(MaxWords:10)"));
+        editTexts.get(0).setEditLimit(10);
         editTexts.add(new EditText(buttons.get(1).collider().left() + 10, buttons.get(1).collider().top() + 45, "PORT"));
-
-//        mouse=new Mouse(0,0,50,50);
 
     }
 
@@ -84,6 +84,9 @@ public class CreateRoomScene extends Scene implements CommandSolver.MouseCommand
     @Override
     public void update() {
 
+        for (int i = 0; i < editTexts.size(); i++) {
+            editTexts.get(i).update();
+        }
     }
 
     @Override
@@ -101,9 +104,10 @@ public class CreateRoomScene extends Scene implements CommandSolver.MouseCommand
         if (state == CommandSolver.MouseState.MOVED) {
             Global.mouse.mouseTrig(e, state, trigTime);
         }
-        if (state == CommandSolver.MouseState.CLICKED) {
+        if (state == CommandSolver.MouseState.PRESSED) {
             if (Global.mouse.isCollision(buttons.get(3))) {
-                if (getPlayerName() == null || getPort() == null) {
+                if (inputError()) {
+                    labels.add(new Label(buttons.get(2).collider().left() - 20, buttons.get(1).collider().bottom() + 30, " Please Enter Correct Information ", FontLoader.Future(20)));
                     return;
                 }
                 SceneController.getInstance().change(new ChooseRoleScene("127.0.0.1", getPlayerName(), Integer.parseInt(getPort())));
@@ -111,6 +115,7 @@ public class CreateRoomScene extends Scene implements CommandSolver.MouseCommand
                 ConnectTool.instance().createRoom(Integer.parseInt(getPort()));
             }
             if (Global.mouse.isCollision(buttons.get(2))) {
+                AudioResourceController.getInstance().pause(new Path().sound().background().lovelyflower());
                 SceneController.getInstance().change(new MenuScene());
             }
             if (Global.mouse.isCollision(buttons.get(0))) {
@@ -151,5 +156,9 @@ public class CreateRoomScene extends Scene implements CommandSolver.MouseCommand
 
     public String getPort() {
         return editTexts.get(1).getEditText();
+    }
+
+    public boolean inputError() {
+        return getPlayerName() == "" || getPort() == "";
     }
 }

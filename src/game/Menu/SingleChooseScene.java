@@ -1,5 +1,9 @@
 package game.Menu;
 
+import game.Teach.SurvivalPropsRuleScene;
+import game.Teach.TeachPointGameScene;
+import game.Teach.TeachScene;
+import game.Teach.TeachSurvivalGameScene;
 import game.controllers.AudioResourceController;
 import game.controllers.SceneController;
 import game.core.Global;
@@ -7,7 +11,6 @@ import game.graphic.AllImages;
 import game.graphic.Animation;
 import game.scene.Scene;
 import game.scene.SinglePointGameScene;
-import game.scene.SingleSurvivalGameScene;
 import game.utils.CommandSolver;
 import game.utils.Path;
 
@@ -25,8 +28,6 @@ public class SingleChooseScene extends Scene implements CommandSolver.MouseComma
     //文字
     private ArrayList<Label> labels;
 
-//    //滑鼠
-//    private Mouse mouse;
 
     //動畫
     ArrayList<Animation> animations;
@@ -36,19 +37,22 @@ public class SingleChooseScene extends Scene implements CommandSolver.MouseComma
         //主選單背景圖
         img = SceneController.getInstance().imageController().tryGetImage(new Path().img().menu().Scene().scene9());
 
-
+//        Font font=new Font("",Font.BOLD,40);
+        Font font=FontLoader.cuteChinese(40);
         //文字
         labels = new ArrayList<Label>();
-        labels.add(new Label(Global.SCREEN_X / 3 + 30, Global.SCREEN_Y / 4 + 80, "     POINT MODE  ", FontLoader.Blocks(40)));
-        labels.add(new Label(Global.SCREEN_X / 3 + 30, labels.get(0).painter().bottom() + 200, " SURVIVAL MODE ", FontLoader.Blocks(40)));
+        labels.add(new Label(Global.SCREEN_X / 3 + 30, Global.SCREEN_Y / 4 + 80, "    POINT MODE  ",font));
+        labels.add(new Label(Global.SCREEN_X / 3 + 30, labels.get(0).painter().bottom() + 200, "   SURVIVAL MODE ", font));
 
         //按鈕
         buttons = new ArrayList<Button>();
         buttons.add(new Button(labels.get(0).painter().left(), labels.get(0).painter().top() - 40, 380, 40));
         buttons.add(new Button(labels.get(1).painter().left(), labels.get(1).painter().top() - 40, 380, 40));
         buttons.add(new Button(Global.SCREEN_X - 100, 20, Global.UNIT_WIDTH, Global.UNIT_HEIGHT));
+        buttons.add(new Button(labels.get(0).painter().left(), labels.get(0).painter().top() - 40, 380, 40, new Animation(AllImages.inputButton)));
+        buttons.add(new Button(labels.get(1).painter().left(), labels.get(1).painter().top() - 40, 380, 40, new Animation(AllImages.inputButton)));
+        buttons.add(new Button(Global.SCREEN_X - 100, 20, Global.UNIT_WIDTH, Global.UNIT_HEIGHT, new Animation(AllImages.inputButton)));
 
-//        mouse=new Mouse(0,0,50,50);
 
         //動畫
         animations = new ArrayList<>();
@@ -63,7 +67,6 @@ public class SingleChooseScene extends Scene implements CommandSolver.MouseComma
     public void sceneEnd() {
         this.labels = null;
         this.img = null;
-        AudioResourceController.getInstance().stop(new Path().sound().background().lovelyflower());
     }
 
     @Override
@@ -77,7 +80,23 @@ public class SingleChooseScene extends Scene implements CommandSolver.MouseComma
         animations.get(2).paint(Global.SCREEN_X - 100, 20, Global.UNIT_WIDTH, Global.UNIT_HEIGHT, g);
 
         for (int i = 0; i < buttons.size(); i++) {
-            buttons.get(i).paint(g);
+            if (i == 3) {
+                if (Global.mouse.isCollision(buttons.get(i))) {
+                    buttons.get(i).paint(g);
+                }
+
+            } else if (i == 4) {
+                if (Global.mouse.isCollision(buttons.get(i))) {
+                    buttons.get(i).paint(g);
+                }
+            } else if (i == 5) {
+                if (Global.mouse.isCollision(buttons.get(i))) {
+                    buttons.get(i).paint(g);
+                }
+            } else {
+                buttons.get(i).paint(g);
+            }
+
         }
         for (int i = 0; i < labels.size(); i++) {
             labels.get(i).paint(g);
@@ -111,19 +130,19 @@ public class SingleChooseScene extends Scene implements CommandSolver.MouseComma
         if (state == CommandSolver.MouseState.MOVED) {
             Global.mouse.mouseTrig(e, state, trigTime);
         }
-        if (state == CommandSolver.MouseState.CLICKED) {
+        if (state == CommandSolver.MouseState.PRESSED) {
             if (Global.mouse.isCollision(buttons.get(0))) {
-                sceneEnd();
-                SceneController.getInstance().change(new SinglePointGameScene());
+                AudioResourceController.getInstance().pause(new Path().sound().background().lovelyflower());
+                SceneController.getInstance().change(new TeachPointGameScene());
             }
             if (Global.mouse.isCollision(buttons.get(1))) {
-                sceneEnd();
-                SceneController.getInstance().change(new SingleSurvivalGameScene());
+                AudioResourceController.getInstance().pause(new Path().sound().background().lovelyflower());
+                SceneController.getInstance().change(new TeachSurvivalGameScene());
             }
             if (Global.mouse.isCollision(buttons.get(2))) {
+                AudioResourceController.getInstance().pause(new Path().sound().background().lovelyflower());
                 SceneController.getInstance().change(new MenuScene());
             }
-
         }
     }
 }

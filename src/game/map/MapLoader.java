@@ -20,6 +20,7 @@ public class MapLoader {
 
     /**
      * 地圖資料(整合bmp & txt)
+     *
      * @return 地圖資料（MapInfo類）的物件陣列
      */
     public ArrayList<MapInfo> combineInfo() {
@@ -47,6 +48,7 @@ public class MapLoader {
 
     /**
      * 透過地圖資訊 轉換為 自定義的地圖物件
+     *
      * @param mapInfos 地圖資訊
      * @return 地圖資料（自定義類Tile）的物件陣列
      */
@@ -82,8 +84,8 @@ public class MapLoader {
             }
             if (mapInfo.getName().equals("winterTree2")) {
                 mapMapObjects.add(new MapObject(
-                        mapInfo.getX() * Global.UNIT_WIDTH,
-                        mapInfo.getY() * Global.UNIT_HEIGHT,
+                        mapInfo.getX() * Global.UNIT_WIDTH - 5,
+                        mapInfo.getY() * Global.UNIT_HEIGHT - 60,
                         100,
                         200,
                         mapInfo.getName()));

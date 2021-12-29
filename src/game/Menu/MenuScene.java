@@ -24,9 +24,6 @@ public class MenuScene extends Scene implements CommandSolver.MouseCommandListen
     //文字
     private ArrayList<Label> labels;
 
-//    //滑鼠
-//    private Mouse mouse;
-
     //動畫
     ArrayList<Animation> animations;
 
@@ -34,24 +31,25 @@ public class MenuScene extends Scene implements CommandSolver.MouseCommandListen
     public void sceneBegin() {
         //主選單背景圖
         img = SceneController.getInstance().imageController().tryGetImage(new Path().img().menu().Scene().scene9());
-        AudioResourceController.getInstance().play(new Path().sound().background().lovelyflower());
+        AudioResourceController.getInstance().loop(new Path().sound().background().lovelyflower(), -1);
 
-        //文字
+        Font font=FontLoader.cuteChinese(40);
+
         labels = new ArrayList<Label>();
-        labels.add(new Label(Global.SCREEN_X / 3 + 30, Global.SCREEN_Y / 4 - 30, "MENU", FontLoader.Blocks(100)));
-        labels.add(new Label(Global.SCREEN_X / 3 + 30, labels.get(0).painter().bottom() + 100, "  SINGLE GAME ", FontLoader.Blocks(40)));
-        labels.add(new Label(Global.SCREEN_X / 3 + 30, labels.get(1).painter().bottom() + 100, "  CREATE ROOM ", FontLoader.Blocks(40)));
-        labels.add(new Label(Global.SCREEN_X / 3 + 30, labels.get(2).painter().bottom() + 100, "CONNECT ROOM", FontLoader.Blocks(40)));
-        labels.add(new Label(Global.SCREEN_X / 3 + 30, labels.get(3).painter().bottom() + 100, "   TEACH  GAME ", FontLoader.Blocks(40)));
+        labels.add(new Label(Global.SCREEN_X / 3 +30, Global.SCREEN_Y / 4 - 30, "MENU", FontLoader.cuteChinese(130)));
+        labels.add(new Label(Global.SCREEN_X / 3 + 30, labels.get(0).painter().bottom() + 100, "   SINGLE GAME ", font));
+        labels.add(new Label(Global.SCREEN_X / 3 + 30, labels.get(1).painter().bottom() + 100, "   CREATE ROOM ", font));
+        labels.add(new Label(Global.SCREEN_X / 3 + 30, labels.get(2).painter().bottom() + 100, "  CONNECT ROOM", font));
+        labels.add(new Label(Global.SCREEN_X / 3 + 30, labels.get(3).painter().bottom() + 100, "   TEACH  GAME ", font));
+
 
         //按鈕
         buttons = new ArrayList<Button>();
-        buttons.add(new Button(labels.get(1).painter().left(), labels.get(1).painter().top() - 40, 360, 40));
-        buttons.add(new Button(labels.get(2).painter().left(), labels.get(2).painter().top() - 40, 360, 40));
-        buttons.add(new Button(labels.get(3).painter().left(), labels.get(3).painter().top() - 40, 360, 40));
-        buttons.add(new Button(labels.get(4).painter().left(), labels.get(4).painter().top() - 40, 360, 40));
+        buttons.add(new Button(labels.get(1).painter().left() - 5, labels.get(1).painter().top() - 45, 370, 50, new Animation(AllImages.inputButton)));
+        buttons.add(new Button(labels.get(2).painter().left() - 5, labels.get(2).painter().top() - 45, 370, 50, new Animation(AllImages.inputButton)));
+        buttons.add(new Button(labels.get(3).painter().left() - 5, labels.get(3).painter().top() - 45, 370, 50, new Animation(AllImages.inputButton)));
+        buttons.add(new Button(labels.get(4).painter().left() - 5, labels.get(4).painter().top() - 45, 370, 50, new Animation(AllImages.inputButton)));
 
-//        mouse=new Mouse(0,0,50,50);
 
         //動畫
         animations = new ArrayList<>();
@@ -75,11 +73,16 @@ public class MenuScene extends Scene implements CommandSolver.MouseCommandListen
         for (int i = 0; i < animations.size(); i++) {
             animations.get(i).paint(Global.SCREEN_X / 4, Global.SCREEN_Y / 4 + i * 100, Global.UNIT_WIDTH * 2, Global.UNIT_HEIGHT * 2, g);
         }
+
+
+        for (int i = 0; i < buttons.size(); i++) {
+            if (Global.mouse.isCollision(buttons.get(i))) {
+                buttons.get(i).paint(g);
+            }
+        }
+
         for (int i = 0; i < labels.size(); i++) {
             labels.get(i).paint(g);
-        }
-        for (int i = 0; i < buttons.size(); i++) {
-            buttons.get(i).paint(g);
         }
 
 
@@ -108,7 +111,7 @@ public class MenuScene extends Scene implements CommandSolver.MouseCommandListen
 
     @Override
     public void mouseTrig(MouseEvent e, CommandSolver.MouseState state, long trigTime) {
-        if (state == CommandSolver.MouseState.CLICKED) {
+        if (state == CommandSolver.MouseState.PRESSED) {
             if (Global.mouse.isCollision(buttons.get(0))) {
                 SceneController.getInstance().change(new SingleChooseScene());
             }
@@ -119,8 +122,7 @@ public class MenuScene extends Scene implements CommandSolver.MouseCommandListen
                 SceneController.getInstance().change(new ConnectRoomScene());
             }
             if (Global.mouse.isCollision(buttons.get(3))) {
-                sceneEnd();
-                AudioResourceController.getInstance().stop(new Path().sound().background().lovelyflower());
+                AudioResourceController.getInstance().pause(new Path().sound().background().lovelyflower());
                 SceneController.getInstance().change(new TeachScene());
             }
         }

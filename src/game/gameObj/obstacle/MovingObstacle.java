@@ -79,4 +79,24 @@ public class MovingObstacle extends TransformObstacle {
         animation.update();
         move();
     }
+    public void moveTeachScene() {
+        animation.update();
+        if (randomMoveDelay.count()) {
+            iniMoveOnX = Global.random(-2, 1);
+            iniMoveOnY = Global.random(-2, 1);
+            if (Global.getProbability(80)) {
+                iniMoveOnX = 0;
+                iniMoveOnY = 0;
+            }
+        }
+        movement.move(iniMoveOnX, iniMoveOnY);
+        translate(movement.getVector2D().getX(), movement.getVector2D().getY());
+        keepInMapTeachScene();
+    }
+
+    public void keepInMapTeachScene() {
+        if (touchLeft() || touchTop() || super.collider().right() >= Global.SCREEN_X || super.collider().bottom() >= Global.SCREEN_Y) {
+            translate(-movement.getVector2D().getX(), -movement.getVector2D().getY());
+        }
+    }
 }
